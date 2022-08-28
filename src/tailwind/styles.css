@@ -1,0 +1,39 @@
+:root {
+  --primary: #01283c;
+  --secondary: #f2fafd;
+  --blue-500: #079ae0;
+  --blue-700: #02608c;
+  --red-500: #e31837;
+  --white: #ffffff;
+  --neutral-gray-300: #d1d2d5;
+  --neutral-gray-600: #575b63;
+  --neutral-gray-700: #383d47;
+  --neutral-gray-900: #0A101C;
+  --8xl: 5.375rem;
+  --7xl: 4.5rem;
+  --6xl: 4.25rem;
+  --4xl: 3.5rem;
+  --h2xl: 3.375rem;
+  --3xl: 2.625rem;
+  --subtext: 2.25rem;
+  --2xl: 2rem;
+  --xl: 1.5rem;
+  --lg: 1.125rem;
+  --base: 1rem;
+  --sm: 0.875rem;
+  --xs: 0.75rem;
+}
+
+/* @tailwind base; */
+
+.text-3xl {
+  font-size: var(--3xl);
+}
+
+.font-bold {
+  font-weight: 700;
+}
+
+.underline {
+  text-decoration-line: underline;
+}

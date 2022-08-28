@@ -1,0 +1,17 @@
+@import './variables.css';
+
+/* @tailwind base; */
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .option-card {
+    flex: 1;
+    min-height: 200px;
+    align-self: stretch;
+  }
+
+  .option-cards-container > a {
+    width: 100%;
+  }
+}
