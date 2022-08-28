@@ -1,17 +1,15 @@
 @import './variables.css';
 
-/* @tailwind base; */
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-@layer components {
-  .option-card {
-    flex: 1;
-    min-height: 200px;
-    align-self: stretch;
-  }
-
-  .option-cards-container > a {
-    width: 100%;
+@layer base {
+  body {
+    background: var(--background);
+    color: var(--neutral-gray-100);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
   }
 }

@@ -14,23 +14,19 @@ const customTheme = {
       secondary: {
         DEFAULT: 'var(--secondary)',
       },
-      red: {
-        500: 'var(--red-500)',
+      background: {
+        DEFAULT: 'var(--background)',
       },
-      blue: {
-        500: 'var(--blue-500)',
-        700: 'var(--blue-700)',
+      red: {
+        DEFAULT: 'var(--red)',
       },
       white: {
         DEFAULT: 'var(--white)',
       },
       neutral: {
+        'gray-100': 'var(--neutral-gray-100)',
         'gray-300': 'var(--neutral-gray-300)',
-        'gray-600': 'var(--neutral-gray-600)',
-        'gray-700': 'var(--neutral-gray-700)',
-        'gray-700-025': 'var(--neutral-gray-700-025)',
-        'gray-700-050': 'var(--neutral-gray-700-050)',
-        'gray-900': 'var(--neutral-gray-900)',
+        'blue-100': 'var(--neutral-blue-100)',
       },
     },
     fontSize: {
