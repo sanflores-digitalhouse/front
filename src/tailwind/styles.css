@@ -554,6 +554,18 @@ body {
   align-items: center;
 }
 
+#root .tw-justify-between {
+  justify-content: space-between;
+}
+
+#root .tw-gap-x-2 {
+  column-gap: 0.5rem;
+}
+
+#root .tw-rounded-xl {
+  border-radius: 0.75rem;
+}
+
 #root .tw-border-t {
   border-top-width: 1px;
 }
@@ -570,9 +582,18 @@ body {
   background-color: var(--background) !important;
 }
 
+#root .tw-bg-primary {
+  background-color: var(--primary);
+}
+
 #root .tw-px-10 {
   padding-left: 2.5rem;
   padding-right: 2.5rem;
+}
+
+#root .tw-px-0 {
+  padding-left: 0px;
+  padding-right: 0px;
 }
 
 #root .tw-text-sm {
@@ -589,6 +610,10 @@ body {
 
 #root .\!tw-text-neutral-gray-100 {
   color: var(--neutral-gray-100) !important;
+}
+
+#root .tw-text-primary {
+  color: var(--primary);
 }
 
 #root .tw-underline {

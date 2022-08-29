@@ -29,12 +29,13 @@
   "plugins": [
     "@typescript-eslint",
     "react-hooks",
+    "react",
     "jsx-a11y",
     "prettier"
   ],
   "settings": {
     "react": {
-      "version": "17.0.1"
+      "version": "18.2.0"
     }
   },
   "rules": {
