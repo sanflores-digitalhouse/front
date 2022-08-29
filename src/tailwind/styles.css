@@ -562,6 +562,10 @@ body {
   column-gap: 0.5rem;
 }
 
+#root .tw-rounded-xl {
+  border-radius: 0.75rem;
+}
+
 #root .tw-border-t {
   border-top-width: 1px;
 }

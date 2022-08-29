@@ -34,7 +34,7 @@ export const Navbar = () => {
             </Link>
           ) : (
             <div className="tw-flex tw-items-center tw-gap-x-2">
-              <Avatar className="tw-bg-primary" {...stringAvatar(name)} />
+              <Avatar className="tw-bg-primary tw-rounded-xl" {...stringAvatar(name)} />
               Hola, {name}
             </div>
           )}
