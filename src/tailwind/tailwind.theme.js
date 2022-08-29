@@ -26,6 +26,7 @@ const customTheme = {
       neutral: {
         'gray-100': 'var(--neutral-gray-100)',
         'gray-300': 'var(--neutral-gray-300)',
+        'gray-500': 'var(--neutral-gray-500)',
         'blue-100': 'var(--neutral-blue-100)',
       },
     },
