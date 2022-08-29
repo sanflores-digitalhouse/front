@@ -1,19 +1,16 @@
 :root {
-  --primary: #01283c;
+  --primary: #3399FF;
 
   --secondary: #f2fafd;
+  --background: #0A192A;
 
-  --blue-500: #079ae0;
-  --blue-700: #02608c;
-
-  --red-500: #e31837;
+  --red: #e31837;
 
   --white: #ffffff;
 
-  --neutral-gray-300: #d1d2d5;
-  --neutral-gray-600: #575b63;
-  --neutral-gray-700: #383d47;
-  --neutral-gray-900: #0A101C;
+  --neutral-gray-100: #E7EBF0;
+  --neutral-gray-300: #7E8792;
+  --neutral-blue-100: #c2e0ff14;
 
   --8xl: 5.375rem;
   --7xl: 4.5rem;
