@@ -11,5 +11,14 @@
     min-height: 100vh;
     display: flex;
     flex-direction: column;
+
+  }
+
+  fieldset {
+    border-color: var(--neutral-blue-100) !important;
+  }
+
+  .border-primary-hover:hover {
+    border-color: var(--primary);
   }
 }
