@@ -66,7 +66,12 @@ const Login = () => {
   const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
 
   return (
-    <div className="tw-pt-24 tw-w-full tw-flex tw-flex-col tw-flex-1 tw-items-center">
+    <div
+      className="tw-w-full tw-flex tw-flex-col tw-flex-1 tw-items-center tw-justify-center"
+      style={{
+        height: 'calc(100vh - 128px)',
+      }}
+    >
       <h2>Iniciar sesión</h2>
       <form
         className="tw-flex tw-flex-col tw-mt-10"
@@ -74,7 +79,6 @@ const Login = () => {
       >
         <FormControl
           className="tw-m-0 tw-mb-5"
-          sx={{ m: 1, width: '25ch' }}
           variant="outlined"
         >
           <InputLabel htmlFor="outlined-adornment-password">Correo</InputLabel>
@@ -91,7 +95,6 @@ const Login = () => {
         {errors.email && <ErrorMessage errors={errors.email as Errors} />}
         <FormControl
           className="tw-m-0 tw-mb-5"
-          sx={{ m: 1, width: '25ch' }}
           variant="outlined"
         >
           <InputLabel htmlFor="outlined-adornment-password">

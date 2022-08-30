@@ -437,7 +437,8 @@ fieldset {
   border-color: var(--neutral-blue-100) !important;
 }
 
-.MuiFormControl-root, input {
+.MuiFormControl-root,
+  input {
   background-color: var(--neutral-gray-500);
   width: 20rem;
 }
@@ -544,10 +545,6 @@ label {
   --tw-backdrop-sepia:  ;
 }
 
-#root .tw-absolute {
-  position: absolute;
-}
-
 #root .tw-bottom-0 {
   bottom: 0px;
 }
@@ -594,6 +591,10 @@ label {
 
 #root .tw-items-center {
   align-items: center;
+}
+
+#root .tw-justify-center {
+  justify-content: center;
 }
 
 #root .tw-justify-between {
@@ -644,10 +645,6 @@ label {
 #root .tw-px-0 {
   padding-left: 0px;
   padding-right: 0px;
-}
-
-#root .tw-pt-24 {
-  padding-top: 6rem;
 }
 
 #root .tw-text-sm {
