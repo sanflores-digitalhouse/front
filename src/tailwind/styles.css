@@ -437,6 +437,19 @@ fieldset {
   border-color: var(--neutral-blue-100) !important;
 }
 
+.MuiFormControl-root, input {
+  background-color: var(--neutral-gray-500);
+  width: 20rem;
+}
+
+input {
+  color: var(--neutral-gray-100) !important;
+}
+
+label {
+  color: var(--neutral-gray-100) !important;
+}
+
 *, ::before, ::after {
   --tw-border-spacing-x: 0;
   --tw-border-spacing-y: 0;
@@ -543,12 +556,12 @@ fieldset {
   margin: 0px;
 }
 
-#root .tw-mt-10 {
-  margin-top: 2.5rem;
-}
-
 #root .tw-mb-5 {
   margin-bottom: 1.25rem;
+}
+
+#root .tw-mt-10 {
+  margin-top: 2.5rem;
 }
 
 #root .tw-flex {
@@ -557,6 +570,10 @@ fieldset {
 
 #root .tw-h-16 {
   height: 4rem;
+}
+
+#root .tw-h-14 {
+  height: 3.5rem;
 }
 
 #root .tw-w-full {
@@ -581,6 +598,10 @@ fieldset {
 
 #root .tw-justify-between {
   justify-content: space-between;
+}
+
+#root .tw-gap-y-4 {
+  row-gap: 1rem;
 }
 
 #root .tw-gap-x-2 {
@@ -615,10 +636,6 @@ fieldset {
   background-color: var(--primary);
 }
 
-#root .tw-bg-neutral-gray-500 {
-  background-color: var(--neutral-gray-500);
-}
-
 #root .tw-px-10 {
   padding-left: 2.5rem;
   padding-right: 2.5rem;
@@ -635,6 +652,10 @@ fieldset {
 
 #root .tw-text-sm {
   font-size: var(--sm);
+}
+
+#root .tw-text-red {
+  color: var(--red);
 }
 
 #root .\!tw-text-neutral-gray-100 {
