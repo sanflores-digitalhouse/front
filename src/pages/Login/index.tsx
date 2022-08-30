@@ -8,8 +8,13 @@ import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
-import { emailRegExp, isValueEmpty, valuesHaveErrors } from '../../utils/';
-
+import {
+  isValueEmpty,
+  valuesHaveErrors,
+  emailValidationConfig,
+  passwordValidationConfig,
+} from '../../utils/';
+import { ErrorMessage, Errors } from '../../components/ErrorMessage';
 interface State {
   email: string;
   password: string;
@@ -27,7 +32,9 @@ const Login = () => {
     handleSubmit,
     // watch,
     formState: { errors, isDirty },
-  } = useForm<Inputs>();
+  } = useForm<Inputs>({
+    criteriaMode: 'all',
+  });
 
   const [values, setValues] = React.useState<State>({
     email: '',
@@ -66,49 +73,36 @@ const Login = () => {
         onSubmit={handleSubmit(onSubmit)}
       >
         <FormControl
-          className="tw-bg-neutral-gray-500 tw-m-0 tw-mb-5"
+          className="tw-m-0 tw-mb-5"
           sx={{ m: 1, width: '25ch' }}
           variant="outlined"
         >
-          <InputLabel
-            className="tw-text-neutral-gray-100"
-            htmlFor="outlined-adornment-password"
-          >
-            Correo
-          </InputLabel>
+          <InputLabel htmlFor="outlined-adornment-password">Correo</InputLabel>
           <OutlinedInput
             id="outlined-adornment-email"
             type="text"
             value={values.email}
-            {...register('email', {
-              required: true,
-              pattern: emailRegExp,
-            })}
+            {...register('email', emailValidationConfig)}
             onChange={handleChange('email')}
-            className="tw-text-neutral-gray-100"
             label="email"
             autoComplete="off"
           />
         </FormControl>
-        {errors.email && <p>This field is required</p>}
+        {errors.email && <ErrorMessage errors={errors.email as Errors} />}
         <FormControl
-          className="tw-bg-neutral-gray-500 tw-m-0 tw-mb-5"
+          className="tw-m-0 tw-mb-5"
           sx={{ m: 1, width: '25ch' }}
           variant="outlined"
         >
-          <InputLabel
-            className="tw-text-neutral-gray-100"
-            htmlFor="outlined-adornment-password"
-          >
+          <InputLabel htmlFor="outlined-adornment-password">
             Contraseña
           </InputLabel>
           <OutlinedInput
             id="outlined-adornment-password"
             type={values.showPassword ? 'text' : 'password'}
             value={values.password}
-            {...register('password')}
+            {...register('password', passwordValidationConfig)}
             onChange={handleChange('password')}
-            className="tw-text-neutral-gray-100"
             endAdornment={
               <InputAdornment position="end">
                 <IconButton
@@ -126,9 +120,9 @@ const Login = () => {
             autoComplete="off"
           />
         </FormControl>
-        {errors.password && <p>This field is required</p>}
+        {errors.password && <ErrorMessage errors={errors.password as Errors} />}
         <Button
-          className={`${
+          className={`tw-h-14 ${
             hasErrors || !isDirty || isEmpty
               ? 'tw-text-neutral-gray-300 tw-border-neutral-gray-300 tw-cursor-not-allowed'
               : ''
