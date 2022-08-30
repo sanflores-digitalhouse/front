@@ -6,6 +6,7 @@
   --white: #ffffff;
   --neutral-gray-100: #E7EBF0;
   --neutral-gray-300: #7E8792;
+  --neutral-gray-500: #0D2238;
   --neutral-blue-100: #c2e0ff14;
   --8xl: 5.375rem;
   --7xl: 4.5rem;
@@ -432,6 +433,24 @@ body {
   flex-direction: column;
 }
 
+fieldset {
+  border-color: var(--neutral-blue-100) !important;
+}
+
+.MuiFormControl-root,
+  input {
+  background-color: var(--neutral-gray-500);
+  width: 20rem;
+}
+
+input {
+  color: var(--neutral-gray-100) !important;
+}
+
+label {
+  color: var(--neutral-gray-100) !important;
+}
+
 *, ::before, ::after {
   --tw-border-spacing-x: 0;
   --tw-border-spacing-y: 0;
@@ -526,12 +545,20 @@ body {
   --tw-backdrop-sepia:  ;
 }
 
-#root .tw-absolute {
-  position: absolute;
-}
-
 #root .tw-bottom-0 {
   bottom: 0px;
+}
+
+#root .tw-m-0 {
+  margin: 0px;
+}
+
+#root .tw-mb-5 {
+  margin-bottom: 1.25rem;
+}
+
+#root .tw-mt-10 {
+  margin-top: 2.5rem;
 }
 
 #root .tw-flex {
@@ -542,6 +569,10 @@ body {
   height: 4rem;
 }
 
+#root .tw-h-14 {
+  height: 3.5rem;
+}
+
 #root .tw-w-full {
   width: 100%;
 }
@@ -550,12 +581,28 @@ body {
   flex: 1 1 0%;
 }
 
+#root .tw-cursor-not-allowed {
+  cursor: not-allowed;
+}
+
+#root .tw-flex-col {
+  flex-direction: column;
+}
+
 #root .tw-items-center {
   align-items: center;
 }
 
+#root .tw-justify-center {
+  justify-content: center;
+}
+
 #root .tw-justify-between {
   justify-content: space-between;
+}
+
+#root .tw-gap-y-4 {
+  row-gap: 1rem;
 }
 
 #root .tw-gap-x-2 {
@@ -576,6 +623,10 @@ body {
 
 #root .tw-border-neutral-blue-100 {
   border-color: var(--neutral-blue-100);
+}
+
+#root .tw-border-neutral-gray-300 {
+  border-color: var(--neutral-gray-300);
 }
 
 #root .\!tw-bg-background {
@@ -600,12 +651,8 @@ body {
   font-size: var(--sm);
 }
 
-#root .tw-text-3xl {
-  font-size: var(--3xl);
-}
-
-#root .tw-font-bold {
-  font-weight: 700;
+#root .tw-text-red {
+  color: var(--red);
 }
 
 #root .\!tw-text-neutral-gray-100 {
@@ -616,8 +663,12 @@ body {
   color: var(--primary);
 }
 
-#root .tw-underline {
-  text-decoration-line: underline;
+#root .tw-text-neutral-gray-100 {
+  color: var(--neutral-gray-100);
+}
+
+#root .tw-text-neutral-gray-300 {
+  color: var(--neutral-gray-300);
 }
 
 #root .tw-shadow-none {

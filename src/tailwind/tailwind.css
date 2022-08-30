@@ -12,4 +12,26 @@
     display: flex;
     flex-direction: column;
   }
+
+  fieldset {
+    border-color: var(--neutral-blue-100) !important;
+  }
+
+  .border-primary-hover:hover {
+    border-color: var(--primary);
+  }
+
+  .MuiFormControl-root,
+  input {
+    background-color: var(--neutral-gray-500);
+    width: 20rem;
+  }
+
+  input {
+    color: var(--neutral-gray-100) !important;
+  }
+
+  label {
+    color: var(--neutral-gray-100) !important;
+  }
 }
