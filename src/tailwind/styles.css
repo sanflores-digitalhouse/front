@@ -545,12 +545,16 @@ label {
   --tw-backdrop-sepia:  ;
 }
 
+#root .tw-fixed {
+  position: fixed;
+}
+
 #root .tw-bottom-0 {
   bottom: 0px;
 }
 
-#root .tw-m-0 {
-  margin: 0px;
+#root .tw-z-50 {
+  z-index: 50;
 }
 
 #root .tw-mb-5 {
@@ -573,8 +577,24 @@ label {
   height: 3.5rem;
 }
 
+#root .tw-h-full {
+  height: 100%;
+}
+
 #root .tw-w-full {
   width: 100%;
+}
+
+#root .tw-w-80 {
+  width: 20rem;
+}
+
+#root .tw-max-w-full {
+  max-width: 100%;
+}
+
+#root .tw-max-w-3xl {
+  max-width: 48rem;
 }
 
 #root .tw-flex-1 {
@@ -587,6 +607,10 @@ label {
 
 #root .tw-flex-col {
   flex-direction: column;
+}
+
+#root .tw-flex-wrap {
+  flex-wrap: wrap;
 }
 
 #root .tw-items-center {
@@ -609,6 +633,14 @@ label {
   column-gap: 0.5rem;
 }
 
+#root .tw-gap-y-12 {
+  row-gap: 3rem;
+}
+
+#root .tw-gap-x-16 {
+  column-gap: 4rem;
+}
+
 #root .tw-rounded-xl {
   border-radius: 0.75rem;
 }
@@ -629,8 +661,8 @@ label {
   border-color: var(--neutral-gray-300);
 }
 
-#root .\!tw-bg-background {
-  background-color: var(--background) !important;
+#root .tw-bg-transparent {
+  background-color: transparent;
 }
 
 #root .tw-bg-primary {
@@ -677,8 +709,8 @@ label {
   box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
-#root .tw-backdrop-blur-lg {
-  --tw-backdrop-blur: blur(16px);
+#root .tw-backdrop-blur {
+  --tw-backdrop-blur: blur(8px);
   -webkit-backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
           backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
 }
