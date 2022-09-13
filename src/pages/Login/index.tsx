@@ -21,7 +21,7 @@ interface State {
   showPassword: boolean;
 }
 
-interface Inputs {
+export interface LoginInputs {
   email: string;
   password: string;
 }
@@ -32,7 +32,7 @@ const Login = () => {
     handleSubmit,
     // watch,
     formState: { errors, isDirty },
-  } = useForm<Inputs>({
+  } = useForm<LoginInputs>({
     criteriaMode: 'all',
   });
 
@@ -63,7 +63,7 @@ const Login = () => {
       setValues({ ...values, [prop]: event.target.value });
     };
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<LoginInputs> = (data) => console.log(data);
 
   return (
     <div
@@ -74,13 +74,10 @@ const Login = () => {
     >
       <h2>Iniciar sesión</h2>
       <form
-        className="tw-flex tw-flex-col tw-mt-10"
+        className="tw-flex tw-flex-col tw-gap-y-12 tw-mt-10"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <FormControl
-          className="tw-m-0 tw-mb-5"
-          variant="outlined"
-        >
+        <FormControl variant="outlined">
           <InputLabel htmlFor="outlined-adornment-password">Correo</InputLabel>
           <OutlinedInput
             id="outlined-adornment-email"
@@ -93,10 +90,7 @@ const Login = () => {
           />
         </FormControl>
         {errors.email && <ErrorMessage errors={errors.email as Errors} />}
-        <FormControl
-          className="tw-m-0 tw-mb-5"
-          variant="outlined"
-        >
+        <FormControl variant="outlined">
           <InputLabel htmlFor="outlined-adornment-password">
             Contraseña
           </InputLabel>
