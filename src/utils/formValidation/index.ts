@@ -38,3 +38,33 @@ export const passwordValidationConfig = {
     message: ERROR_MESSAGES.MAX_LENGTH,
   },
 };
+
+export const nameValidationConfig = {
+  required: {
+    value: true,
+    message: ERROR_MESSAGES.REQUIRED_FIELD,
+  },
+  pattern: {
+    value: /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/,
+    message: ERROR_MESSAGES.INVALID_NAME,
+  },
+  minLength: {
+    value: 2,
+    message: ERROR_MESSAGES.MIN_LENGTH,
+  },
+  maxLength: {
+    value: 20,
+    message: ERROR_MESSAGES.MAX_LENGTH,
+  },
+};
+
+export const phoneValidationConfig = {
+  required: {
+    value: true,
+    message: ERROR_MESSAGES.REQUIRED_FIELD,
+  },
+  pattern: {
+    value: phoneRegExp,
+    message: ERROR_MESSAGES.INVALID_PHONE,
+  },
+};
