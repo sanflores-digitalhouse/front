@@ -3,6 +3,7 @@ import { ERROR_MESSAGES } from '../../constants';
 export const phoneRegExp =
   /^((\+\d{1,3}(-| )?\(?\d\)?(-| )?\d{1,3})|(\(?\d{2,3}\)?))(-| )?(\d{3,4})(-| )?(\d{4})(( x| ext)\d{1,5}){0,1}$/;
 export const emailRegExp = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g;
+export const dniRegExp = /^\d{8}$/;
 
 export const isValueEmpty = (values: any): boolean =>
   Object.values(values).some((value) => value === '');
@@ -50,7 +51,7 @@ export const nameValidationConfig = {
   },
   minLength: {
     value: 2,
-    message: ERROR_MESSAGES.MIN_LENGTH,
+    message: ERROR_MESSAGES.MIN_LENGHT_NAME,
   },
   maxLength: {
     value: 20,
@@ -66,5 +67,16 @@ export const phoneValidationConfig = {
   pattern: {
     value: phoneRegExp,
     message: ERROR_MESSAGES.INVALID_PHONE,
+  },
+};
+
+export const dniValidationConfig = {
+  required: {
+    value: true,
+    message: ERROR_MESSAGES.REQUIRED_FIELD,
+  },
+  pattern: {
+    value: dniRegExp,
+    message: ERROR_MESSAGES.INVALID_DNI,
   },
 };
