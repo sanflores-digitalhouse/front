@@ -21,7 +21,7 @@ interface State {
   showPassword: boolean;
 }
 
-interface Inputs {
+export interface LoginInputs {
   email: string;
   password: string;
 }
@@ -32,7 +32,7 @@ const Login = () => {
     handleSubmit,
     // watch,
     formState: { errors, isDirty },
-  } = useForm<Inputs>({
+  } = useForm<LoginInputs>({
     criteriaMode: 'all',
   });
 
@@ -63,7 +63,7 @@ const Login = () => {
       setValues({ ...values, [prop]: event.target.value });
     };
 
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<LoginInputs> = (data) => console.log(data);
 
   return (
     <div
@@ -74,56 +74,58 @@ const Login = () => {
     >
       <h2>Iniciar sesión</h2>
       <form
-        className="tw-flex tw-flex-col tw-mt-10"
+        className="tw-flex tw-flex-col tw-gap-y-12 tw-mt-10"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <FormControl
-          className="tw-m-0 tw-mb-5"
-          variant="outlined"
-        >
-          <InputLabel htmlFor="outlined-adornment-password">Correo</InputLabel>
-          <OutlinedInput
-            id="outlined-adornment-email"
-            type="text"
-            value={values.email}
-            {...register('email', emailValidationConfig)}
-            onChange={handleChange('email')}
-            label="email"
-            autoComplete="off"
-          />
-        </FormControl>
-        {errors.email && <ErrorMessage errors={errors.email as Errors} />}
-        <FormControl
-          className="tw-m-0 tw-mb-5"
-          variant="outlined"
-        >
-          <InputLabel htmlFor="outlined-adornment-password">
-            Contraseña
-          </InputLabel>
-          <OutlinedInput
-            id="outlined-adornment-password"
-            type={values.showPassword ? 'text' : 'password'}
-            value={values.password}
-            {...register('password', passwordValidationConfig)}
-            onChange={handleChange('password')}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                  className="tw-text-neutral-gray-100"
-                >
-                  {values.showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-            label="Password"
-            autoComplete="off"
-          />
-        </FormControl>
-        {errors.password && <ErrorMessage errors={errors.password as Errors} />}
+        <div>
+          <FormControl variant="outlined">
+            <InputLabel htmlFor="outlined-adornment-password">
+              Correo
+            </InputLabel>
+            <OutlinedInput
+              id="outlined-adornment-email"
+              type="text"
+              value={values.email}
+              {...register('email', emailValidationConfig)}
+              onChange={handleChange('email')}
+              label="email"
+              autoComplete="off"
+            />
+          </FormControl>
+          {errors.email && <ErrorMessage errors={errors.email as Errors} />}
+        </div>
+        <div>
+          <FormControl variant="outlined">
+            <InputLabel htmlFor="outlined-adornment-password">
+              Contraseña
+            </InputLabel>
+            <OutlinedInput
+              id="outlined-adornment-password"
+              type={values.showPassword ? 'text' : 'password'}
+              value={values.password}
+              {...register('password', passwordValidationConfig)}
+              onChange={handleChange('password')}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                    className="tw-text-neutral-gray-100"
+                  >
+                    {values.showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
+              label="Password"
+              autoComplete="off"
+            />
+          </FormControl>
+          {errors.password && (
+            <ErrorMessage errors={errors.password as Errors} />
+          )}
+        </div>
         <Button
           className={`tw-h-14 ${
             hasErrors || !isDirty || isEmpty

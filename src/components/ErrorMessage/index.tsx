@@ -13,7 +13,7 @@ export const ErrorMessage = ({ errors }: ErrorMessageProps) => {
   const messages = Object.keys(types).map((key) => types[key]);
 
   return (
-    <ul className="tw-flex tw-flex-col tw-gap-y-4 tw-mb-5">
+    <ul className="tw-flex tw-flex-col tw-gap-y-4 tw-pt-4 tw-bg-background">
       {messages.map((message, index) => (
         <li className="tw-text-red" key={`error-${index}`}>
           {message}
