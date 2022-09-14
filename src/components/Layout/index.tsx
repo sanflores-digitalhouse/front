@@ -10,7 +10,10 @@ interface NavbarProps {
 
 const navbarHeight = '4rem';
 
-export const Layout = ({ children, isAuthenticated = false }: NavbarProps): JSX.Element => {
+export const Layout = ({
+  children,
+  isAuthenticated = false,
+}: NavbarProps): JSX.Element => {
   return (
     <>
       <div
@@ -24,9 +27,13 @@ export const Layout = ({ children, isAuthenticated = false }: NavbarProps): JSX.
 
         <main
           className="tw-flex tw-flex-col tw-flex-1  tw-flex-wrap tw-overflow-auto"
-          style={{
-            minHeight: 'calc(100vh - 8rem)',
-          }}
+          style={
+            !isAuthenticated
+              ? {
+                  minHeight: 'calc(100vh - 8rem)',
+                }
+              : {}
+          }
         >
           {children}
         </main>
