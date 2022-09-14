@@ -77,47 +77,55 @@ const Login = () => {
         className="tw-flex tw-flex-col tw-gap-y-12 tw-mt-10"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <FormControl variant="outlined">
-          <InputLabel htmlFor="outlined-adornment-password">Correo</InputLabel>
-          <OutlinedInput
-            id="outlined-adornment-email"
-            type="text"
-            value={values.email}
-            {...register('email', emailValidationConfig)}
-            onChange={handleChange('email')}
-            label="email"
-            autoComplete="off"
-          />
-        </FormControl>
-        {errors.email && <ErrorMessage errors={errors.email as Errors} />}
-        <FormControl variant="outlined">
-          <InputLabel htmlFor="outlined-adornment-password">
-            Contraseña
-          </InputLabel>
-          <OutlinedInput
-            id="outlined-adornment-password"
-            type={values.showPassword ? 'text' : 'password'}
-            value={values.password}
-            {...register('password', passwordValidationConfig)}
-            onChange={handleChange('password')}
-            endAdornment={
-              <InputAdornment position="end">
-                <IconButton
-                  aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
-                  onMouseDown={handleMouseDownPassword}
-                  edge="end"
-                  className="tw-text-neutral-gray-100"
-                >
-                  {values.showPassword ? <VisibilityOff /> : <Visibility />}
-                </IconButton>
-              </InputAdornment>
-            }
-            label="Password"
-            autoComplete="off"
-          />
-        </FormControl>
-        {errors.password && <ErrorMessage errors={errors.password as Errors} />}
+        <div>
+          <FormControl variant="outlined">
+            <InputLabel htmlFor="outlined-adornment-password">
+              Correo
+            </InputLabel>
+            <OutlinedInput
+              id="outlined-adornment-email"
+              type="text"
+              value={values.email}
+              {...register('email', emailValidationConfig)}
+              onChange={handleChange('email')}
+              label="email"
+              autoComplete="off"
+            />
+          </FormControl>
+          {errors.email && <ErrorMessage errors={errors.email as Errors} />}
+        </div>
+        <div>
+          <FormControl variant="outlined">
+            <InputLabel htmlFor="outlined-adornment-password">
+              Contraseña
+            </InputLabel>
+            <OutlinedInput
+              id="outlined-adornment-password"
+              type={values.showPassword ? 'text' : 'password'}
+              value={values.password}
+              {...register('password', passwordValidationConfig)}
+              onChange={handleChange('password')}
+              endAdornment={
+                <InputAdornment position="end">
+                  <IconButton
+                    aria-label="toggle password visibility"
+                    onClick={handleClickShowPassword}
+                    onMouseDown={handleMouseDownPassword}
+                    edge="end"
+                    className="tw-text-neutral-gray-100"
+                  >
+                    {values.showPassword ? <VisibilityOff /> : <Visibility />}
+                  </IconButton>
+                </InputAdornment>
+              }
+              label="Password"
+              autoComplete="off"
+            />
+          </FormControl>
+          {errors.password && (
+            <ErrorMessage errors={errors.password as Errors} />
+          )}
+        </div>
         <Button
           className={`tw-h-14 ${
             hasErrors || !isDirty || isEmpty
