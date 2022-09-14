@@ -441,13 +441,23 @@ fieldset {
   input {
   background-color: var(--neutral-gray-500);
   width: 20rem;
-}
-
-input {
   color: var(--neutral-gray-100) !important;
 }
 
 label {
+  color: var(--neutral-gray-100) !important;
+}
+
+input:-webkit-autofill,
+  input:-webkit-autofill:hover, 
+  input:-webkit-autofill:focus,
+  textarea:-webkit-autofill,
+  textarea:-webkit-autofill:hover,
+  textarea:-webkit-autofill:focus,
+  select:-webkit-autofill,
+  select:-webkit-autofill:hover,
+  select:-webkit-autofill:focus {
+  background-color: var(--neutral-gray-500) !important;
   color: var(--neutral-gray-100) !important;
 }
 
@@ -557,10 +567,6 @@ label {
   z-index: 50;
 }
 
-#root .tw-mb-5 {
-  margin-bottom: 1.25rem;
-}
-
 #root .tw-mt-10 {
   margin-top: 2.5rem;
 }
@@ -661,6 +667,10 @@ label {
   border-color: var(--neutral-gray-300);
 }
 
+#root .tw-bg-background {
+  background-color: var(--background);
+}
+
 #root .tw-bg-transparent {
   background-color: transparent;
 }
@@ -677,6 +687,10 @@ label {
 #root .tw-px-0 {
   padding-left: 0px;
   padding-right: 0px;
+}
+
+#root .tw-pt-4 {
+  padding-top: 1rem;
 }
 
 #root .tw-text-sm {
