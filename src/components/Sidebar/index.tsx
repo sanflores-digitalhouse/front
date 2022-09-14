@@ -43,7 +43,7 @@ export const Sidebar = () => {
   const { pathname } = useLocation();
 
   return (
-    <div
+    <nav
       className="tw-flex tw-w-64 tw-p-2 tw-border-r tw-border-neutral-blue-100 tw-overflow-auto tw-sticky tw-top-16"
       style={{
         minHeight: 'calc(100vh - 8rem)',
@@ -63,6 +63,6 @@ export const Sidebar = () => {
           </li>
         ))}
       </ul>
-    </div>
+    </nav>
   );
 };

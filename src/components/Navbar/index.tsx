@@ -16,12 +16,12 @@ const stringAvatar = (name: string) => {
 export const Navbar = () => {
   // TODO: replace with true user data
   const name = 'Mauricio Brito';
-  const isAuthenticated = false;
+  const isAuthenticated = true;
   const location = useLocation();
   const isLogin = location.pathname === ROUTES.LOGIN && !isAuthenticated;
   
   return (
-    <nav className="tw-w-full tw-fixed tw-z-50">
+    <div className="tw-w-full tw-fixed tw-z-50">
       <AppBar className="tw-px-10 tw-bg-transparent !tw-text-neutral-gray-100 tw-border-b tw-border-neutral-blue-100 tw-backdrop-blur tw-shadow-none">
         <Toolbar className="tw-flex tw-px-0 tw-justify-between">
           <Link to={ROUTES.HOME}>
@@ -44,6 +44,6 @@ export const Navbar = () => {
           )}
         </Toolbar>
       </AppBar>
-    </nav>
+    </div>
   );
 };

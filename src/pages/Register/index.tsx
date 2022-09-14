@@ -62,8 +62,6 @@ const Register = () => {
     showPassword: false,
   });
 
-  console.log(errors);
-
   const isEmpty = isValueEmpty(values);
 
   const hasErrors = valuesHaveErrors(errors);

@@ -16,18 +16,13 @@ export const Layout = ({ children }: NavbarProps): JSX.Element => {
       <div
         className="tw-flex"
         style={{
-          minHeight: 'calc(100vh - 8rem)',
           marginTop: navbarHeight,
         }}
       >
         <Navbar />
         {auth.token && <Sidebar />}
 
-        <main
-          className={`tw-flex tw-flex-1  tw-flex-wrap ${
-            auth.token ? '' : ' tw-flex-col'
-          }`}
-        >
+        <main className="tw-flex tw-flex-1  tw-flex-wrap tw-overflow-auto">
           {children}
         </main>
       </div>
