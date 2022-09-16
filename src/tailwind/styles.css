@@ -599,6 +599,10 @@ label {
   height: 3rem;
 }
 
+#root .tw-h-8 {
+  height: 2rem;
+}
+
 #root .tw-h-14 {
   height: 3.5rem;
 }
@@ -613,6 +617,10 @@ label {
 
 #root .tw-w-64 {
   width: 16rem;
+}
+
+#root .tw-w-8 {
+  width: 2rem;
 }
 
 #root .tw-w-80 {
@@ -695,6 +703,10 @@ label {
   border-radius: 0.5rem;
 }
 
+#root .tw-rounded-full {
+  border-radius: 9999px;
+}
+
 #root .tw-border-2 {
   border-width: 2px;
 }
@@ -731,6 +743,10 @@ label {
   background-color: var(--primary);
 }
 
+#root .tw-bg-red {
+  background-color: var(--red);
+}
+
 #root .tw-p-2 {
   padding: 0.5rem;
 }
@@ -751,6 +767,16 @@ label {
 #root .tw-px-0 {
   padding-left: 0px;
   padding-right: 0px;
+}
+
+#root .tw-px-4 {
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+#root .tw-py-5 {
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
 }
 
 #root .tw-pt-4 {
@@ -811,6 +837,18 @@ label {
   --tw-backdrop-blur: blur(8px);
   -webkit-backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
           backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
+}
+
+#root .tw-transition {
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-backdrop-filter;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+  transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-backdrop-filter;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
+}
+
+#root .hover\:tw-bg-neutral-gray-500:hover {
+  background-color: var(--neutral-gray-500);
 }
 
 #root .hover\:tw-text-primary:hover {

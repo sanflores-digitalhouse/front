@@ -32,7 +32,9 @@ export const Layout = ({
               ? {
                   minHeight: 'calc(100vh - 8rem)',
                 }
-              : {}
+              : {
+                  paddingBottom: '3rem',
+                }
           }
         >
           {children}
