@@ -13,10 +13,9 @@ const stringAvatar = (name: string) => {
   };
 };
 
-export const Navbar = () => {
+export const Navbar = ({ isAuthenticated = false }) => {
   // TODO: replace with true user data
   const name = 'Mauricio Brito';
-  const isAuthenticated = true;
   const location = useLocation();
   const isLogin = location.pathname === ROUTES.LOGIN && !isAuthenticated;
   

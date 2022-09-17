@@ -5,12 +5,15 @@ import { Sidebar } from '../Sidebar';
 
 interface NavbarProps {
   children: React.ReactNode;
+  isAuthenticated?: boolean;
 }
 
 const navbarHeight = '4rem';
-const auth = { token: true };
 
-export const Layout = ({ children }: NavbarProps): JSX.Element => {
+export const Layout = ({
+  children,
+  isAuthenticated = false,
+}: NavbarProps): JSX.Element => {
   return (
     <>
       <div
@@ -19,10 +22,21 @@ export const Layout = ({ children }: NavbarProps): JSX.Element => {
           marginTop: navbarHeight,
         }}
       >
-        <Navbar />
-        {auth.token && <Sidebar />}
+        <Navbar isAuthenticated={isAuthenticated} />
+        {isAuthenticated && <Sidebar />}
 
-        <main className="tw-flex tw-flex-1  tw-flex-wrap tw-overflow-auto">
+        <main
+          className="tw-flex tw-flex-col tw-flex-1  tw-flex-wrap tw-overflow-auto"
+          style={
+            !isAuthenticated
+              ? {
+                  minHeight: 'calc(100vh - 8rem)',
+                }
+              : {
+                  paddingBottom: '3rem',
+                }
+          }
+        >
           {children}
         </main>
       </div>
