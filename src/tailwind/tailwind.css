@@ -31,10 +31,4 @@
   label {
     color: var(--neutral-gray-100) !important;
   }
-
-  .MuiCard-root {
-    background-color: var(--neutral-gray-500) !important;
-    color: var(--neutral-gray-100) !important;
-    border: 1px solid var(--neutral-blue-100) !important;
-  }
 }

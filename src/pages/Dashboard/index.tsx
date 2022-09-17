@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '../../constants';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { CardCustom } from '../../components/';
+import { CardCustom, Records } from '../../components/';
 
 const Dashboard = () => {
   return (
@@ -49,28 +49,7 @@ const Dashboard = () => {
             <div>
               <p className="tw-mb-4 tw-font-bold">Tu actividad</p>
             </div>
-            <ul className="tw-w-full">
-              <li className="tw-flex tw-w-full tw-justify-between tw-px-4 tw-border-t tw-border-neutral-blue-100 tw-py-5 hover:tw-bg-neutral-gray-500 tw-transition">
-                <div className="tw-flex tw-items-center tw-gap-x-4">
-                  <div className="tw-rounded-full tw-w-8 tw-h-8 tw-bg-red" />
-                  <p>Transferiste a Rodrigo</p>
-                </div>
-                <div>
-                  <p>$1.000</p>
-                  <p>Sabado</p>
-                </div>
-              </li>
-              <li className="tw-flex tw-w-full tw-justify-between tw-px-4 tw-border-t tw-border-neutral-blue-100 tw-py-5 hover:tw-bg-neutral-gray-500">
-                <div className="tw-flex tw-items-center tw-gap-x-4">
-                  <div className="tw-rounded-full tw-w-8 tw-h-8 tw-bg-red" />
-                  <p>Transferiste a Rodrigo</p>
-                </div>
-                <div>
-                  <p>$1.000</p>
-                  <p>Sabado</p>
-                </div>
-              </li>
-            </ul>
+            <Records />
           </>
         }
         actions={

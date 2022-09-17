@@ -567,16 +567,16 @@ label {
   margin-right: auto;
 }
 
-#root .tw-mt-8 {
-  margin-top: 2rem;
-}
-
 #root .tw-mt-12 {
   margin-top: 3rem;
 }
 
 #root .tw-mb-8 {
   margin-bottom: 2rem;
+}
+
+#root .tw-mt-8 {
+  margin-top: 2rem;
 }
 
 #root .tw-mb-4 {
@@ -599,16 +599,16 @@ label {
   height: 3rem;
 }
 
-#root .tw-h-8 {
-  height: 2rem;
-}
-
 #root .tw-h-14 {
   height: 3.5rem;
 }
 
 #root .tw-h-full {
   height: 100%;
+}
+
+#root .tw-h-8 {
+  height: 2rem;
 }
 
 #root .tw-w-full {
@@ -619,12 +619,12 @@ label {
   width: 16rem;
 }
 
-#root .tw-w-8 {
-  width: 2rem;
-}
-
 #root .tw-w-80 {
   width: 20rem;
+}
+
+#root .tw-w-8 {
+  width: 2rem;
 }
 
 #root .tw-max-w-2xl {
@@ -695,12 +695,12 @@ label {
   overflow: auto;
 }
 
-#root .tw-rounded-xl {
-  border-radius: 0.75rem;
-}
-
 #root .tw-rounded-lg {
   border-radius: 0.5rem;
+}
+
+#root .tw-rounded-xl {
+  border-radius: 0.75rem;
 }
 
 #root .tw-rounded-full {
@@ -747,16 +747,16 @@ label {
   background-color: var(--red);
 }
 
-#root .tw-p-2 {
-  padding: 0.5rem;
-}
-
 #root .tw-p-10 {
   padding: 2.5rem;
 }
 
 #root .tw-p-0 {
   padding: 0px;
+}
+
+#root .tw-p-2 {
+  padding: 0.5rem;
 }
 
 #root .tw-px-10 {
@@ -799,6 +799,10 @@ label {
   font-weight: 700;
 }
 
+#root .tw-text-neutral-gray-100 {
+  color: var(--neutral-gray-100);
+}
+
 #root .tw-text-red {
   color: var(--red);
 }
@@ -809,10 +813,6 @@ label {
 
 #root .tw-text-primary {
   color: var(--primary);
-}
-
-#root .tw-text-neutral-gray-100 {
-  color: var(--neutral-gray-100);
 }
 
 #root .\!tw-text-primary {
