@@ -631,6 +631,10 @@ label {
   max-width: 42rem;
 }
 
+#root .tw-max-w-5xl {
+  max-width: 64rem;
+}
+
 #root .tw-max-w-3xl {
   max-width: 48rem;
 }
@@ -653,6 +657,10 @@ label {
 
 #root .tw-items-start {
   align-items: flex-start;
+}
+
+#root .tw-items-end {
+  align-items: flex-end;
 }
 
 #root .tw-items-center {
@@ -735,10 +743,6 @@ label {
   background-color: var(--background);
 }
 
-#root .tw-bg-transparent {
-  background-color: transparent;
-}
-
 #root .tw-bg-primary {
   background-color: var(--primary);
 }
@@ -785,6 +789,10 @@ label {
 
 #root .tw-pl-8 {
   padding-left: 2rem;
+}
+
+#root .tw-text-left {
+  text-align: left;
 }
 
 #root .tw-text-sm {

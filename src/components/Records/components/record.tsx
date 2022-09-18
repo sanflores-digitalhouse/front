@@ -1,5 +1,5 @@
 import React from 'react';
-import { formatCurrency, formatDateFromString } from '../../../utils';
+import { formatCurrency, formatDateFromString } from '../../../utils/';
 import { currencies } from '../../../constants/';
 
 export interface RecordProps {
@@ -26,7 +26,7 @@ export const Record = ({
           {type} a {name}
         </p>
       </div>
-      <div>
+      <div className='tw-flex tw-text-left tw-flex-col tw-items-end'>
         <p>{formatCurrency(locales, currency, amount)}</p>
         <p>{formatDateFromString(date)}</p>
       </div>

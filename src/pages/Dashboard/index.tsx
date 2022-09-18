@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '../../constants';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { CardCustom, Records } from '../../components/';
+import { CardCustom, Records } from '../../components';
 
 const Dashboard = () => {
   return (
@@ -47,14 +47,14 @@ const Dashboard = () => {
         content={
           <>
             <div>
-              <p className="tw-mb-4 tw-font-bold">Tu actividad</p>
+              <p className="tw-mb-4 tw-font-bold">Tu actividad reciente</p>
             </div>
-            <Records />
+            <Records maxRecords={5} />
           </>
         }
         actions={
           <Link
-            to={ROUTES.HOME}
+            to={ROUTES.ACTIVITY}
             className="tw-h-12 tw-w-full tw-flex tw-items-center tw-justify-between tw-px-4 hover:tw-text-primary hover:tw-bg-neutral-gray-500 tw-transition"
           >
             <span>Ver toda tu actividad</span>
