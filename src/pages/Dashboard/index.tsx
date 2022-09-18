@@ -4,8 +4,12 @@ import { Link } from 'react-router-dom';
 import { ROUTES } from '../../constants';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { CardCustom, Records } from '../../components';
+import { formatCurrency } from '../../utils/';
+import { currencies } from '../../constants/';
 
 const Dashboard = () => {
+  const { Argentina } = currencies;
+  const { locales, currency } = Argentina;
   return (
     <div className="tw-w-full">
       <CardCustom
@@ -13,7 +17,9 @@ const Dashboard = () => {
           <div className="tw-flex tw-justify-between tw-mb-8">
             <div>
               <p className="tw-mb-4 tw-font-bold">Dinero disponible</p>
-              <p className="tw-text-xl tw-font-bold">$6.890.534,17</p>
+              <p className="tw-text-xl tw-font-bold">
+                {formatCurrency(locales, currency, 6890534.17)}
+              </p>
             </div>
             <div className="tw-flex tw-justify-between tw-items-start tw-flex-wrap tw-gap-x-4">
               <Link
@@ -55,7 +61,7 @@ const Dashboard = () => {
         actions={
           <Link
             to={ROUTES.ACTIVITY}
-            className="tw-h-12 tw-w-full tw-flex tw-items-center tw-justify-between tw-px-4 hover:tw-text-primary hover:tw-bg-neutral-gray-500 tw-transition"
+            className="tw-h-12 tw-w-full tw-flex tw-items-center tw-justify-between tw-px-4 tw-mt-4 hover:tw-text-primary hover:tw-bg-neutral-gray-500 tw-transition"
           >
             <span>Ver toda tu actividad</span>
             <ArrowForwardIosIcon />
