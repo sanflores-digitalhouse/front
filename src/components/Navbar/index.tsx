@@ -18,10 +18,13 @@ export const Navbar = ({ isAuthenticated = false }) => {
   const name = 'Mauricio Brito';
   const location = useLocation();
   const isLogin = location.pathname === ROUTES.LOGIN && !isAuthenticated;
-  
+
   return (
     <div className="tw-w-full tw-fixed tw-z-50">
-      <AppBar className="tw-px-10 tw-bg-transparent !tw-text-neutral-gray-100 tw-border-b tw-border-neutral-blue-100 tw-backdrop-blur tw-shadow-none">
+      <AppBar
+        className="tw-px-10 !tw-text-neutral-gray-100 tw-border-b tw-border-neutral-blue-100 tw-backdrop-blur tw-shadow-none"
+        style={{ background: 'transparent' }}
+      >
         <Toolbar className="tw-flex tw-px-0 tw-justify-between">
           <Link to={ROUTES.HOME}>
             <Icon className="tw-text-primary" type="digital-house" />

@@ -26,7 +26,7 @@ export const Record = ({
           {type} a {name}
         </p>
       </div>
-      <div>
+      <div className='tw-flex tw-text-left tw-flex-col tw-items-end'>
         <p>{formatCurrency(locales, currency, amount)}</p>
         <p>{formatDateFromString(date)}</p>
       </div>
