@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '../../constants';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { CardCustom, Records } from '../../components/';
+import { CardCustom, Records } from '../../components';
 
 const Dashboard = () => {
   return (

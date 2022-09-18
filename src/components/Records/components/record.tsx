@@ -1,5 +1,5 @@
 import React from 'react';
-import { formatCurrency, formatDateFromString } from '../../../utils';
+import { formatCurrency, formatDateFromString } from '../../../utils/';
 import { currencies } from '../../../constants/';
 
 export interface RecordProps {
