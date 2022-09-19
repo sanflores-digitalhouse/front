@@ -1,17 +1,14 @@
 import React from 'react';
 import { RecordProps, Record } from './components/record';
-import { USER } from '../../data';
 
 export interface RecordsProps {
-  records?: RecordProps[];
+  records: RecordProps[];
   maxRecords?: number;
   initialRecord?: number;
 }
 
-const { activities } = USER;
-
 export const Records = ({
-  records = activities,
+  records,
   maxRecords,
   initialRecord = 0,
 }: RecordsProps) => {

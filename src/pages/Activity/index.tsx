@@ -1,5 +1,5 @@
 import React from 'react';
-import { RecordsProps } from '../../components/Records/index';
+import { RecordsProps, RecordVariant } from '../../components/Records/index';
 import { CardCustom, Records } from '../../components';
 import Pagination from '@mui/material/Pagination';
 import { USER } from '../../data/user';
@@ -7,8 +7,20 @@ import { USER } from '../../data/user';
 export type ActivitiesProps = RecordsProps;
 
 const { activities } = USER;
+const records = activities.map((activity) => {
+  const { amount, name, date, type } = activity;
+  return {
+    content: {
+      amount,
+      name,
+      date,
+      type,
+    },
+    variant: RecordVariant.TRANSACTION,
+  };
+});
 
-const Activity = ({ records = activities }: ActivitiesProps) => {
+const Activity = () => {
   const [page, setPage] = React.useState(1);
   const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
     setPage(value);
@@ -23,11 +35,14 @@ const Activity = ({ records = activities }: ActivitiesProps) => {
             <div>
               <p className="tw-mb-4 tw-font-bold">Tu actividad</p>
             </div>
-            <Records initialRecord={page * recordsPerPage - recordsPerPage} />
+            <Records
+              records={records}
+              initialRecord={page * recordsPerPage - recordsPerPage}
+            />
           </>
         }
         actions={
-          <div className="tw-h-12 tw-w-full tw-flex tw-items-center tw-justify-center tw-px-4">
+          <div className="tw-h-12 tw-w-full tw-flex tw-items-center tw-justify-center tw-px-4 tw-mt-4">
             <Pagination
               count={numberOfPages}
               onChange={handleChange}

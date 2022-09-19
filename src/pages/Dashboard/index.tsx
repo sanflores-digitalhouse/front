@@ -3,9 +3,24 @@ import Button from '@mui/material/Button';
 import { Link } from 'react-router-dom';
 import { ROUTES } from '../../constants';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { CardCustom, Records } from '../../components';
+import { CardCustom, Records, RecordVariant } from '../../components';
 import { formatCurrency } from '../../utils/';
 import { currencies } from '../../constants/';
+import { USER } from '../../data';
+
+const { activities } = USER;
+const parsedActivities = activities.map((activity) => {
+  const { amount, name, date, type } = activity;
+  return {
+    content: {
+      amount,
+      name,
+      date,
+      type,
+    },
+    variant: RecordVariant.TRANSACTION,
+  };
+});
 
 const Dashboard = () => {
   const { Argentina } = currencies;
@@ -55,7 +70,7 @@ const Dashboard = () => {
             <div>
               <p className="tw-mb-4 tw-font-bold">Tu actividad reciente</p>
             </div>
-            <Records maxRecords={5} />
+            <Records records={parsedActivities} maxRecords={5} />
           </>
         }
         actions={

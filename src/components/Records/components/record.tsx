@@ -2,34 +2,64 @@ import React from 'react';
 import { formatCurrency, formatDateFromString } from '../../../utils/';
 import { currencies } from '../../../constants/';
 
-export interface RecordProps {
-  type: string;
-  name: string;
+export enum RecordVariant {
+  TRANSACTION = 'transaction',
+  CARD = 'card',
+  ACCOUNT = 'account',
+}
+export interface Transaction {
   amount: number;
+  name: string;
   date: string;
+  type: string;
+  id?: string;
 }
 
-export const Record = ({
-  type = 'Transfer',
-  name = 'Rodrigo',
-  amount = 2000,
-  date = 'Sabado',
-}: RecordProps) => {
-  const { Argentina } = currencies;
-  const { locales, currency } = Argentina;
+interface Card {
+  number: string;
+  name: string;
+}
 
+interface Account {
+  name: string;
+}
+export interface RecordProps {
+  content: Transaction | Card | Account;
+  className?: string;
+  variant?: RecordVariant;
+}
+const { Argentina } = currencies;
+const { locales, currency } = Argentina;
+
+export const Record = ({
+  className,
+  content,
+  variant = RecordVariant.TRANSACTION,
+}: RecordProps) => {
   return (
-    <li className="tw-flex tw-w-full tw-justify-between tw-px-4 tw-border-t tw-border-neutral-blue-100 tw-py-5 hover:tw-bg-neutral-gray-500 tw-transition">
+    <li
+      className={`tw-flex tw-w-full tw-justify-between tw-px-4 tw-border-t tw-border-neutral-blue-100 tw-py-5 hover:tw-bg-neutral-gray-500 tw-transition ${className}`}
+    >
+      {variant === RecordVariant.TRANSACTION && (
+        <Transaction {...(content as Transaction)} />
+      )}
+    </li>
+  );
+};
+
+function Transaction({ amount, name, date, type }: Transaction) {
+  return (
+    <>
       <div className="tw-flex tw-items-center tw-gap-x-4">
         <div className="tw-rounded-full tw-w-8 tw-h-8 tw-bg-red" />
         <p>
           {type} a {name}
         </p>
       </div>
-      <div className='tw-flex tw-text-left tw-flex-col tw-items-end'>
+      <div className="tw-flex tw-text-left tw-flex-col tw-items-end">
         <p>{formatCurrency(locales, currency, amount)}</p>
         <p>{formatDateFromString(date)}</p>
       </div>
-    </li>
+    </>
   );
-};
+}
