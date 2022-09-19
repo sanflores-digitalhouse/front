@@ -27,6 +27,7 @@ const Activity = () => {
   };
   const recordsPerPage = 10;
   const numberOfPages = Math.ceil(records.length / recordsPerPage);
+  const isRecordsGreeterThanOnePage = records.length > recordsPerPage;
   return (
     <div className="tw-w-full">
       <CardCustom
@@ -42,13 +43,15 @@ const Activity = () => {
           </>
         }
         actions={
-          <div className="tw-h-12 tw-w-full tw-flex tw-items-center tw-justify-center tw-px-4 tw-mt-4">
-            <Pagination
-              count={numberOfPages}
-              onChange={handleChange}
-              shape="rounded"
-            />
-          </div>
+          isRecordsGreeterThanOnePage && (
+            <div className="tw-h-12 tw-w-full tw-flex tw-items-center tw-justify-center tw-px-4 tw-mt-4">
+              <Pagination
+                count={numberOfPages}
+                onChange={handleChange}
+                shape="rounded"
+              />
+            </div>
+          )
         }
         className="tw-max-w-5xl"
       />
