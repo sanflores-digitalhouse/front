@@ -1,13 +1,13 @@
 import React from 'react';
-import { RecordsProps, RecordVariant } from '../../components/Records/index';
+import { RecordVariant, RecordProps } from '../../components/Records/';
 import { CardCustom, Records } from '../../components';
 import Pagination from '@mui/material/Pagination';
 import { USER } from '../../data/user';
+import { usePagination } from '../../hooks/usePagination';
 
-export type ActivitiesProps = RecordsProps;
 
 const { activities } = USER;
-const records = activities.map((activity) => {
+const transactions = activities.map((activity) => {
   const { amount, name, date, type } = activity;
   return {
     content: {
@@ -20,14 +20,11 @@ const records = activities.map((activity) => {
   };
 });
 
+const recordsPerPage = 10;
 const Activity = () => {
-  const [page, setPage] = React.useState(1);
-  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
-    setPage(value);
-  };
-  const recordsPerPage = 10;
-  const numberOfPages = Math.ceil(records.length / recordsPerPage);
-  const isRecordsGreeterThanOnePage = records.length > recordsPerPage;
+  const { page, handleChange, numberOfPages, isRecordsGreeterThanOnePage } =
+    usePagination(transactions as RecordProps[], recordsPerPage);
+
   return (
     <div className="tw-w-full">
       <CardCustom
@@ -37,7 +34,7 @@ const Activity = () => {
               <p className="tw-mb-4 tw-font-bold">Tu actividad</p>
             </div>
             <Records
-              records={records}
+              records={transactions}
               initialRecord={page * recordsPerPage - recordsPerPage}
             />
           </>

@@ -1,13 +1,14 @@
 import React from 'react';
 import { formatCurrency, formatDateFromString } from '../../../utils/';
 import { currencies } from '../../../constants/';
+import { useSearchParams } from 'react-router-dom';
 
 export enum RecordVariant {
   TRANSACTION = 'transaction',
   CARD = 'card',
   ACCOUNT = 'account',
 }
-export interface Transaction {
+interface Transaction {
   amount: number;
   name: string;
   date: string;
@@ -18,6 +19,8 @@ export interface Transaction {
 interface Card {
   number: string;
   name: string;
+  type: string;
+  isSelecting: boolean;
 }
 
 interface Account {
@@ -36,12 +39,17 @@ export const Record = ({
   content,
   variant = RecordVariant.TRANSACTION,
 }: RecordProps) => {
+  const [searchParams] = useSearchParams();
+  const isSelecting = !!searchParams.get('select');
   return (
     <li
       className={`tw-flex tw-w-full tw-justify-between tw-px-4 tw-border-t tw-border-neutral-blue-100 tw-py-5 hover:tw-bg-neutral-gray-500 tw-transition ${className}`}
     >
       {variant === RecordVariant.TRANSACTION && (
         <Transaction {...(content as Transaction)} />
+      )}
+      {variant === RecordVariant.CARD && (
+        <CardItem {...(content as Card)} isSelecting={isSelecting} />
       )}
     </li>
   );
@@ -59,6 +67,23 @@ function Transaction({ amount, name, date, type }: Transaction) {
       <div className="tw-flex tw-text-left tw-flex-col tw-items-end">
         <p>{formatCurrency(locales, currency, amount)}</p>
         <p>{formatDateFromString(date)}</p>
+      </div>
+    </>
+  );
+}
+
+function CardItem({ number, type, isSelecting }: Card) {
+  return (
+    <>
+      <div className="tw-flex tw-items-center tw-gap-x-4">
+        <div className="tw-rounded-full tw-w-8 tw-h-8 tw-bg-red" />
+        <p>
+          {type} terminada en {number}
+        </p>
+      </div>
+      <div className="tw-flex tw-text-left tw-flex-col tw-items-end">
+        <p>{isSelecting ?  'Seleccionar': 'Eliminar'}</p>
+        <p>Editar</p>
       </div>
     </>
   );

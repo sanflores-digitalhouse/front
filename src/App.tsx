@@ -10,6 +10,8 @@ const Dashboard = React.lazy(() => import('./pages/Dashboard'));
 const Login = React.lazy(() => import('./pages/Login'));
 const Register = React.lazy(() => import('./pages/Register'));
 const Activity = React.lazy(() => import('./pages/Activity'));
+const Cards = React.lazy(() => import('./pages/Cards'));
+
 const auth = { token: true };
 function App() {
   return (
@@ -24,6 +26,7 @@ function App() {
               >
                 <Route element={<Dashboard />} path={ROUTES.HOME} />
                 <Route element={<Activity />} path={ROUTES.ACTIVITY} />
+                <Route element={<Cards />} path={ROUTES.CARDS} />
               </Route>
               <Route
                 element={
