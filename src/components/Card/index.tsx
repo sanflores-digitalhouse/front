@@ -5,7 +5,7 @@ import CardContent from '@mui/material/CardContent';
 
 export interface CardCustomProps {
   content: React.ReactNode;
-  actions: React.ReactNode;
+  actions?: React.ReactNode;
   className?: string;
 }
 
@@ -22,9 +22,11 @@ export const CardCustom = ({
       <CardContent className="tw-flex tw-flex-col tw-p-0">
         {content}
       </CardContent>
-      <CardActions className="tw-flex tw-flex-wrap tw-justify-evenly tw-p-0">
-        {actions}
-      </CardActions>
+      {actions && (
+        <CardActions className="tw-flex tw-flex-wrap tw-justify-evenly tw-p-0">
+          {actions}
+        </CardActions>
+      )}
     </Card>
   );
 };

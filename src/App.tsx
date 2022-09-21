@@ -6,13 +6,14 @@ import { Layout } from './components/Layout';
 import './tailwind/styles.css';
 
 // pages
-const Dashboard = React.lazy(() => import('./pages/Dashboard'));
 const Login = React.lazy(() => import('./pages/Login'));
+const Dashboard = React.lazy(() => import('./pages/Dashboard'));
 const Register = React.lazy(() => import('./pages/Register'));
 const Activity = React.lazy(() => import('./pages/Activity'));
 const Cards = React.lazy(() => import('./pages/Cards'));
 const SendMoney = React.lazy(() => import('./pages/SendMoney'));
 const LoadMoney = React.lazy(() => import('./pages/LoadMoney'));
+const Profile = React.lazy(() => import('./pages/Profile'));
 
 const auth = { token: true };
 function App() {
@@ -31,6 +32,7 @@ function App() {
                 <Route element={<Cards />} path={ROUTES.CARDS} />
                 <Route element={<SendMoney />} path={ROUTES.SEND_MONEY} />
                 <Route element={<LoadMoney />} path={ROUTES.LOAD_MONEY} />
+                <Route element={<Profile />} path={ROUTES.PROFILE} />
               </Route>
               <Route
                 element={

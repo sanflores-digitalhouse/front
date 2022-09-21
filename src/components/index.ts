@@ -4,3 +4,4 @@ export * from './Icon';
 export * from './ErrorMessage';
 export * from './Card';
 export * from './Records';
+export * from './Tooltip';
