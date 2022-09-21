@@ -8,7 +8,6 @@ import {
 } from '../../components';
 import { ADD, ROUTES } from '../../constants';
 import { Link } from 'react-router-dom';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { usePagination } from '../../hooks/usePagination';
 import { USER } from '../../data/user';
 import { Pagination } from '@mui/material';
@@ -46,7 +45,7 @@ const SendMoney = () => {
               <Icon type="add" />
               <p>Nueva cuenta</p>
             </div>
-            <ArrowForwardIosIcon />
+            <Icon type="arrow-right" />
           </Link>
         }
       />

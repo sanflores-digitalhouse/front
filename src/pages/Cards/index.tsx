@@ -9,7 +9,6 @@ import {
   RecordVariant,
 } from '../../components';
 import { Pagination } from '@mui/material';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { Link } from 'react-router-dom';
 import { ROUTES, ADD } from '../../constants';
 
@@ -50,7 +49,7 @@ const Cards = () => {
               <Icon type="add" />
               <p>Nueva tarjeta</p>
             </div>
-            <ArrowForwardIosIcon />
+            <Icon type="arrow-right" />
           </Link>
         }
       />

@@ -2,7 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { CardCustom, Icon } from '../../components';
 import { ROUTES, SELECT } from '../../constants';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 const LoadMoney = () => {
   return (
@@ -23,7 +22,7 @@ const LoadMoney = () => {
               <Icon type="user" />
               <p>Transferencia bancaria</p>
             </div>
-            <ArrowForwardIosIcon />
+            <Icon type="arrow-right" />
           </Link>
         }
       />
@@ -43,7 +42,7 @@ const LoadMoney = () => {
               <Icon type="credit-card" />
               <p>Seleccionar tarjeta</p>
             </div>
-            <ArrowForwardIosIcon />
+            <Icon type="arrow-right" />
           </Link>
         }
       />

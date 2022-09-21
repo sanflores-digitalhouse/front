@@ -2,8 +2,7 @@ import React from 'react';
 import Button from '@mui/material/Button';
 import { Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../constants';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import { CardCustom, Records, RecordVariant } from '../../components';
+import { CardCustom, Records, RecordVariant, Icon } from '../../components';
 import { formatCurrency } from '../../utils/';
 import { currencies } from '../../constants/';
 import { USER } from '../../data';
@@ -88,7 +87,7 @@ const Dashboard = () => {
             className="tw-h-12 tw-w-full tw-flex tw-items-center tw-justify-between tw-mt-4 hover:tw-text-primary tw-px-4 hover:tw-bg-neutral-gray-500 tw-transition"
           >
             <span>Ver toda tu actividad</span>
-            <ArrowForwardIosIcon />
+            <Icon type="arrow-right" />
           </Link>
         }
       />
