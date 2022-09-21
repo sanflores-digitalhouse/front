@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { CardCustom } from '../../components';
-import { ROUTES } from '../../constants';
+import { CardCustom, Icon } from '../../components';
+import { ROUTES, SELECT } from '../../constants';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 const LoadMoney = () => {
@@ -11,9 +11,7 @@ const LoadMoney = () => {
         className="tw-max-w-5xl"
         content={
           <div className="tw-flex tw-justify-between tw-mb-8">
-            <p className="tw-font-bold">
-              Desde cuenta propia
-            </p>
+            <p className="tw-font-bold">Desde cuenta propia</p>
           </div>
         }
         actions={
@@ -22,7 +20,7 @@ const LoadMoney = () => {
             className="tw-w-full tw-flex tw-items-center tw-justify-between"
           >
             <div className="tw-flex tw-items-center tw-gap-x-4">
-              <div className="tw-rounded-full tw-w-8 tw-h-8 tw-bg-red" />
+              <Icon type="user" />
               <p>Transferencia bancaria</p>
             </div>
             <ArrowForwardIosIcon />
@@ -33,18 +31,16 @@ const LoadMoney = () => {
         className="tw-max-w-5xl"
         content={
           <div className="tw-flex tw-justify-between tw-mb-8">
-            <p className="tw-font-bold">
-              Desde tarjeta
-            </p>
+            <p className="tw-font-bold">Desde tarjeta</p>
           </div>
         }
         actions={
           <Link
-            to={ROUTES.CARDS}
+            to={`${ROUTES.CARDS}?${SELECT}`}
             className="tw-w-full tw-flex tw-items-center tw-justify-between"
           >
             <div className="tw-flex tw-items-center tw-gap-x-4">
-              <div className="tw-rounded-full tw-w-8 tw-h-8 tw-bg-red" />
+              <Icon type="credit-card" />
               <p>Seleccionar tarjeta</p>
             </div>
             <ArrowForwardIosIcon />

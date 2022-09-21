@@ -2,6 +2,8 @@ import React from 'react';
 import { formatCurrency, formatDateFromString } from '../../../utils/';
 import { currencies } from '../../../constants/';
 import { useSearchParams } from 'react-router-dom';
+import { Icon, IconType } from './../../Icon';
+import { ActivityType } from '../../../data';
 
 export enum RecordVariant {
   TRANSACTION = 'transaction',
@@ -10,9 +12,9 @@ export enum RecordVariant {
 }
 interface Transaction {
   amount: number;
-  name: string;
+  name?: string;
   date: string;
-  type: string;
+  type: ActivityType;
   id?: string;
 }
 
@@ -41,6 +43,7 @@ export const Record = ({
 }: RecordProps) => {
   const [searchParams] = useSearchParams();
   const isSelecting = !!searchParams.get('select');
+
   return (
     <li
       className={`tw-flex tw-w-full tw-justify-between tw-px-4 tw-border-t tw-border-neutral-blue-100 tw-py-5 hover:tw-bg-neutral-gray-500 tw-transition ${className}`}
@@ -51,18 +54,30 @@ export const Record = ({
       {variant === RecordVariant.CARD && (
         <CardItem {...(content as Card)} isSelecting={isSelecting} />
       )}
-      {variant === RecordVariant.ACCOUNT && ( <AccountItem {...(content as Account)} /> )}
+      {variant === RecordVariant.ACCOUNT && (
+        <AccountItem {...(content as Account)} />
+      )}
     </li>
   );
 };
 
 function TransactionItem({ amount, name, date, type }: Transaction) {
+  const iconType: Record<ActivityType, IconType> = {
+    [ActivityType.TRANSFER_IN]: 'transfer-in',
+    [ActivityType.TRANSFER_OUT]: 'transfer-out',
+    [ActivityType.INCOME]: 'income',
+  };
+  const messageType : Record<ActivityType, string> = {
+    [ActivityType.TRANSFER_IN]: 'Recibiste de',
+    [ActivityType.TRANSFER_OUT]: 'Enviaste a',
+    [ActivityType.INCOME]: 'Ingresaste',
+  };
   return (
     <>
       <div className="tw-flex tw-items-center tw-gap-x-4">
-        <div className="tw-rounded-full tw-w-8 tw-h-8 tw-bg-red" />
+        {iconType[type] && <Icon className="tw-fill-neutral-gray-500" type={iconType[type]} />}
         <p>
-          {type} a {name}
+          {messageType[type] && messageType[type]}  {name}
         </p>
       </div>
       <div className="tw-flex tw-text-left tw-flex-col tw-items-end">
@@ -78,30 +93,31 @@ function CardItem({ number, type, isSelecting }: Card) {
   return (
     <>
       <div className="tw-flex tw-items-center tw-gap-x-4">
-        <div className="tw-rounded-full tw-w-8 tw-h-8 tw-bg-red" />
+        <Icon type="mastercard" />
+
         <p>
           {type} terminada en {lastFourDigits}
         </p>
       </div>
       <div className="tw-flex tw-text-left tw-gap-x-4 tw-items-center">
-        <p>{isSelecting ?  'Seleccionar': 'Eliminar'}</p>
+        <p>{isSelecting ? 'Seleccionar' : 'Eliminar'}</p>
         <p>Editar</p>
       </div>
     </>
   );
 }
 
-  function AccountItem({ name }: Account) {
-    return (
-      <>
-        <div className="tw-flex tw-items-center tw-gap-x-4">
-          <div className="tw-rounded-full tw-w-8 tw-h-8 tw-bg-red" />
-          <p>{name}</p>
-        </div>
-        <div className="tw-flex tw-text-left tw-gap-x-4 tw-items-center">
-          <p>Eliminar</p>
-          <p>Editar</p>
-        </div>
-      </>
-    );
-  }
+function AccountItem({ name }: Account) {
+  return (
+    <>
+      <div className="tw-flex tw-items-center tw-gap-x-4">
+        <Icon type="user" />
+        <p>{name}</p>
+      </div>
+      <div className="tw-flex tw-text-left tw-gap-x-4 tw-items-center">
+        <p>Seleccionar</p>
+        <p>Editar</p>
+      </div>
+    </>
+  );
+}
