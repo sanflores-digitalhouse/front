@@ -35,7 +35,7 @@ const Cards = () => {
         className="tw-max-w-5xl"
         content={
           <div className="tw-flex tw-justify-between tw-mb-8">
-            <p className="tw-mb-4 tw-font-bold">
+            <p className="tw-font-bold">
               Agregá tu tarjeta de débito o crédito
             </p>
           </div>
