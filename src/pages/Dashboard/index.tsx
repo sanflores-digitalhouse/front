@@ -39,7 +39,7 @@ const Dashboard = () => {
             <div className="tw-flex tw-justify-between tw-items-start tw-flex-wrap tw-gap-x-4">
               <Link
                 className="tw-underline hover:tw-text-primary"
-                to={ROUTES.HOME}
+                to={ROUTES.CARDS}
               >
                 Ver tarjetas
               </Link>
