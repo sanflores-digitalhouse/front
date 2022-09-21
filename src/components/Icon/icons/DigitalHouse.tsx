@@ -1,8 +1,6 @@
 import * as React from 'react';
 
-export const SvgDigitalHouse = (
-  props: React.SVGProps<SVGSVGElement>
-): JSX.Element => (
+const SvgDigitalHouse = (props: React.SVGProps<SVGSVGElement>): JSX.Element => (
   <svg
     width="87"
     height="34"
@@ -21,3 +19,5 @@ export const SvgDigitalHouse = (
     />
   </svg>
 );
+
+export default SvgDigitalHouse;

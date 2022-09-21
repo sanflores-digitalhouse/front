@@ -1,6 +1,7 @@
 import React from 'react';
 import {
   CardCustom,
+  Icon,
   RecordProps,
   Records,
   RecordVariant,
@@ -33,9 +34,7 @@ const SendMoney = () => {
         className="tw-max-w-5xl"
         content={
           <div className="tw-flex tw-justify-between tw-mb-8">
-            <p className="tw-font-bold">
-              Elegí a qué cuenta transferir
-            </p>
+            <p className="tw-font-bold">Elegí a qué cuenta transferir</p>
           </div>
         }
         actions={
@@ -44,7 +43,7 @@ const SendMoney = () => {
             className="tw-w-full tw-flex tw-items-center tw-justify-between"
           >
             <div className="tw-flex tw-items-center tw-gap-x-4">
-              <div className="tw-rounded-full tw-w-8 tw-h-8 tw-bg-red" />
+              <Icon type="add" />
               <p>Nueva cuenta</p>
             </div>
             <ArrowForwardIosIcon />
@@ -56,7 +55,7 @@ const SendMoney = () => {
         content={
           <>
             <div>
-              <p className="tw-mb-4 tw-font-bold">Tus tarjetas</p>
+              <p className="tw-mb-4 tw-font-bold">Últimas cuentas</p>
             </div>
             <Records
               records={userAccounts}

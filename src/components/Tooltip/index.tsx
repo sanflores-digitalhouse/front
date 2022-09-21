@@ -16,6 +16,7 @@ export interface TooltipProps {
   message?: string;
   event?: ToolTipEventType;
   position?: TooltipPosition;
+  className?: string;
 }
 
 const toolTipPositionStyle = {
@@ -28,6 +29,7 @@ export const Tooltip = ({
   message,
   event = ToolTipEventType.click,
   position = TooltipPosition.bottom,
+  className= '',
 }: TooltipProps) => {
   const [isActive, setIsActive] = useState(false);
   const updateActive = () => setIsActive(true);
@@ -47,7 +49,7 @@ export const Tooltip = ({
 
   return (
     <div
-      className="tw-relative tw-inline-flex tw-justify-center"
+      className={`tw-relative tw-inline-flex tw-justify-center ${className}`}
       onClick={event === ToolTipEventType.click ? updateActive : undefined}
       onMouseEnter={event === ToolTipEventType.hover ? updateActive : undefined}
       onMouseLeave={
