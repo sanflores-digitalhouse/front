@@ -1,6 +1,6 @@
 import React from 'react';
 import Button from '@mui/material/Button';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../constants';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { CardCustom, Records, RecordVariant } from '../../components';
@@ -25,6 +25,7 @@ const parsedActivities = activities.map((activity) => {
 const Dashboard = () => {
   const { Argentina } = currencies;
   const { locales, currency } = Argentina;
+  const navigate = useNavigate();
   return (
     <div className="tw-w-full">
       <CardCustom
@@ -54,10 +55,18 @@ const Dashboard = () => {
         }
         actions={
           <>
-            <Button className="tw-h-12 tw-w-64" variant="outlined">
+            <Button
+              onClick={() => navigate(ROUTES.LOAD_MONEY)}
+              className="tw-h-12 tw-w-64"
+              variant="outlined"
+            >
               Ingresar dinero
             </Button>
-            <Button className="tw-h-12 tw-w-64" variant="contained">
+            <Button
+              onClick={() => navigate(ROUTES.SEND_MONEY)}
+              className="tw-h-12 tw-w-64"
+              variant="contained"
+            >
               Transferir dinero
             </Button>
           </>
