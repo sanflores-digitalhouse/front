@@ -8,6 +8,9 @@ import {
   RecordVariant,
 } from '../../components';
 import { Pagination } from '@mui/material';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { Link } from 'react-router-dom';
+import { ROUTES, ADD } from '../../constants';
 
 const { cards } = USER;
 const userCards = cards.map((activity) => {
@@ -37,7 +40,15 @@ const Cards = () => {
             </p>
           </div>
         }
-        actions={<></>}
+        actions={
+          <Link to={`${ROUTES.CARDS}?${ADD}`} className="tw-w-full tw-flex tw-items-center tw-justify-between">
+            <div className="tw-flex tw-items-center tw-gap-x-4">
+              <div className="tw-rounded-full tw-w-8 tw-h-8 tw-bg-red" />
+              <p>Nueva tarjeta</p>
+            </div>
+            <ArrowForwardIosIcon />
+          </Link>
+        }
       />
       <CardCustom
         className="tw-max-w-5xl"
