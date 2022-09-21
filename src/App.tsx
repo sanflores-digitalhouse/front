@@ -11,6 +11,7 @@ const Login = React.lazy(() => import('./pages/Login'));
 const Register = React.lazy(() => import('./pages/Register'));
 const Activity = React.lazy(() => import('./pages/Activity'));
 const Cards = React.lazy(() => import('./pages/Cards'));
+const SendMoney = React.lazy(() => import('./pages/SendMoney'));
 
 const auth = { token: true };
 function App() {
@@ -27,6 +28,7 @@ function App() {
                 <Route element={<Dashboard />} path={ROUTES.HOME} />
                 <Route element={<Activity />} path={ROUTES.ACTIVITY} />
                 <Route element={<Cards />} path={ROUTES.CARDS} />
+                <Route element={<SendMoney />} path={ROUTES.SEND_MONEY} />
               </Route>
               <Route
                 element={

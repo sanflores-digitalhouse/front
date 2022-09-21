@@ -98,5 +98,13 @@ export const USER = {
       expiration: '2022-09-17T20:57:38+00:00',
       cvv: '123',
     },
+  ],
+  accounts: [
+    {
+      name: 'John Esteban Doe Cia',
+    },
+    {
+      name: 'Mauricio Brito',
+    },
   ]
 };

@@ -1,34 +1,32 @@
 import React from 'react';
-import { usePagination } from '../../hooks/usePagination';
-import { USER } from '../../data/user';
 import {
   CardCustom,
   RecordProps,
   Records,
   RecordVariant,
 } from '../../components';
-import { Pagination } from '@mui/material';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { ADD, ROUTES } from '../../constants';
 import { Link } from 'react-router-dom';
-import { ROUTES, ADD } from '../../constants';
+import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
+import { usePagination } from '../../hooks/usePagination';
+import { USER } from '../../data/user';
+import { Pagination } from '@mui/material';
 
-const { cards } = USER;
-const userCards = cards.map((card) => {
-  const { number, name, type } = card;
+const { accounts } = USER;
+const userAccounts = accounts.map((account) => {
+  const { name } = account;
   return {
     content: {
-      number,
       name,
-      type,
     },
-    variant: RecordVariant.CARD,
+    variant: RecordVariant.ACCOUNT,
   };
 });
 
-const Cards = () => {
+const SendMoney = () => {
   const recordsPerPage = 10;
   const { page, handleChange, numberOfPages, isRecordsGreeterThanOnePage } =
-    usePagination(userCards as RecordProps[], recordsPerPage);
+    usePagination(userAccounts as RecordProps[], recordsPerPage);
   return (
     <div className="tw-w-full">
       <CardCustom
@@ -36,15 +34,18 @@ const Cards = () => {
         content={
           <div className="tw-flex tw-justify-between tw-mb-8">
             <p className="tw-mb-4 tw-font-bold">
-              Agregá tu tarjeta de débito o crédito
+              Elegí a qué cuenta transferir
             </p>
           </div>
         }
         actions={
-          <Link to={`${ROUTES.CARDS}?${ADD}`} className="tw-w-full tw-flex tw-items-center tw-justify-between">
+          <Link
+            to={`${ROUTES.CARDS}?${ADD}`}
+            className="tw-w-full tw-flex tw-items-center tw-justify-between"
+          >
             <div className="tw-flex tw-items-center tw-gap-x-4">
               <div className="tw-rounded-full tw-w-8 tw-h-8 tw-bg-red" />
-              <p>Nueva tarjeta</p>
+              <p>Nueva cuenta</p>
             </div>
             <ArrowForwardIosIcon />
           </Link>
@@ -58,7 +59,7 @@ const Cards = () => {
               <p className="tw-mb-4 tw-font-bold">Tus tarjetas</p>
             </div>
             <Records
-              records={userCards}
+              records={userAccounts}
               initialRecord={page * recordsPerPage - recordsPerPage}
             />
           </>
@@ -79,4 +80,4 @@ const Cards = () => {
   );
 };
 
-export default Cards;
+export default SendMoney;

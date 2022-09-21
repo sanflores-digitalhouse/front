@@ -46,16 +46,17 @@ export const Record = ({
       className={`tw-flex tw-w-full tw-justify-between tw-px-4 tw-border-t tw-border-neutral-blue-100 tw-py-5 hover:tw-bg-neutral-gray-500 tw-transition ${className}`}
     >
       {variant === RecordVariant.TRANSACTION && (
-        <Transaction {...(content as Transaction)} />
+        <TransactionItem {...(content as Transaction)} />
       )}
       {variant === RecordVariant.CARD && (
         <CardItem {...(content as Card)} isSelecting={isSelecting} />
       )}
+      {variant === RecordVariant.ACCOUNT && ( <AccountItem {...(content as Account)} /> )}
     </li>
   );
 };
 
-function Transaction({ amount, name, date, type }: Transaction) {
+function TransactionItem({ amount, name, date, type }: Transaction) {
   return (
     <>
       <div className="tw-flex tw-items-center tw-gap-x-4">
@@ -89,3 +90,18 @@ function CardItem({ number, type, isSelecting }: Card) {
     </>
   );
 }
+
+  function AccountItem({ name }: Account) {
+    return (
+      <>
+        <div className="tw-flex tw-items-center tw-gap-x-4">
+          <div className="tw-rounded-full tw-w-8 tw-h-8 tw-bg-red" />
+          <p>{name}</p>
+        </div>
+        <div className="tw-flex tw-text-left tw-gap-x-4 tw-items-center">
+          <p>Eliminar</p>
+          <p>Editar</p>
+        </div>
+      </>
+    );
+  }
