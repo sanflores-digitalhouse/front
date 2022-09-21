@@ -12,7 +12,7 @@ const Profile = () => {
               Copia tu cvu o alias para ingresar o transferir dinero desde otra
               cuenta
             </p>
-            <div className="tw-flex tw-justify-between tw-items-center">
+            <div className="tw-flex tw-mb-4 tw-justify-between tw-items-center">
               <div>
                 <p className="tw-mb-4">CVU</p>
                 <p className="">00000</p>

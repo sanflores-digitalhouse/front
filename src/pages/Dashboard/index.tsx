@@ -45,7 +45,7 @@ const Dashboard = () => {
               </Link>
               <Link
                 className="tw-underline hover:tw-text-primary"
-                to={ROUTES.HOME}
+                to={ROUTES.PROFILE}
               >
                 Ver CVU
               </Link>
