@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { linkNavList } from '../../constants';
+import { LINK_LIST } from '../../constants';
 
 export const Sidebar = () => {
   const { pathname } = useLocation();
@@ -13,7 +13,7 @@ export const Sidebar = () => {
       }}
     >
       <ul className="tw-mt-8 tw-flex tw-flex-col tw-gap-y-4">
-        {linkNavList.map((link) => (
+        {LINK_LIST.map((link) => (
           <li className="tw-pl-8" key={link.name}>
             <Link
               to={link.href}

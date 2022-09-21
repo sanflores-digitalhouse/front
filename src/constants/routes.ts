@@ -10,7 +10,7 @@ export const ROUTES = {
   NOT_FOUND: '/404',
 };
 
-export const linkNavList = [
+export const LINK_LIST = [
   {
     name: 'Inicio',
     href: ROUTES.HOME,

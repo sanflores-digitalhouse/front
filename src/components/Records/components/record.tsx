@@ -1,35 +1,107 @@
 import React from 'react';
 import { formatCurrency, formatDateFromString } from '../../../utils/';
 import { currencies } from '../../../constants/';
+import { useSearchParams } from 'react-router-dom';
 
-export interface RecordProps {
-  type: string;
-  name: string;
+export enum RecordVariant {
+  TRANSACTION = 'transaction',
+  CARD = 'card',
+  ACCOUNT = 'account',
+}
+interface Transaction {
   amount: number;
+  name: string;
   date: string;
+  type: string;
+  id?: string;
 }
 
-export const Record = ({
-  type = 'Transfer',
-  name = 'Rodrigo',
-  amount = 2000,
-  date = 'Sabado',
-}: RecordProps) => {
-  const { Argentina } = currencies;
-  const { locales, currency } = Argentina;
+interface Card {
+  number: string;
+  name: string;
+  type: string;
+  isSelecting: boolean;
+}
 
+interface Account {
+  name: string;
+}
+export interface RecordProps {
+  content: Transaction | Card | Account;
+  className?: string;
+  variant?: RecordVariant;
+}
+const { Argentina } = currencies;
+const { locales, currency } = Argentina;
+
+export const Record = ({
+  className,
+  content,
+  variant = RecordVariant.TRANSACTION,
+}: RecordProps) => {
+  const [searchParams] = useSearchParams();
+  const isSelecting = !!searchParams.get('select');
   return (
-    <li className="tw-flex tw-w-full tw-justify-between tw-px-4 tw-border-t tw-border-neutral-blue-100 tw-py-5 hover:tw-bg-neutral-gray-500 tw-transition">
+    <li
+      className={`tw-flex tw-w-full tw-justify-between tw-px-4 tw-border-t tw-border-neutral-blue-100 tw-py-5 hover:tw-bg-neutral-gray-500 tw-transition ${className}`}
+    >
+      {variant === RecordVariant.TRANSACTION && (
+        <TransactionItem {...(content as Transaction)} />
+      )}
+      {variant === RecordVariant.CARD && (
+        <CardItem {...(content as Card)} isSelecting={isSelecting} />
+      )}
+      {variant === RecordVariant.ACCOUNT && ( <AccountItem {...(content as Account)} /> )}
+    </li>
+  );
+};
+
+function TransactionItem({ amount, name, date, type }: Transaction) {
+  return (
+    <>
       <div className="tw-flex tw-items-center tw-gap-x-4">
         <div className="tw-rounded-full tw-w-8 tw-h-8 tw-bg-red" />
         <p>
           {type} a {name}
         </p>
       </div>
-      <div className='tw-flex tw-text-left tw-flex-col tw-items-end'>
+      <div className="tw-flex tw-text-left tw-flex-col tw-items-end">
         <p>{formatCurrency(locales, currency, amount)}</p>
         <p>{formatDateFromString(date)}</p>
       </div>
-    </li>
+    </>
   );
-};
+}
+
+function CardItem({ number, type, isSelecting }: Card) {
+  const lastFourDigits = number.slice(-4);
+  return (
+    <>
+      <div className="tw-flex tw-items-center tw-gap-x-4">
+        <div className="tw-rounded-full tw-w-8 tw-h-8 tw-bg-red" />
+        <p>
+          {type} terminada en {lastFourDigits}
+        </p>
+      </div>
+      <div className="tw-flex tw-text-left tw-gap-x-4 tw-items-center">
+        <p>{isSelecting ?  'Seleccionar': 'Eliminar'}</p>
+        <p>Editar</p>
+      </div>
+    </>
+  );
+}
+
+  function AccountItem({ name }: Account) {
+    return (
+      <>
+        <div className="tw-flex tw-items-center tw-gap-x-4">
+          <div className="tw-rounded-full tw-w-8 tw-h-8 tw-bg-red" />
+          <p>{name}</p>
+        </div>
+        <div className="tw-flex tw-text-left tw-gap-x-4 tw-items-center">
+          <p>Eliminar</p>
+          <p>Editar</p>
+        </div>
+      </>
+    );
+  }

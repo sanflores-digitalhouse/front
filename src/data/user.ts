@@ -76,4 +76,35 @@ export const USER = {
       date: '2022-09-17T20:57:38+00:00',
     },
   ],
+  cards: [
+    {
+      type: 'Debit',
+      number: '1234567890',
+      name: 'Mauricio Brito',
+      expiration: '2022-09-17T20:57:38+00:00',
+      cvv: '123',
+    },
+    {
+      type: 'Debit',
+      number: '1234567890',
+      name: 'Mauricio Brito',
+      expiration: '2022-09-17T20:57:38+00:00',
+      cvv: '123',
+    },
+    {
+      type: 'Debit',
+      number: '1234567890',
+      name: 'Mauricio Brito',
+      expiration: '2022-09-17T20:57:38+00:00',
+      cvv: '123',
+    },
+  ],
+  accounts: [
+    {
+      name: 'John Esteban Doe Cia',
+    },
+    {
+      name: 'Mauricio Brito',
+    },
+  ]
 };

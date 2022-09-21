@@ -571,16 +571,20 @@ label {
   margin-top: 3rem;
 }
 
-#root .tw-mb-8 {
-  margin-bottom: 2rem;
-}
-
 #root .tw-mt-8 {
   margin-top: 2rem;
 }
 
 #root .tw-mb-4 {
   margin-bottom: 1rem;
+}
+
+#root .tw-mt-4 {
+  margin-top: 1rem;
+}
+
+#root .tw-mb-8 {
+  margin-bottom: 2rem;
 }
 
 #root .tw-mt-10 {

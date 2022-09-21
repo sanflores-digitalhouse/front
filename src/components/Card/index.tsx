@@ -19,7 +19,7 @@ export const CardCustom = ({
       className={`tw-p-10 tw-max-w-2xl tw-mx-auto tw-mt-12 tw-bg-background tw-text-neutral-gray-100 tw-border-2 tw-border-neutral-blue-100 tw-rounded-lg ${className}`}
       variant="outlined"
     >
-      <CardContent className="tw-flex tw-flex-col tw-mb-8 tw-p-0">
+      <CardContent className="tw-flex tw-flex-col tw-p-0">
         {content}
       </CardContent>
       <CardActions className="tw-flex tw-flex-wrap tw-justify-evenly tw-p-0">
