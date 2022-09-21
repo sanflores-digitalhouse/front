@@ -36,6 +36,17 @@ export interface RecordProps {
 const { Argentina } = currencies;
 const { locales, currency } = Argentina;
 
+const iconType: Record<ActivityType, IconType> = {
+  [ActivityType.TRANSFER_IN]: 'transfer-in',
+  [ActivityType.TRANSFER_OUT]: 'transfer-out',
+  [ActivityType.INCOME]: 'income',
+};
+const messageType: Record<ActivityType, string> = {
+  [ActivityType.TRANSFER_IN]: 'Recibiste de',
+  [ActivityType.TRANSFER_OUT]: 'Enviaste a',
+  [ActivityType.INCOME]: 'Ingresaste',
+};
+
 export const Record = ({
   className,
   content,
@@ -62,22 +73,14 @@ export const Record = ({
 };
 
 function TransactionItem({ amount, name, date, type }: Transaction) {
-  const iconType: Record<ActivityType, IconType> = {
-    [ActivityType.TRANSFER_IN]: 'transfer-in',
-    [ActivityType.TRANSFER_OUT]: 'transfer-out',
-    [ActivityType.INCOME]: 'income',
-  };
-  const messageType : Record<ActivityType, string> = {
-    [ActivityType.TRANSFER_IN]: 'Recibiste de',
-    [ActivityType.TRANSFER_OUT]: 'Enviaste a',
-    [ActivityType.INCOME]: 'Ingresaste',
-  };
   return (
     <>
       <div className="tw-flex tw-items-center tw-gap-x-4">
-        {iconType[type] && <Icon className="tw-fill-neutral-gray-500" type={iconType[type]} />}
+        {iconType[type] && (
+          <Icon className="tw-fill-neutral-gray-500" type={iconType[type]} />
+        )}
         <p>
-          {messageType[type] && messageType[type]}  {name}
+          {messageType[type] && messageType[type]} {name}
         </p>
       </div>
       <div className="tw-flex tw-text-left tw-flex-col tw-items-end">

@@ -8,7 +8,6 @@ import {
 } from '../../components';
 import { ADD, ROUTES } from '../../constants';
 import { Link } from 'react-router-dom';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { usePagination } from '../../hooks/usePagination';
 import { USER } from '../../data/user';
 import { Pagination } from '@mui/material';
@@ -33,20 +32,20 @@ const SendMoney = () => {
       <CardCustom
         className="tw-max-w-5xl"
         content={
-          <div className="tw-flex tw-justify-between tw-mb-8">
+          <div className="tw-flex tw-justify-between tw-mb-4">
             <p className="tw-font-bold">Elegí a qué cuenta transferir</p>
           </div>
         }
         actions={
           <Link
             to={`${ROUTES.CARDS}?${ADD}`}
-            className="tw-w-full tw-flex tw-items-center tw-justify-between"
+            className="tw-w-full tw-flex tw-items-center tw-justify-between tw-p-4 hover:tw-bg-neutral-gray-500 tw-transition"
           >
             <div className="tw-flex tw-items-center tw-gap-x-4">
               <Icon type="add" />
               <p>Nueva cuenta</p>
             </div>
-            <ArrowForwardIosIcon />
+            <Icon type="arrow-right" />
           </Link>
         }
       />

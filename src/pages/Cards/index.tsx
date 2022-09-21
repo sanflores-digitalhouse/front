@@ -9,7 +9,6 @@ import {
   RecordVariant,
 } from '../../components';
 import { Pagination } from '@mui/material';
-import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import { Link } from 'react-router-dom';
 import { ROUTES, ADD } from '../../constants';
 
@@ -35,7 +34,7 @@ const Cards = () => {
       <CardCustom
         className="tw-max-w-5xl"
         content={
-          <div className="tw-flex tw-justify-between tw-mb-8">
+          <div className="tw-flex tw-justify-between tw-mb-4">
             <p className="tw-font-bold">
               Agregá tu tarjeta de débito o crédito
             </p>
@@ -44,13 +43,13 @@ const Cards = () => {
         actions={
           <Link
             to={`${ROUTES.CARDS}?${ADD}`}
-            className="tw-w-full tw-flex tw-items-center tw-justify-between"
+            className="tw-w-full tw-flex tw-items-center tw-justify-between tw-p-4 hover:tw-bg-neutral-gray-500 tw-transition"
           >
             <div className="tw-flex tw-items-center tw-gap-x-4">
               <Icon type="add" />
               <p>Nueva tarjeta</p>
             </div>
-            <ArrowForwardIosIcon />
+            <Icon type="arrow-right" />
           </Link>
         }
       />
