@@ -85,7 +85,7 @@ const Dashboard = () => {
         actions={
           <Link
             to={ROUTES.ACTIVITY}
-            className="tw-h-12 tw-w-full tw-flex tw-items-center tw-justify-between tw-px-4 tw-mt-4 hover:tw-text-primary hover:tw-bg-neutral-gray-500 tw-transition"
+            className="tw-h-12 tw-w-full tw-flex tw-items-center tw-justify-between tw-mt-4 hover:tw-text-primary tw-px-4 hover:tw-bg-neutral-gray-500 tw-transition"
           >
             <span>Ver toda tu actividad</span>
             <ArrowForwardIosIcon />
