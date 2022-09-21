@@ -73,15 +73,16 @@ function Transaction({ amount, name, date, type }: Transaction) {
 }
 
 function CardItem({ number, type, isSelecting }: Card) {
+  const lastFourDigits = number.slice(-4);
   return (
     <>
       <div className="tw-flex tw-items-center tw-gap-x-4">
         <div className="tw-rounded-full tw-w-8 tw-h-8 tw-bg-red" />
         <p>
-          {type} terminada en {number}
+          {type} terminada en {lastFourDigits}
         </p>
       </div>
-      <div className="tw-flex tw-text-left tw-flex-col tw-items-end">
+      <div className="tw-flex tw-text-left tw-gap-x-4 tw-items-center">
         <p>{isSelecting ?  'Seleccionar': 'Eliminar'}</p>
         <p>Editar</p>
       </div>
