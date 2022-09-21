@@ -5,7 +5,6 @@ import Pagination from '@mui/material/Pagination';
 import { USER } from '../../data/user';
 import { usePagination } from '../../hooks/usePagination';
 
-
 const { activities } = USER;
 const transactions = activities.map((activity) => {
   const { amount, name, date, type } = activity;
@@ -28,6 +27,7 @@ const Activity = () => {
   return (
     <div className="tw-w-full">
       <CardCustom
+        className="tw-max-w-5xl"
         content={
           <>
             <div>
@@ -50,7 +50,6 @@ const Activity = () => {
             </div>
           )
         }
-        className="tw-max-w-5xl"
       />
     </div>
   );
