@@ -1,3 +1,8 @@
+export enum ActivityType {
+  TRANSFER_IN = 'TRANSFER_IN',
+  TRANSFER_OUT = 'TRANSFER_OUT',
+  INCOME = 'INCOME',
+}
 export const USER = {
   name: 'Mauricio',
   lastName: 'Brito',
@@ -10,67 +15,66 @@ export const USER = {
   city: 'Buenos Aires',
   activities: [
     {
-      type: 'Transfer',
+      type: ActivityType.TRANSFER_IN,
+      name: 'Aitana',
+      amount: 3500.64,
+      date: '2022-09-17T20:57:38+00:00',
+    },
+    {
+      type: ActivityType.TRANSFER_OUT,
+      name: 'Brendys',
+      amount: 1895,
+      date: '2022-09-17T20:57:38+00:00',
+    },
+    {
+      type: ActivityType.INCOME,
+      amount: 2000,
+      date: '2022-09-17T20:57:38+00:00',
+    },
+    {
+      type: ActivityType.TRANSFER_IN,
       name: 'Rodrigo',
       amount: 2000,
       date: '2022-09-17T20:57:38+00:00',
     },
     {
-      type: 'Transfer',
+      type: ActivityType.TRANSFER_IN,
       name: 'Rodrigo',
       amount: 2000,
       date: '2022-09-17T20:57:38+00:00',
     },
     {
-      type: 'Transfer',
+      type: ActivityType.TRANSFER_IN,
       name: 'Rodrigo',
       amount: 2000,
       date: '2022-09-17T20:57:38+00:00',
     },
     {
-      type: 'Transfer',
+      type: ActivityType.TRANSFER_IN,
       name: 'Rodrigo',
       amount: 2000,
       date: '2022-09-17T20:57:38+00:00',
     },
     {
-      type: 'Transfer',
+      type: ActivityType.TRANSFER_IN,
       name: 'Rodrigo',
       amount: 2000,
       date: '2022-09-17T20:57:38+00:00',
     },
     {
-      type: 'Transfer',
+      type: ActivityType.TRANSFER_IN,
       name: 'Rodrigo',
       amount: 2000,
       date: '2022-09-17T20:57:38+00:00',
     },
     {
-      type: 'Transfer',
+      type: ActivityType.TRANSFER_IN,
       name: 'Rodrigo',
       amount: 2000,
       date: '2022-09-17T20:57:38+00:00',
     },
     {
-      type: 'Transfer',
-      name: 'Rodrigo',
-      amount: 2000,
-      date: '2022-09-17T20:57:38+00:00',
-    },
-    {
-      type: 'Transfer',
-      name: 'Rodrigo',
-      amount: 2000,
-      date: '2022-09-17T20:57:38+00:00',
-    },
-    {
-      type: 'Transfer',
-      name: 'Rodrigo',
-      amount: 2000,
-      date: '2022-09-17T20:57:38+00:00',
-    },
-    {
-      type: 'Transfer',
+      type: ActivityType.TRANSFER_IN,
       name: 'Mauricio',
       amount: 2000,
       date: '2022-09-17T20:57:38+00:00',

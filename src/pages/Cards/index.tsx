@@ -3,6 +3,7 @@ import { usePagination } from '../../hooks/usePagination';
 import { USER } from '../../data/user';
 import {
   CardCustom,
+  Icon,
   RecordProps,
   Records,
   RecordVariant,
@@ -41,9 +42,12 @@ const Cards = () => {
           </div>
         }
         actions={
-          <Link to={`${ROUTES.CARDS}?${ADD}`} className="tw-w-full tw-flex tw-items-center tw-justify-between">
+          <Link
+            to={`${ROUTES.CARDS}?${ADD}`}
+            className="tw-w-full tw-flex tw-items-center tw-justify-between"
+          >
             <div className="tw-flex tw-items-center tw-gap-x-4">
-              <div className="tw-rounded-full tw-w-8 tw-h-8 tw-bg-red" />
+              <Icon type="add" />
               <p>Nueva tarjeta</p>
             </div>
             <ArrowForwardIosIcon />

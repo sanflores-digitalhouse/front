@@ -1,5 +1,5 @@
 import React from 'react';
-import { CardCustom, Tooltip, TooltipPosition } from '../../components';
+import { CardCustom, Tooltip, TooltipPosition, Icon } from '../../components';
 
 const Profile = () => {
   return (
@@ -14,20 +14,20 @@ const Profile = () => {
             </p>
             <div className="tw-flex tw-mb-4 tw-justify-between tw-items-center">
               <div>
-                <p className="tw-mb-4">CVU</p>
-                <p className="">00000</p>
+                <p className="tw-font-bold tw-text-primary">CVU</p>
+                <p className="">0000002100075320000000</p>
               </div>
-              <Tooltip message="Copiado" position={TooltipPosition.top}>
-                <div className="tw-rounded-full tw-w-8 tw-h-8 tw-bg-red" />
+              <Tooltip className="tw-cursor-pointer" message="Copiado" position={TooltipPosition.top}>
+                <Icon type="copy" />
               </Tooltip>
             </div>
             <div className="tw-flex tw-justify-between tw-items-center">
               <div>
-                <p className="tw-mb-4">Alias</p>
+                <p className="tw-font-bold tw-text-primary">Alias</p>
                 <p className="">estealiasnoexiste</p>
               </div>
-              <Tooltip message="Copiado" position={TooltipPosition.top}>
-                <div className="tw-rounded-full tw-w-8 tw-h-8 tw-bg-red" />
+              <Tooltip className="tw-cursor-pointer" message="Copiado" position={TooltipPosition.top}>
+                <Icon type="copy" />
               </Tooltip>
             </div>
           </div>

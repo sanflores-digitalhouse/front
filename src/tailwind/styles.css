@@ -643,10 +643,6 @@ label {
   height: 3rem;
 }
 
-#root .tw-h-8 {
-  height: 2rem;
-}
-
 #root .tw-h-14 {
   height: 3.5rem;
 }
@@ -661,10 +657,6 @@ label {
 
 #root .tw-w-64 {
   width: 16rem;
-}
-
-#root .tw-w-8 {
-  width: 2rem;
 }
 
 #root .tw-w-80 {
@@ -694,6 +686,10 @@ label {
 
 #root .tw-cursor-not-allowed {
   cursor: not-allowed;
+}
+
+#root .tw-cursor-pointer {
+  cursor: pointer;
 }
 
 #root .tw-flex-col {
@@ -772,10 +768,6 @@ label {
   border-radius: 0.25rem;
 }
 
-#root .tw-rounded-full {
-  border-radius: 9999px;
-}
-
 #root .tw-border-2 {
   border-width: 2px;
 }
@@ -808,8 +800,8 @@ label {
   background-color: var(--primary);
 }
 
-#root .tw-bg-red {
-  background-color: var(--red);
+#root .tw-fill-neutral-gray-500 {
+  fill: var(--neutral-gray-500);
 }
 
 #root .tw-p-10 {
