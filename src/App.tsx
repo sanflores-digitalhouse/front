@@ -4,6 +4,8 @@ import { PrivateRoutes } from './components';
 import { ROUTES } from './constants';
 import { Layout } from './components/Layout';
 import './tailwind/styles.css';
+import UserInfoProvider from './context/User';
+import CircularProgress from '@mui/material/CircularProgress';
 
 // pages
 const Login = React.lazy(() => import('./pages/Login'));
@@ -20,39 +22,52 @@ function App() {
   return (
     <>
       <BrowserRouter>
-        <Suspense fallback={<div>Loading...</div>}>
+        <UserInfoProvider>
           <Layout isAuthenticated={auth.token}>
-            <Routes>
-              <Route
-                path={ROUTES.HOME}
-                element={<PrivateRoutes isAuthenticated={auth.token} />}
-              >
-                <Route element={<Dashboard />} path={ROUTES.HOME} />
-                <Route element={<Activity />} path={ROUTES.ACTIVITY} />
-                <Route element={<Cards />} path={ROUTES.CARDS} />
-                <Route element={<SendMoney />} path={ROUTES.SEND_MONEY} />
-                <Route element={<LoadMoney />} path={ROUTES.LOAD_MONEY} />
-                <Route element={<Profile />} path={ROUTES.PROFILE} />
-              </Route>
-              <Route
-                element={
-                  auth.token ? <Navigate replace to={ROUTES.HOME} /> : <Login />
-                }
-                path={ROUTES.LOGIN}
-              />
-              <Route
-                element={
-                  auth.token ? (
-                    <Navigate replace to={ROUTES.HOME} />
-                  ) : (
-                    <Register />
-                  )
-                }
-                path={ROUTES.REGISTER}
-              />
-            </Routes>
+            <Suspense
+              fallback={
+                <div className="tw-w-full tw-h-full tw-flex tw-flex-col tw-items-center tw-justify-center">
+                  <CircularProgress />
+                </div>
+              }
+            >
+              <Routes>
+                <React.Fragment></React.Fragment>
+                <Route
+                  path={ROUTES.HOME}
+                  element={<PrivateRoutes isAuthenticated={auth.token} />}
+                >
+                  <Route element={<Dashboard />} path={ROUTES.HOME} />
+                  <Route element={<Activity />} path={ROUTES.ACTIVITY} />
+                  <Route element={<Cards />} path={ROUTES.CARDS} />
+                  <Route element={<SendMoney />} path={ROUTES.SEND_MONEY} />
+                  <Route element={<LoadMoney />} path={ROUTES.LOAD_MONEY} />
+                  <Route element={<Profile />} path={ROUTES.PROFILE} />
+                </Route>
+                <Route
+                  element={
+                    auth.token ? (
+                      <Navigate replace to={ROUTES.HOME} />
+                    ) : (
+                      <Login />
+                    )
+                  }
+                  path={ROUTES.LOGIN}
+                />
+                <Route
+                  element={
+                    auth.token ? (
+                      <Navigate replace to={ROUTES.HOME} />
+                    ) : (
+                      <Register />
+                    )
+                  }
+                  path={ROUTES.REGISTER}
+                />
+              </Routes>
+            </Suspense>
           </Layout>
-        </Suspense>
+        </UserInfoProvider>
       </BrowserRouter>
     </>
   );

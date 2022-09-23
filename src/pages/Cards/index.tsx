@@ -12,7 +12,8 @@ import { Pagination } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { ROUTES, ADD } from '../../constants';
 
-const { cards } = USER;
+const { account } = USER;
+const { cards } = account;
 const userCards = cards.map((card) => {
   const { number, name, type } = card;
   return {

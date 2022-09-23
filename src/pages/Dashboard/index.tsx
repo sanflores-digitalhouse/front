@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Button from '@mui/material/Button';
 import { Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../constants';
@@ -6,25 +6,64 @@ import { CardCustom, Records, RecordVariant, Icon } from '../../components';
 import { formatCurrency } from '../../utils/';
 import { currencies } from '../../constants/';
 import { USER } from '../../data';
+import { useUserInfo } from '../../hooks/useUserInfo';
 
-const { activities } = USER;
+const { account } = USER;
+const { activities } = account;
 const parsedActivities = activities.map((activity) => {
-  const { amount, name, date, type } = activity;
+  const { amount, name, date } = activity;
   return {
     content: {
       amount,
       name,
       date,
-      type,
     },
     variant: RecordVariant.TRANSACTION,
   };
 });
 
+const newUser = {
+  name: 'Mauricio',
+  lastName: 'Garcia',
+  email: 'mauricio@gmail.com',
+  password: '123456N"',
+  phone: '1234567890',
+  balance: 100000,
+  account: {
+    activities: [
+      {
+        sourceAccount: '1234567890',
+        amount: 100000,
+        date: '2021-10-10',
+      },
+    ],
+    cards: [
+      {
+        number: '1234567890',
+        name: 'Mauricio Garcia',
+        expiration: '10/2025',
+        cvc: '123',
+      },
+    ],
+    accounts: [
+      {
+        name: 'Mauricio Garcia',
+      },
+    ],
+  },
+};
+
 const Dashboard = () => {
   const { Argentina } = currencies;
   const { locales, currency } = Argentina;
   const navigate = useNavigate();
+  const { user, dispatch } = useUserInfo();
+  console.log(user);
+
+  useEffect(() => {
+    dispatch({ type: 'SET_USER', payload: newUser });
+  }, [dispatch]);
+
   return (
     <div className="tw-w-full">
       <CardCustom
