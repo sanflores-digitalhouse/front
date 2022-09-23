@@ -1,5 +1,6 @@
 import React from 'react';
 import { CardCustom, Tooltip, TooltipPosition, Icon } from '../../components';
+import { copyToClipboard } from '../../utils';
 
 const Profile = () => {
   return (
@@ -17,8 +18,16 @@ const Profile = () => {
                 <p className="tw-font-bold tw-text-primary">CVU</p>
                 <p className="">0000002100075320000000</p>
               </div>
-              <Tooltip className="tw-cursor-pointer" message="Copiado" position={TooltipPosition.top}>
-                <Icon type="copy" />
+              <Tooltip
+                className="tw-cursor-pointer"
+                message="Copiado"
+                position={TooltipPosition.top}
+              >
+                <button
+                  onClick={() => copyToClipboard('0000002100075320000000')}
+                >
+                  <Icon type="copy" />
+                </button>
               </Tooltip>
             </div>
             <div className="tw-flex tw-justify-between tw-items-center">
@@ -26,8 +35,14 @@ const Profile = () => {
                 <p className="tw-font-bold tw-text-primary">Alias</p>
                 <p className="">estealiasnoexiste</p>
               </div>
-              <Tooltip className="tw-cursor-pointer" message="Copiado" position={TooltipPosition.top}>
-                <Icon type="copy" />
+              <Tooltip
+                className="tw-cursor-pointer"
+                message="Copiado"
+                position={TooltipPosition.top}
+              >
+                <button onClick={() => copyToClipboard('estealiasnoexiste')}>
+                  <Icon type="copy" />
+                </button>
               </Tooltip>
             </div>
           </div>
