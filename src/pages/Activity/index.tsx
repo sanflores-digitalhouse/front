@@ -5,15 +5,15 @@ import Pagination from '@mui/material/Pagination';
 import { USER } from '../../data/user';
 import { usePagination } from '../../hooks/usePagination';
 
-const { activities } = USER;
+const { account } = USER;
+const { activities } = account;
 const transactions = activities.map((activity) => {
-  const { amount, name, date, type } = activity;
+  const { amount, name, date } = activity;
   return {
     content: {
       amount,
       name,
-      date,
-      type,
+      date
     },
     variant: RecordVariant.TRANSACTION,
   };

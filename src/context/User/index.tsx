@@ -1,7 +1,6 @@
 import React, { createContext, useReducer } from 'react';
 import userReducer from './userReducer';
-// import { userActionTypes } from './types';
-import { User } from '../../common';
+import { User } from '../../types';
 
 export interface UserInfoState {
   user: User;

@@ -12,7 +12,8 @@ import { usePagination } from '../../hooks/usePagination';
 import { USER } from '../../data/user';
 import { Pagination } from '@mui/material';
 
-const { accounts } = USER;
+const { account } = USER;
+const { accounts } = account;
 const userAccounts = accounts.map((account) => {
   const { name } = account;
   return {

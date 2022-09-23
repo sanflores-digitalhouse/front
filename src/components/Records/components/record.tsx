@@ -3,7 +3,7 @@ import { formatCurrency, formatDateFromString } from '../../../utils/';
 import { currencies } from '../../../constants/';
 import { useSearchParams } from 'react-router-dom';
 import { Icon, IconType } from './../../Icon';
-import { ActivityType } from '../../../data';
+import { ActivityType } from '../../../common';
 
 export enum RecordVariant {
   TRANSACTION = 'transaction',
@@ -14,7 +14,6 @@ interface Transaction {
   amount: number;
   name?: string;
   date: string;
-  type: ActivityType;
   id?: string;
 }
 
@@ -47,6 +46,11 @@ const messageType: Record<ActivityType, string> = {
   [ActivityType.INCOME]: 'Ingresaste',
 };
 
+export const calculateType = (amount: number) => {
+  const isNegative = amount < 0;
+  return isNegative ? ActivityType.TRANSFER_OUT : ActivityType.TRANSFER_IN;
+};
+
 export const Record = ({
   className,
   content,
@@ -72,15 +76,16 @@ export const Record = ({
   );
 };
 
-function TransactionItem({ amount, name, date, type }: Transaction) {
+function TransactionItem({ amount, name, date }: Transaction) {
+  const calculatedType = calculateType(amount);
   return (
     <>
       <div className="tw-flex tw-items-center tw-gap-x-4">
-        {iconType[type] && (
-          <Icon className="tw-fill-neutral-gray-500" type={iconType[type]} />
+        {calculatedType && (
+          <Icon className="tw-fill-neutral-gray-500" type={iconType[calculatedType]} />
         )}
         <p>
-          {messageType[type] && messageType[type]} {name}
+          {messageType[calculatedType] && messageType[calculatedType]} {name}
         </p>
       </div>
       <div className="tw-flex tw-text-left tw-flex-col tw-items-end">

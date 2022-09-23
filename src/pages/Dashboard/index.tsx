@@ -8,15 +8,15 @@ import { currencies } from '../../constants/';
 import { USER } from '../../data';
 import { useUserInfo } from '../../hooks/useUserInfo';
 
-const { activities } = USER;
+const { account } = USER;
+const { activities } = account;
 const parsedActivities = activities.map((activity) => {
-  const { amount, name, date, type } = activity;
+  const { amount, name, date } = activity;
   return {
     content: {
       amount,
       name,
       date,
-      type,
     },
     variant: RecordVariant.TRANSACTION,
   };
@@ -35,7 +35,7 @@ const newUser = {
         sourceAccount: '1234567890',
         amount: 100000,
         date: '2021-10-10',
-      }
+      },
     ],
     cards: [
       {
@@ -48,7 +48,7 @@ const newUser = {
     accounts: [
       {
         name: 'Mauricio Garcia',
-      }
+      },
     ],
   },
 };
@@ -63,7 +63,7 @@ const Dashboard = () => {
   useEffect(() => {
     dispatch({ type: 'SET_USER', payload: newUser });
   }, [dispatch]);
-  
+
   return (
     <div className="tw-w-full">
       <CardCustom
