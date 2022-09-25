@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
@@ -15,7 +15,7 @@ import {
   passwordValidationConfig,
 } from '../../utils/';
 import { ErrorMessage, Errors } from '../../components/ErrorMessage';
-interface State {
+interface LoginState {
   email: string;
   password: string;
   showPassword: boolean;
@@ -36,7 +36,7 @@ const Login = () => {
     criteriaMode: 'all',
   });
 
-  const [values, setValues] = React.useState<State>({
+  const [values, setValues] = useState<LoginState>({
     email: '',
     password: '',
     showPassword: false,
@@ -59,7 +59,7 @@ const Login = () => {
   };
 
   const handleChange =
-    (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
+    (prop: keyof LoginState) => (event: React.ChangeEvent<HTMLInputElement>) => {
       setValues({ ...values, [prop]: event.target.value });
     };
 
