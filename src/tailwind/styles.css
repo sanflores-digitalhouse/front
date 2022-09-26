@@ -615,6 +615,14 @@ label {
   margin-top: 1rem;
 }
 
+#root .tw-mb-5 {
+  margin-bottom: 1.25rem;
+}
+
+#root .tw-mt-6 {
+  margin-top: 1.5rem;
+}
+
 #root .tw-mb-8 {
   margin-bottom: 2rem;
 }
@@ -714,6 +722,10 @@ label {
 
 #root .tw-items-center {
   align-items: center;
+}
+
+#root .tw-justify-end {
+  justify-content: flex-end;
 }
 
 #root .tw-justify-center {

@@ -1,5 +1,10 @@
 import React from 'react';
-import { formatCurrency, formatDateFromString } from '../../../utils/';
+import {
+  formatCurrency,
+  formatDateFromString,
+  isVisa,
+  isMastercard,
+} from '../../../utils/';
 import { currencies } from '../../../constants/';
 import { useSearchParams } from 'react-router-dom';
 import { Icon, IconType } from './../../Icon';
@@ -82,7 +87,10 @@ function TransactionItem({ amount, name, date }: Transaction) {
     <>
       <div className="tw-flex tw-items-center tw-gap-x-4">
         {calculatedType && (
-          <Icon className="tw-fill-neutral-gray-500" type={iconType[calculatedType]} />
+          <Icon
+            className="tw-fill-neutral-gray-500"
+            type={iconType[calculatedType]}
+          />
         )}
         <p>
           {messageType[calculatedType] && messageType[calculatedType]} {name}
@@ -98,10 +106,17 @@ function TransactionItem({ amount, name, date }: Transaction) {
 
 function CardItem({ number, type, isSelecting }: Card) {
   const lastFourDigits = number.slice(-4);
+  const isVisaCard = isVisa(number);
+  const isMasterCard = isMastercard(number);
+  const cardType = isVisaCard
+    ? 'visa'
+    : isMasterCard
+    ? 'mastercard'
+    : 'credit-card';
   return (
     <>
       <div className="tw-flex tw-items-center tw-gap-x-4">
-        <Icon type="mastercard" />
+        <Icon type={cardType} />
 
         <p>
           {type} terminada en {lastFourDigits}
@@ -109,7 +124,6 @@ function CardItem({ number, type, isSelecting }: Card) {
       </div>
       <div className="tw-flex tw-text-left tw-gap-x-4 tw-items-center">
         <p>{isSelecting ? 'Seleccionar' : 'Eliminar'}</p>
-        <p>Editar</p>
       </div>
     </>
   );
@@ -124,7 +138,6 @@ function AccountItem({ name }: Account) {
       </div>
       <div className="tw-flex tw-text-left tw-gap-x-4 tw-items-center">
         <p>Seleccionar</p>
-        <p>Editar</p>
       </div>
     </>
   );
