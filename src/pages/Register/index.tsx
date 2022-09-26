@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
@@ -16,11 +16,12 @@ import {
   nameValidationConfig,
   phoneValidationConfig,
   dniValidationConfig,
+  handleChange,
 } from '../../utils/';
 import { ErrorMessage, Errors } from '../../components/ErrorMessage';
 import { ERROR_MESSAGES } from '../../constants/errorMessages';
 
-interface State {
+interface RegisterState {
   name: string;
   lastName: string;
   phone: string;
@@ -51,7 +52,7 @@ const Register = () => {
     criteriaMode: 'all',
   });
 
-  const [values, setValues] = React.useState<State>({
+  const [values, setValues] = React.useState<RegisterState>({
     email: '',
     password: '',
     name: '',
@@ -63,8 +64,7 @@ const Register = () => {
   });
 
   const isEmpty = isValueEmpty(values);
-
-  const hasErrors = valuesHaveErrors(errors);
+  const hasErrors = useMemo(() => valuesHaveErrors(errors), [errors]);
 
   const handleClickShowPassword = () => {
     setValues({
@@ -79,10 +79,14 @@ const Register = () => {
     event.preventDefault();
   };
 
-  const handleChange =
-    (prop: keyof State) => (event: React.ChangeEvent<HTMLInputElement>) => {
-      setValues({ ...values, [prop]: event.target.value });
-    };
+  // const handleChange =
+  //   (prop: keyof RegisterState) => (event: React.ChangeEvent<HTMLInputElement>) => {
+  //     setValues({ ...values, [prop]: event.target.value });
+  //   };
+  const onChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    maxLength?: number
+  ) => handleChange<RegisterState>(event, setValues, maxLength);
 
   const onSubmit: SubmitHandler<RegisterInputs> = (data) => console.log(data);
 
@@ -104,7 +108,7 @@ const Register = () => {
                 type="text"
                 value={values.name}
                 {...register('name', nameValidationConfig)}
-                onChange={handleChange('name')}
+                onChange={onChange}
                 label="nombre"
                 autoComplete="off"
               />
@@ -121,7 +125,7 @@ const Register = () => {
                 type="text"
                 value={values.lastName}
                 {...register('lastName', nameValidationConfig)}
-                onChange={handleChange('lastName')}
+                onChange={onChange}
                 label="lastName"
                 autoComplete="off"
               />
@@ -135,10 +139,10 @@ const Register = () => {
               <InputLabel htmlFor="outlined-adornment-dni">DNI</InputLabel>
               <OutlinedInput
                 id="outlined-adornment-dni"
-                type="text"
+                type="number"
                 value={values.dni}
                 {...register('dni', dniValidationConfig)}
-                onChange={handleChange('dni')}
+                onChange={(event) => onChange(event, 8)}
                 label="dni"
                 autoComplete="off"
               />
@@ -156,7 +160,7 @@ const Register = () => {
                 type="text"
                 value={values.email}
                 {...register('email', emailValidationConfig)}
-                onChange={handleChange('email')}
+                onChange={onChange}
                 label="email"
                 autoComplete="off"
               />
@@ -173,7 +177,7 @@ const Register = () => {
                 type={values.showPassword ? 'text' : 'password'}
                 value={values.password}
                 {...register('password', passwordValidationConfig)}
-                onChange={handleChange('password')}
+                onChange={onChange}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
@@ -212,7 +216,7 @@ const Register = () => {
                     }
                   },
                 })}
-                onChange={handleChange('passwordRepeated')}
+                onChange={onChange}
                 endAdornment={
                   <InputAdornment position="end">
                     <IconButton
@@ -240,10 +244,10 @@ const Register = () => {
               <InputLabel htmlFor="outlined-adornment-dni">Télefono</InputLabel>
               <OutlinedInput
                 id="outlined-adornment-phone"
-                type="text"
+                type="number"
                 value={values.phone}
                 {...register('phone', phoneValidationConfig)}
-                onChange={handleChange('phone')}
+                onChange={onChange}
                 label="phone"
                 autoComplete="off"
               />
