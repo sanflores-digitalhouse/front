@@ -1,5 +1,10 @@
 import React from 'react';
-import { formatCurrency, formatDateFromString, isVisa, isMastercard } from '../../../utils/';
+import {
+  formatCurrency,
+  formatDateFromString,
+  isVisa,
+  isMastercard,
+} from '../../../utils/';
 import { currencies } from '../../../constants/';
 import { useSearchParams } from 'react-router-dom';
 import { Icon, IconType } from './../../Icon';
@@ -103,7 +108,11 @@ function CardItem({ number, type, isSelecting }: Card) {
   const lastFourDigits = number.slice(-4);
   const isVisaCard = isVisa(number);
   const isMasterCard = isMastercard(number);
-  const cardType = isVisaCard ? 'visa' : isMasterCard ? 'mastercard' : 'credit-card';
+  const cardType = isVisaCard
+    ? 'visa'
+    : isMasterCard
+    ? 'mastercard'
+    : 'credit-card';
   return (
     <>
       <div className="tw-flex tw-items-center tw-gap-x-4">
@@ -129,7 +138,6 @@ function AccountItem({ name }: Account) {
       </div>
       <div className="tw-flex tw-text-left tw-gap-x-4 tw-items-center">
         <p>Seleccionar</p>
-        <p>Eliminar</p>
       </div>
     </>
   );
