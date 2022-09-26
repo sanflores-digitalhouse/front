@@ -24,6 +24,7 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
+import { transformExpiration } from '../../utils/formValidation/index';
 import {
   handleChange,
   nameValidationConfig,
@@ -140,8 +141,10 @@ function CardForm() {
     setFormState({ ...formState, focused: event.target.name as Focused });
   };
 
-  const onSubmit: SubmitHandler<ReactCreditCardProps> = (data) =>
-    console.log(data);
+  const onSubmit: SubmitHandler<ReactCreditCardProps> = (data) => {
+    const { expiry } = data;
+    transformExpiration(expiry as number);
+  };
 
   return (
     <>

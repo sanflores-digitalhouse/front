@@ -19,6 +19,15 @@ export const validExpiration = (expiration: string): boolean => {
   );
 };
 
+export const transformExpiration = (expiration: number): string => {
+  const expiryString = expiration.toString();
+  const expiryMonth = expiryString.slice(0, 2);
+  const expiryYear = expiryString.slice(2, 4);
+  const date = new Date();
+  date.setFullYear(+expiryYear, +expiryMonth - 1, 1);
+  return date.toISOString();
+};
+
 export const isValueEmpty = (values: any): boolean =>
   Object.values(values).some((value) => value === '');
 export const valuesHaveErrors = (errors: any): boolean =>
@@ -126,7 +135,7 @@ export const cvcValidationConfig = {
   minLength: {
     value: 3,
     message: ERROR_MESSAGES.INVALID_CVC,
-  }
+  },
 };
 
 export const handleChange = <T>(
