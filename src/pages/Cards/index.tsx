@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { usePagination } from '../../hooks/usePagination';
 import { USER } from '../../data/user';
 import {
@@ -24,13 +24,15 @@ import { useForm, SubmitHandler } from 'react-hook-form';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
-import { transformExpiration } from '../../utils/formValidation/index';
 import {
   handleChange,
   nameValidationConfig,
   cardValidationConfig,
   expirationValidationConfig,
   cvcValidationConfig,
+  isValueEmpty,
+  transformExpiration,
+  valuesHaveErrors,
 } from '../../utils/';
 
 const { account } = USER;
@@ -120,7 +122,7 @@ function CardForm() {
     register,
     handleSubmit,
     // watch,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm<ReactCreditCardProps>({
     criteriaMode: 'all',
   });
@@ -131,6 +133,9 @@ function CardForm() {
     cvc: '',
     focused: undefined,
   });
+
+  const isEmpty = isValueEmpty(formState);
+  const hasErrors = useMemo(() => valuesHaveErrors(errors), [errors]);
 
   const onChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -247,8 +252,13 @@ function CardForm() {
               <div className="tw-flex tw-w-full tw-justify-end tw-mt-6">
                 <Button
                   type="submit"
-                  className="tw-h-12 tw-w-64"
+                  className={`tw-h-12 tw-w-64 ${
+                    hasErrors || !isDirty || isEmpty
+                      ? 'tw-text-neutral-gray-300 tw-border-neutral-gray-300 tw-cursor-not-allowed'
+                      : ''
+                  }`}
                   variant="outlined"
+                  disabled={hasErrors || !isDirty || isEmpty}
                 >
                   Agregar
                 </Button>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
@@ -13,6 +13,7 @@ import {
   valuesHaveErrors,
   emailValidationConfig,
   passwordValidationConfig,
+  handleChange,
 } from '../../utils/';
 import { ErrorMessage, Errors } from '../../components/ErrorMessage';
 interface LoginState {
@@ -43,7 +44,7 @@ const Login = () => {
   });
 
   const isEmpty = isValueEmpty(values);
-  const hasErrors = valuesHaveErrors(errors);
+  const hasErrors = useMemo(() => valuesHaveErrors(errors), [errors]);
 
   const handleClickShowPassword = () => {
     setValues({
@@ -58,10 +59,10 @@ const Login = () => {
     event.preventDefault();
   };
 
-  const handleChange =
-    (prop: keyof LoginState) => (event: React.ChangeEvent<HTMLInputElement>) => {
-      setValues({ ...values, [prop]: event.target.value });
-    };
+  const onChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    maxLength?: number
+  ) => handleChange<LoginState>(event, setValues, maxLength);
 
   const onSubmit: SubmitHandler<LoginInputs> = (data) => console.log(data);
 
@@ -87,7 +88,7 @@ const Login = () => {
               type="text"
               value={values.email}
               {...register('email', emailValidationConfig)}
-              onChange={handleChange('email')}
+              onChange={onChange}
               label="email"
               autoComplete="off"
             />
@@ -104,7 +105,7 @@ const Login = () => {
               type={values.showPassword ? 'text' : 'password'}
               value={values.password}
               {...register('password', passwordValidationConfig)}
-              onChange={handleChange('password')}
+              onChange={onChange}
               endAdornment={
                 <InputAdornment position="end">
                   <IconButton
