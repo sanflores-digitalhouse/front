@@ -4,6 +4,7 @@ export const ROUTES = {
   REGISTER: '/register',
   PROFILE: '/profile',
   ACTIVITY: '/activity',
+  ACTIVITY_DETAILS: '/activity/:id',
   LOAD_MONEY: '/load-money',
   SEND_MONEY: '/send-money',
   CARDS: '/cards',

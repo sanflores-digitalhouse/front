@@ -17,16 +17,16 @@ export const Layout = ({
   return (
     <>
       <div
-        className="tw-flex"
         style={{
           marginTop: navbarHeight,
         }}
+        className="tw-flex print:!tw-mt-0"
       >
         <Navbar isAuthenticated={isAuthenticated} />
         {isAuthenticated && <Sidebar />}
 
         <main
-          className="tw-flex tw-flex-col tw-flex-1  tw-flex-wrap tw-overflow-auto"
+          className="tw-flex tw-flex-col tw-flex-1  tw-flex-wrap tw-overflow-auto print:!tw-p-0"
           style={
             !isAuthenticated
               ? {

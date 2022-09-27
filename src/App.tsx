@@ -12,6 +12,7 @@ const Login = React.lazy(() => import('./pages/Login'));
 const Dashboard = React.lazy(() => import('./pages/Dashboard'));
 const Register = React.lazy(() => import('./pages/Register'));
 const Activity = React.lazy(() => import('./pages/Activity'));
+const ActivityDetails = React.lazy(() => import('./pages/ActivityDetails'));
 const Cards = React.lazy(() => import('./pages/Cards'));
 const SendMoney = React.lazy(() => import('./pages/SendMoney'));
 const LoadMoney = React.lazy(() => import('./pages/LoadMoney'));
@@ -43,6 +44,7 @@ function App() {
                   <Route element={<SendMoney />} path={ROUTES.SEND_MONEY} />
                   <Route element={<LoadMoney />} path={ROUTES.LOAD_MONEY} />
                   <Route element={<Profile />} path={ROUTES.PROFILE} />
+                  <Route element={<ActivityDetails />} path={ROUTES.ACTIVITY_DETAILS} />
                 </Route>
                 <Route
                   element={
