@@ -157,6 +157,9 @@ function CardForm() {
         className="tw-max-w-5xl"
         content={
           <div className="tw-flex tw-flex-col" id="PaymentForm">
+            <div className="tw-flex tw-justify-between tw-mb-4">
+              <p className="tw-font-bold">Agregá una nueva tarjeta</p>
+            </div>
             <div className="tw-mb-5">
               <CardsComponent
                 cvc={formState.cvc}
