@@ -12,6 +12,7 @@ import SvgTransferIn from './icons/TransferIn';
 import SvgTransferOut from './icons/TransferOut';
 import SvgUser from './icons/User';
 import SvgWithdraw from './icons/Withdraw';
+import SvgEdit from './icons/Edit';
 
 export type IconType =
   | 'digital-house'
@@ -26,7 +27,8 @@ export type IconType =
   | 'transfer-in'
   | 'transfer-out'
   | 'user'
-  | 'withdraw';
+  | 'withdraw'
+  | 'edit';
 
 export interface IconProps extends React.SVGProps<SVGSVGElement> {
   type: IconType;
@@ -49,6 +51,7 @@ const icons: Record<
   'transfer-out': (props) => <SvgTransferOut role="img" {...props} />,
   user: (props) => <SvgUser role="img" {...props} />,
   withdraw: (props) => <SvgWithdraw role="img" {...props} />,
+  edit: (props) => <SvgEdit role="img" {...props} />,
 };
 
 export const Icon = ({ type, ...restProps }: IconProps): JSX.Element | null => {
