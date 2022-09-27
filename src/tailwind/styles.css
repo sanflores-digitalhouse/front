@@ -431,6 +431,8 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  -webkit-print-color-adjust: initial;
+          print-color-adjust: initial;
 }
 
 fieldset {
@@ -446,6 +448,19 @@ fieldset {
 
 label {
   color: var(--neutral-gray-100) !important;
+}
+
+@media print {
+  body {
+    -webkit-print-color-adjust: exact;
+    -moz-print-color-adjust: exact;
+    -ms-print-color-adjust: exact;
+    print-color-adjust: exact;
+    width: 100%;
+    background: var(--background);
+    color: var(--neutral-gray-100);
+    min-height: 100vh;
+  }
 }
 
 *, ::before, ::after {
@@ -615,16 +630,16 @@ label {
   margin-top: 1rem;
 }
 
+#root .tw-mb-8 {
+  margin-bottom: 2rem;
+}
+
 #root .tw-mb-5 {
   margin-bottom: 1.25rem;
 }
 
 #root .tw-mt-6 {
   margin-top: 1.5rem;
-}
-
-#root .tw-mb-8 {
-  margin-bottom: 2rem;
 }
 
 #root .tw-mt-10 {
@@ -641,6 +656,10 @@ label {
 
 #root .tw-inline-flex {
   display: inline-flex;
+}
+
+#root .tw-hidden {
+  display: none;
 }
 
 #root .tw-h-full {
@@ -750,6 +769,18 @@ label {
 
 #root .tw-gap-x-2 {
   column-gap: 0.5rem;
+}
+
+#root .tw-gap-y-6 {
+  row-gap: 1.5rem;
+}
+
+#root .tw-gap-y-2 {
+  row-gap: 0.5rem;
+}
+
+#root .tw-gap-y-8 {
+  row-gap: 2rem;
 }
 
 #root .tw-gap-x-4 {
@@ -951,4 +982,46 @@ label {
 
 #root .hover\:tw-text-primary:hover {
   color: var(--primary);
+}
+
+@media print {
+  #root .print\:\!tw-mt-0 {
+    margin-top: 0px !important;
+  }
+
+  #root .print\:tw-mb-0 {
+    margin-bottom: 0px;
+  }
+
+  #root .print\:tw-block {
+    display: block;
+  }
+
+  #root .print\:tw-hidden {
+    display: none;
+  }
+
+  #root .print\:tw-h-screen {
+    height: 100vh;
+  }
+
+  #root .print\:tw-w-screen {
+    width: 100vw;
+  }
+
+  #root .print\:tw-border-2 {
+    border-width: 2px;
+  }
+
+  #root .print\:tw-border-none {
+    border-style: none;
+  }
+
+  #root .print\:\!tw-p-0 {
+    padding: 0px !important;
+  }
+
+  #root .print\:tw-p-48 {
+    padding: 12rem;
+  }
 }

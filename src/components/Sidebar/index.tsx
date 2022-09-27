@@ -7,7 +7,7 @@ export const Sidebar = () => {
 
   return (
     <nav
-      className="tw-flex tw-w-64 tw-p-2 tw-border-r tw-border-neutral-blue-100 tw-overflow-auto tw-sticky tw-top-16"
+      className="tw-flex tw-w-64 tw-p-2 tw-border-r tw-border-neutral-blue-100 tw-overflow-auto tw-sticky tw-top-16 print:tw-hidden"
       style={{
         minHeight: 'calc(100vh - 8rem)',
       }}
