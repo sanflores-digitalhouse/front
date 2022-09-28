@@ -1,12 +1,12 @@
 import React, { useState, useMemo } from 'react';
-import { Link, useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { ROUTES, EDIT } from '../../constants';
-import { CardCustom, Tooltip, TooltipPosition, Icon, ErrorMessage, Errors  } from '../../components';
+import { CardCustom, Tooltip, TooltipPosition, Icon, ErrorMessage, Errors, SnackBar  } from '../../components';
 import { 
   handleChange,
   aliasValidationConfig,
@@ -20,8 +20,11 @@ export interface IProfile {
 }
 
 const Profile = () => {
+  const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const isEditing = !!searchParams.get('edit');
+  const isSuccess = !!searchParams.get('success');
+  const isError = !!searchParams.get('error');
 
   const {
     register,
@@ -48,7 +51,15 @@ const Profile = () => {
   ) => handleChange(event, setFormState);
 
   const onSubmit: SubmitHandler<IProfile> = (data) => {
-    return data; // Acá validaríamos contra el back
+    const fakeCondition = true;
+
+    if (fakeCondition) {
+      navigate('/profile?success=true');
+      return data;
+    } 
+
+    navigate('/profile?edit=true&error=true');
+    return data;
   };
 
   return (
@@ -148,6 +159,12 @@ const Profile = () => {
               </div>
             }
           />
+      }
+      {
+        isSuccess && <SnackBar duration={3000} message="El alias se actualizó correctamente" />
+      }
+      {
+        isError && <SnackBar duration={3000} message="El alias seleccionado ya existe. Debe ingresar uno nuevo." />
       }
     </div>
   );
