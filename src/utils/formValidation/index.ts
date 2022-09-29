@@ -5,6 +5,7 @@ export const phoneRegExp =
 export const emailRegExp = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g;
 export const dniRegExp = /^\d{8}$/;
 export const cardRegExp = /^\d{16}$/;
+export const aliasRegExp = /[a-z]+\.[a-z]+\.[a-z]+$/ig;
 
 export const validExpiration = (expiration: string): boolean => {
   const currentYear = new Date().getFullYear();
@@ -135,6 +136,21 @@ export const cvcValidationConfig = {
   minLength: {
     value: 3,
     message: ERROR_MESSAGES.INVALID_CVC,
+  },
+};
+
+export const aliasValidationConfig = {
+  required: {
+    value: true,
+    message: ERROR_MESSAGES.REQUIRED_FIELD,
+  },
+  pattern: {
+    value: aliasRegExp,
+    message: ERROR_MESSAGES.INVALID_ALIAS,
+  },
+  minLength: {
+    value: 10,
+    message: ERROR_MESSAGES.MIN_LENGHT_ALIAS,
   },
 };
 

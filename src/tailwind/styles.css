@@ -646,6 +646,10 @@ label {
   margin-top: 2.5rem;
 }
 
+#root .tw-ml-4 {
+  margin-left: 1rem;
+}
+
 #root .tw-inline-block {
   display: inline-block;
 }
