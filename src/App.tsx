@@ -49,10 +49,6 @@ function App() {
                     element={<ActivityDetails />}
                     path={ROUTES.ACTIVITY_DETAILS}
                   />
-                  <Route
-                    element={<SendMoney />}
-                    path={`${ROUTES.SEND_MONEY}/:step`}
-                  />
                 </Route>
                 <Route
                   element={
