@@ -17,6 +17,7 @@ const Cards = React.lazy(() => import('./pages/Cards'));
 const SendMoney = React.lazy(() => import('./pages/SendMoney'));
 const LoadMoney = React.lazy(() => import('./pages/LoadMoney'));
 const Profile = React.lazy(() => import('./pages/Profile'));
+const PageNotFound = React.lazy(() => import('./pages/PageNotFound'));
 
 const auth = { token: true };
 function App() {
@@ -39,12 +40,19 @@ function App() {
                   element={<PrivateRoutes isAuthenticated={auth.token} />}
                 >
                   <Route element={<Dashboard />} path={ROUTES.HOME} />
-                  <Route element={<Activity />} path={ROUTES.ACTIVITY} />
+                  <Route element={<Activity />} path={`${ROUTES.ACTIVITY}`} />
                   <Route element={<Cards />} path={ROUTES.CARDS} />
                   <Route element={<SendMoney />} path={ROUTES.SEND_MONEY} />
                   <Route element={<LoadMoney />} path={ROUTES.LOAD_MONEY} />
                   <Route element={<Profile />} path={ROUTES.PROFILE} />
-                  <Route element={<ActivityDetails />} path={ROUTES.ACTIVITY_DETAILS} />
+                  <Route
+                    element={<ActivityDetails />}
+                    path={ROUTES.ACTIVITY_DETAILS}
+                  />
+                  <Route
+                    element={<SendMoney />}
+                    path={`${ROUTES.SEND_MONEY}/:step`}
+                  />
                 </Route>
                 <Route
                   element={
@@ -66,6 +74,7 @@ function App() {
                   }
                   path={ROUTES.REGISTER}
                 />
+                <Route element={<PageNotFound />} path="*" />
               </Routes>
             </Suspense>
           </Layout>

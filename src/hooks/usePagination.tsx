@@ -1,6 +1,8 @@
+import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { RecordProps } from '../components/Records/';
-
+import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '../constants';
 export const usePagination = (
   records: RecordProps[],
   recordsPerPage: number,
@@ -9,8 +11,15 @@ export const usePagination = (
   const [searchParams] = useSearchParams();
   const page = searchParams.get('page');
   const pageNumber = (page && parseInt(page, 10)) || initialPage;
-
   const numberOfPages = Math.ceil(records.length / recordsPerPage);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (pageNumber > numberOfPages) {
+      navigate(ROUTES.NOT_FOUND);
+    }
+  }, [pageNumber, numberOfPages, navigate]);
+
   const isRecordsGreeterThanOnePage = records.length > recordsPerPage;
   return {
     pageNumber,
