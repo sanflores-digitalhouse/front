@@ -3,7 +3,7 @@ export const ROUTES = {
   LOGIN: '/login',
   REGISTER: '/register',
   PROFILE: '/profile',
-  ACTIVITY: '/activity',
+  ACTIVITY: '/activities',
   ACTIVITY_DETAILS: '/activity/:id',
   LOAD_MONEY: '/load-money',
   SEND_MONEY: '/send-money',
