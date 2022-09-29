@@ -1,4 +1,4 @@
-import React from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { RecordProps } from '../components/Records/';
 
 export const usePagination = (
@@ -6,15 +6,14 @@ export const usePagination = (
   recordsPerPage: number,
   initialPage = 1
 ) => {
-  const [page, setPage] = React.useState(initialPage);
-  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
-    setPage(value);
-  };
+  const [searchParams] = useSearchParams();
+  const page = searchParams.get('page');
+  const pageNumber = (page && parseInt(page, 10)) || initialPage;
+
   const numberOfPages = Math.ceil(records.length / recordsPerPage);
   const isRecordsGreeterThanOnePage = records.length > recordsPerPage;
   return {
-    page,
-    handleChange,
+    pageNumber,
     numberOfPages,
     isRecordsGreeterThanOnePage,
   };

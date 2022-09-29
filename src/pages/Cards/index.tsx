@@ -10,7 +10,7 @@ import {
   Records,
   RecordVariant,
 } from '../../components';
-import { Button, Pagination } from '@mui/material';
+import { Button, Pagination, PaginationItem } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { ROUTES, ADD, CARDS_PLACEHOLDERS } from '../../constants';
 import { useSearchParams } from 'react-router-dom';
@@ -34,6 +34,7 @@ import {
   transformExpiration,
   valuesHaveErrors,
 } from '../../utils/';
+import { pageQuery } from '../../common';
 
 const { account } = USER;
 const { cards } = account;
@@ -51,7 +52,7 @@ const userCards = cards.map((card) => {
 
 const Cards = () => {
   const recordsPerPage = 10;
-  const { page, handleChange, numberOfPages, isRecordsGreeterThanOnePage } =
+  const { pageNumber, numberOfPages, isRecordsGreeterThanOnePage } =
     usePagination(userCards as RecordProps[], recordsPerPage);
   const [searchParams] = useSearchParams();
   const isAdding = !!searchParams.get('add');
@@ -91,7 +92,7 @@ const Cards = () => {
                 </div>
                 <Records
                   records={userCards}
-                  initialRecord={page * recordsPerPage - recordsPerPage}
+                  initialRecord={pageNumber * recordsPerPage - recordsPerPage}
                 />
               </>
             }
@@ -100,8 +101,14 @@ const Cards = () => {
                 <div className="tw-h-12 tw-w-full tw-flex tw-items-center tw-justify-center tw-px-4 tw-mt-4">
                   <Pagination
                     count={numberOfPages}
-                    onChange={handleChange}
                     shape="rounded"
+                    renderItem={(item) => (
+                      <PaginationItem
+                        component={Link}
+                        to={pageQuery(ROUTES.CARDS, item.page as number)}
+                        {...item}
+                      />
+                    )}
                   />
                 </div>
               )
