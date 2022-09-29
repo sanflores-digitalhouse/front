@@ -126,7 +126,7 @@ const Profile = () => {
                   <div>
                     <FormControl variant="outlined">
                       <InputLabel htmlFor="outlined-adornment-alias">
-                        Nombre
+                        Alias
                       </InputLabel>
                       <OutlinedInput
                         id="outlined-adornment-alias"

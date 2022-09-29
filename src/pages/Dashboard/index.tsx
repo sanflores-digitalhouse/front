@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import Button from '@mui/material/Button';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { ROUTES } from '../../constants';
-import { CardCustom, Records, RecordVariant, Icon } from '../../components';
+import { CardCustom, Records, RecordVariant, Icon, SnackBar } from '../../components';
 import { formatCurrency } from '../../utils/';
 import { currencies } from '../../constants/';
 import { USER } from '../../data';
@@ -57,8 +57,9 @@ const Dashboard = () => {
   const { Argentina } = currencies;
   const { locales, currency } = Argentina;
   const navigate = useNavigate();
-  const { user, dispatch } = useUserInfo();
-  console.log(user);
+  const { dispatch } = useUserInfo();
+  const [searchParams] = useSearchParams();
+  const isSuccess = !!searchParams.get('success');
 
   useEffect(() => {
     dispatch({ type: 'SET_USER', payload: newUser });
@@ -130,6 +131,9 @@ const Dashboard = () => {
           </Link>
         }
       />
+      {
+        isSuccess && <SnackBar duration={3000} message="El dinero fue ingresado correctamente" />
+      }
     </div>
   );
 };
