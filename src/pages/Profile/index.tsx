@@ -161,10 +161,10 @@ const Profile = () => {
           />
       }
       {
-        isSuccess && <SnackBar duration={3000} message="El alias se actualizó correctamente" />
+        isSuccess && <SnackBar duration={3000} message="El alias se actualizó correctamente" type="success" />
       }
       {
-        isError && <SnackBar duration={3000} message="El alias seleccionado ya existe. Debe ingresar uno nuevo." />
+        isError && <SnackBar duration={3000} message="El alias seleccionado ya existe. Debe ingresar uno nuevo." type="error" />
       }
     </div>
   );

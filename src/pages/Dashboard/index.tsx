@@ -132,7 +132,7 @@ const Dashboard = () => {
         }
       />
       {
-        isSuccess && <SnackBar duration={3000} message="El dinero fue ingresado correctamente" />
+        isSuccess && <SnackBar duration={3000} message="El dinero fue ingresado correctamente" type="success" />
       }
     </div>
   );

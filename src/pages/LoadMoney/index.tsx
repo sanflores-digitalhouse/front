@@ -146,7 +146,7 @@ const LoadMoney = () => {
         }
       />
       {
-        isError && <SnackBar duration={3000} message="Hubo un error al ingresar el dinero. Intente nuevamente más tarde." />
+        isError && <SnackBar duration={3000} message="Hubo un error al ingresar el dinero. Intente nuevamente más tarde." type="error" />
       }
     </div>
   );
