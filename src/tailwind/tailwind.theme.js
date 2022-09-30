@@ -17,8 +17,11 @@ const customTheme = {
       background: {
         DEFAULT: 'var(--background)',
       },
-      red: {
-        DEFAULT: 'var(--red)',
+      error: {
+        DEFAULT: 'var(--error)',
+      },
+      success: {
+        DEFAULT: 'var(--success)',
       },
       white: {
         DEFAULT: 'var(--white)',

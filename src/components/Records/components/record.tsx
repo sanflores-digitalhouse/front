@@ -6,7 +6,7 @@ import {
   isMastercard,
 } from '../../../utils/';
 import { currencies } from '../../../constants/';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Icon, IconType } from './../../Icon';
 import { ActivityType } from '../../../common';
 
@@ -105,6 +105,7 @@ function TransactionItem({ amount, name, date }: Transaction) {
 }
 
 function CardItem({ number, type, isSelecting }: Card) {
+  const navigate = useNavigate();
   const lastFourDigits = number.slice(-4);
   const isVisaCard = isVisa(number);
   const isMasterCard = isMastercard(number);
@@ -123,7 +124,11 @@ function CardItem({ number, type, isSelecting }: Card) {
         </p>
       </div>
       <div className="tw-flex tw-text-left tw-gap-x-4 tw-items-center">
-        <p>{isSelecting ? 'Seleccionar' : 'Eliminar'}</p>
+        {
+          !isSelecting ? 
+          <button onClick={() => navigate(`/load-money?type=${cardType}&card=${lastFourDigits}`)}>Seleccionar</button> :
+          <button>Eliminar</button>
+        }
       </div>
     </>
   );
