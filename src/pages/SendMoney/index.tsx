@@ -12,8 +12,7 @@ import { USER } from '../../data/user';
 import {
   handleChange,
   dniValidationConfig,
-  nameValidationConfig,
-  isValueEmpty,
+  aliasValidationConfig,
 } from '../../utils';
 
 const { account } = USER;
@@ -96,8 +95,8 @@ function SendMoneyForm() {
   };
 
   useEffect(() => {
-    if (step !== '1' && isValueEmpty(formState)) {
-      navigate(`${ROUTES.SEND_MONEY}?${STEP}1`);
+    if (step !== '1' && formState.alias === '') {
+      setTimeout(() => navigate(`${ROUTES.SEND_MONEY}?${STEP}1`));
     }
   }, [step, formState, navigate]);
 
@@ -113,7 +112,7 @@ function SendMoneyForm() {
             label="CVU ó Alias"
             type="text"
             actionLabel="Continuar"
-            validation={nameValidationConfig}
+            validation={aliasValidationConfig}
             formState={formState}
             handleChange={(
               event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

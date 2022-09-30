@@ -33,7 +33,7 @@ export const FormSingle = ({
     register,
     handleSubmit,
     // watch,
-    formState: { errors },
+    formState: { errors, isDirty },
   } = useForm({
     criteriaMode: 'all',
   });
@@ -73,12 +73,12 @@ export const FormSingle = ({
               <div className="tw-flex tw-w-full tw-justify-end tw-mt-6">
                 <Button
                   className={`tw-h-12 tw-w-64 ${
-                    hasErrors || isEmpty
+                    hasErrors || isEmpty || !isDirty
                       ? 'tw-text-neutral-gray-300 tw-border-neutral-gray-300 tw-cursor-not-allowed'
                       : ''
                   }`}
                   variant="outlined"
-                  disabled={hasErrors || isEmpty}
+                  disabled={hasErrors || isEmpty || !isDirty}
                   type="submit"
                 >
                   {actionLabel}
