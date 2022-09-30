@@ -9,9 +9,12 @@ export const ERROR_MESSAGES = {
   INVALID_EXPIRATION: 'Fecha de expiración inválida',
   INVALID_CVC: 'CVC debe tener al menos 3 dígitos',
   INVALID_ALIAS: 'El alias deben ser 3 palabras separadas por puntos',
+  INVALID_MONEY: 'El monto a ingresar no puede ser negativo',
+  INVALID_EMPTY_MONEY: 'El monto a ingresar no puede ser cero',
   REQUIRED_FIELD: 'Campo requerido',
   MIN_LENGTH: 'Debe tener al menos 6 caracteres',
   MAX_LENGTH: 'Debe tener menos de 20 caracteres',
   MIN_LENGHT_NAME: 'Debe tener al menos 2 caracteres',
   MIN_LENGHT_ALIAS: 'Debe tener al menos 10 caracteres',
+  MIN_LENGHT_MONEY: 'El mínimo para ingresar a la cuenta es de $100',
 };

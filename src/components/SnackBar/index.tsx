@@ -4,9 +4,10 @@ import Snackbar from '@mui/material/Snackbar';
 export interface ISnackBar {
   duration: number
   message: string
+  type?: 'primary' | 'success' | 'error'
 }
 
-export const SnackBar = ({ duration, message }: ISnackBar) => {
+export const SnackBar = ({ duration, message, type = 'primary' }: ISnackBar) => {
   const [open, setOpen] = useState<boolean>(true);
 
   const closeNotification = () => {
@@ -19,7 +20,7 @@ export const SnackBar = ({ duration, message }: ISnackBar) => {
       autoHideDuration={duration}
       onClose={closeNotification}
     >
-      <div className="tw-bg-primary tw-p-4 tw-rounded">{message}</div>
+      <div className={`tw-bg-${type} tw-p-4 tw-rounded`}>{message}</div>
     </Snackbar>
   );
 };

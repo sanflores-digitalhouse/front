@@ -2,7 +2,8 @@
   --primary: #3399FF;
   --secondary: #f2fafd;
   --background: #0A192A;
-  --red: #e31837;
+  --error: #e31837;
+  --success: #1aac06;
   --white: #ffffff;
   --neutral-gray-100: #E7EBF0;
   --neutral-gray-300: #7E8792;
@@ -922,10 +923,6 @@ label {
 
 #root .tw-text-neutral-gray-100 {
   color: var(--neutral-gray-100);
-}
-
-#root .tw-text-red {
-  color: var(--red);
 }
 
 #root .\!tw-text-neutral-gray-100 {

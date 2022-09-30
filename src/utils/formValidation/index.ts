@@ -6,6 +6,7 @@ export const emailRegExp = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g;
 export const dniRegExp = /^\d{8}$/;
 export const cardRegExp = /^\d{16}$/;
 export const aliasRegExp = /[a-z]+\.[a-z]+\.[a-z]+$/ig;
+export const moneyRegExp = /^([0]{1}\.{1}[0-9]+|[1-9]{1}[0-9]*\.{1}[0-9]+|[0-9]+|0)$/g;
 
 export const validExpiration = (expiration: string): boolean => {
   const currentYear = new Date().getFullYear();
@@ -151,6 +152,22 @@ export const aliasValidationConfig = {
   minLength: {
     value: 10,
     message: ERROR_MESSAGES.MIN_LENGHT_ALIAS,
+  },
+};
+
+export const moneyValidationConfig = {
+  required: {
+    value: true,
+    message: ERROR_MESSAGES.REQUIRED_FIELD,
+  },
+  pattern: {
+    value: moneyRegExp,
+    message: ERROR_MESSAGES.INVALID_MONEY,
+  },
+  validate: (value: any) => {
+    if (value === '0') {
+      return ERROR_MESSAGES.INVALID_EMPTY_MONEY;
+    }
   },
 };
 
