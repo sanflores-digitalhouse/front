@@ -91,7 +91,7 @@ function SendMoneyForm() {
     maxLength?: number
   ) => handleChange(event, setFormState, maxLength);
 
-  const onSubmit = (step: number) => {
+  const onNavigate = (step: number) => {
     navigate(`${ROUTES.SEND_MONEY}?${STEP}${step}`);
   };
 
@@ -118,7 +118,7 @@ function SendMoneyForm() {
             handleChange={(
               event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
             ) => onChange(event)}
-            submit={() => onSubmit(2)}
+            submit={() => onNavigate(2)}
           />
         );
       case '2':
@@ -134,7 +134,7 @@ function SendMoneyForm() {
             handleChange={(
               event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
             ) => onChange(event)}
-            submit={() => onSubmit(3)}
+            submit={() => onNavigate(3)}
           />
         );
       case '3':
