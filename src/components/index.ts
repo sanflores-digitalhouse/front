@@ -5,4 +5,5 @@ export * from './ErrorMessage';
 export * from './Card';
 export * from './Records';
 export * from './Tooltip';
+export * from './SnackBar';
 export * from './FormSingle';

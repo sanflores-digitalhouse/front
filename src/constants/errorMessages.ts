@@ -8,8 +8,10 @@ export const ERROR_MESSAGES = {
   INVALID_CARD: 'Tarjeta inválida',
   INVALID_EXPIRATION: 'Fecha de expiración inválida',
   INVALID_CVC: 'CVC debe tener al menos 3 dígitos',
+  INVALID_ALIAS: 'El alias deben ser 3 palabras separadas por puntos',
   REQUIRED_FIELD: 'Campo requerido',
   MIN_LENGTH: 'Debe tener al menos 6 caracteres',
   MAX_LENGTH: 'Debe tener menos de 20 caracteres',
   MIN_LENGHT_NAME: 'Debe tener al menos 2 caracteres',
+  MIN_LENGHT_ALIAS: 'Debe tener al menos 10 caracteres',
 };
