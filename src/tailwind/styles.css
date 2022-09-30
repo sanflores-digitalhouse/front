@@ -610,6 +610,14 @@ label {
   margin-top: 3rem;
 }
 
+#root .tw-mb-8 {
+  margin-bottom: 2rem;
+}
+
+#root .tw-mt-6 {
+  margin-top: 1.5rem;
+}
+
 #root .tw-mt-8 {
   margin-top: 2rem;
 }
@@ -630,16 +638,8 @@ label {
   margin-top: 1rem;
 }
 
-#root .tw-mb-8 {
-  margin-bottom: 2rem;
-}
-
 #root .tw-mb-5 {
   margin-bottom: 1.25rem;
-}
-
-#root .tw-mt-6 {
-  margin-top: 1.5rem;
 }
 
 #root .tw-mt-10 {
@@ -924,6 +924,10 @@ label {
   color: var(--red);
 }
 
+#root .tw-text-neutral-gray-300 {
+  color: var(--neutral-gray-300);
+}
+
 #root .\!tw-text-neutral-gray-100 {
   color: var(--neutral-gray-100) !important;
 }
@@ -938,10 +942,6 @@ label {
 
 #root .tw-text-white {
   color: var(--white);
-}
-
-#root .tw-text-neutral-gray-300 {
-  color: var(--neutral-gray-300);
 }
 
 #root .tw-underline {
