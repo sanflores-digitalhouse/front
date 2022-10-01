@@ -4,3 +4,5 @@ export * from './date';
 export * from './copy';
 export * from './numberCard';
 export * from './print';
+export * from './api';
+export * from './parseData';

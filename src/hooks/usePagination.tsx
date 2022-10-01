@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { RecordProps } from '../components/Records/';
+import { IRecord } from '../components/Records/';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../constants';
 export const usePagination = (
-  records: RecordProps[],
+  records: IRecord[],
   recordsPerPage: number,
   initialPage = 1
 ) => {
