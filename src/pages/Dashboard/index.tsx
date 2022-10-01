@@ -1,26 +1,23 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { ROUTES } from '../../constants';
-import { CardCustom, Records, RecordVariant, Icon, SnackBar } from '../../components';
-import { formatCurrency } from '../../utils/';
+import {
+  CardCustom,
+  Records,
+  RecordVariant,
+  Icon,
+  SnackBar,
+  IRecord,
+} from '../../components';
+import {
+  formatCurrency,
+  getUserActivities,
+  parseActivities,
+  parseRecordContent,
+} from '../../utils/';
 import { currencies } from '../../constants/';
-import { USER } from '../../data';
 import { useUserInfo } from '../../hooks/useUserInfo';
-
-const { account } = USER;
-const { activities } = account;
-const parsedActivities = activities.map((activity) => {
-  const { amount, name, date } = activity;
-  return {
-    content: {
-      amount,
-      name,
-      date,
-    },
-    variant: RecordVariant.TRANSACTION,
-  };
-});
 
 const newUser = {
   name: 'Mauricio',
@@ -60,6 +57,17 @@ const Dashboard = () => {
   const { dispatch } = useUserInfo();
   const [searchParams] = useSearchParams();
   const isSuccess = !!searchParams.get('success');
+  const [userActivities, setUserActivities] = useState<IRecord[]>([]);
+
+  useEffect(() => {
+    getUserActivities('12312312312').then((activities) => {
+      const parsedActivities = parseActivities(activities);
+      const parsedRecords = parsedActivities.map((parsedActivity: any) =>
+        parseRecordContent(parsedActivity, RecordVariant.TRANSACTION)
+      );
+      setUserActivities(parsedRecords);
+    });
+  }, []);
 
   useEffect(() => {
     dispatch({ type: 'SET_USER', payload: newUser });
@@ -118,7 +126,7 @@ const Dashboard = () => {
             <div>
               <p className="tw-mb-4 tw-font-bold">Tu actividad reciente</p>
             </div>
-            <Records records={parsedActivities} maxRecords={5} />
+            <Records records={userActivities} maxRecords={5} />
           </>
         }
         actions={
@@ -131,9 +139,13 @@ const Dashboard = () => {
           </Link>
         }
       />
-      {
-        isSuccess && <SnackBar duration={3000} message="El dinero fue ingresado correctamente" type="success" />
-      }
+      {isSuccess && (
+        <SnackBar
+          duration={3000}
+          message="El dinero fue ingresado correctamente"
+          type="success"
+        />
+      )}
     </div>
   );
 };

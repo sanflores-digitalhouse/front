@@ -1,32 +1,36 @@
-import React from 'react';
-import { RecordVariant, RecordProps } from '../../components/Records/';
-import { CardCustom, Records } from '../../components';
+import React, { useEffect, useState } from 'react';
+import { RecordVariant, IRecord } from '../../components/Records/';
+import { CardCustom, Records, Transaction } from '../../components';
 import Pagination from '@mui/material/Pagination';
-import { USER } from '../../data/user';
 import { usePagination } from '../../hooks/usePagination';
 import { ROUTES } from '../../constants';
 import PaginationItem from '@mui/material/PaginationItem';
 import { Link } from 'react-router-dom';
 import { pageQuery } from '../../common/';
-
-const { account } = USER;
-const { activities } = account;
-const transactions = activities.map((activity) => {
-  const { amount, name, date } = activity;
-  return {
-    content: {
-      amount,
-      name,
-      date,
-    },
-    variant: RecordVariant.TRANSACTION,
-  };
-});
+import {
+  getUserActivities,
+  parseActivities,
+  parseRecordContent,
+} from '../../utils';
 
 const recordsPerPage = 10;
 const Activity = () => {
+  const [userActivities, setUserActivities] = useState<IRecord[]>([]);
+
   const { pageNumber, numberOfPages, isRecordsGreeterThanOnePage } =
-    usePagination(transactions as RecordProps[], recordsPerPage);
+    usePagination(userActivities as IRecord[], recordsPerPage);
+  //TODO: replace with real data
+
+  useEffect(() => {
+    getUserActivities('12312312312').then((activities) => {
+      const parsedActivities = parseActivities(activities);
+      const parsedRecords = parsedActivities.map(
+        (parsedActivity: Transaction) =>
+          parseRecordContent(parsedActivity, RecordVariant.TRANSACTION)
+      );
+      setUserActivities(parsedRecords);
+    });
+  }, []);
 
   return (
     <div className="tw-w-full">
@@ -38,7 +42,7 @@ const Activity = () => {
               <p className="tw-mb-4 tw-font-bold">Tu actividad</p>
             </div>
             <Records
-              records={transactions}
+              records={userActivities}
               initialRecord={pageNumber * recordsPerPage - recordsPerPage}
             />
           </>
