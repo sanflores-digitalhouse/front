@@ -22,11 +22,12 @@ export interface Transaction {
   id?: string;
 }
 
-interface Card {
+export interface Card {
   number: string;
   name: string;
   type: string;
-  isSelecting: boolean;
+  id: string;
+  isSelecting?: boolean;
 }
 
 interface Account {
@@ -67,6 +68,7 @@ export const Record = ({
 }: RecordProps) => {
   const [searchParams] = useSearchParams();
   const isSelecting = !!searchParams.get('select');
+  console.log(isSelecting);
 
   return (
     <li
@@ -131,10 +133,12 @@ function CardItem({ number, type, isSelecting }: Card) {
         </p>
       </div>
       <div className="tw-flex tw-text-left tw-gap-x-4 tw-items-center">
-        {!isSelecting ? (
+        {isSelecting ? (
           <button
             onClick={() =>
-              navigate(`/load-money?type=${cardType}&card=${lastFourDigits}`)
+              navigate(
+                `${ROUTES.LOAD_MONEY}?type=${cardType}&card=${lastFourDigits}`
+              )
             }
           >
             Seleccionar
