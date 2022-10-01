@@ -15,7 +15,7 @@ export const usePagination = (
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (pageNumber > numberOfPages) {
+    if (numberOfPages !== 0 && pageNumber > numberOfPages) {
       navigate(ROUTES.NOT_FOUND);
     }
   }, [pageNumber, numberOfPages, navigate]);
