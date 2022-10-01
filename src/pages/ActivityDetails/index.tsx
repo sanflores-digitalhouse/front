@@ -1,12 +1,13 @@
 import React from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { CardCustom, Icon } from '../../components/';
 import { currencies, ROUTES } from '../../constants';
 import { Button } from '@mui/material';
 import { formatCurrency, formatDateFromString, printPage } from '../../utils';
 
 const ActivityDetails = () => {
-  const { id } = useParams();
+  const [searchParams] = useSearchParams();
+  const id = parseInt(searchParams.get('id') || '0', 10);
   const navigate = useNavigate();
   const { Argentina } = currencies;
   const { locales, currency } = Argentina;

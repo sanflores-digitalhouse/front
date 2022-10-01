@@ -6,7 +6,7 @@ import {
   RecordVariant,
   FormSingle,
 } from '../../components';
-import { currencies, ROUTES, STEP } from '../../constants';
+import { currencies, ROUTES, STEP, ID } from '../../constants';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { USER } from '../../data/user';
 import {
@@ -98,7 +98,7 @@ function SendMoneyForm() {
 
   useEffect(() => {
     if (step !== '1' && formState.alias === '') {
-      setTimeout(() => navigate(`${ROUTES.SEND_MONEY}?${STEP}1`));
+      setTimeout(() => onNavigate(1));
     }
   }, [step, formState, navigate]);
 
@@ -177,7 +177,9 @@ function SendMoneyForm() {
                     type="submit"
                     className="tw-h-12 tw-w-64"
                     variant="outlined"
-                    onClick={() => console.log('Transfiriendo...')}
+                    onClick={() =>
+                      navigate(`${ROUTES.ACTIVITY_DETAILS}?${ID}1`)
+                    }
                   >
                     Transferir
                   </Button>
