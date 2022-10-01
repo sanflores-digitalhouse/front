@@ -11,7 +11,7 @@ import {
   Errors,
   SnackBar,
 } from '../../components';
-import { ROUTES } from '../../constants';
+import { ROUTES, SELECT } from '../../constants';
 import {
   handleChange,
   moneyValidationConfig,
@@ -54,14 +54,14 @@ const LoadMoney = () => {
   ) => handleChange(event, setFormState);
 
   const onSubmit: SubmitHandler<any> = (data) => {
-    const fakeCondition = false;
+    const fakeCondition = true;
 
     if (fakeCondition) {
       navigate('/?success=true');
       return data;
     }
 
-    navigate(`/load-money?type=${cardType}&card=${card}&error=true`);
+    navigate(`${ROUTES.LOAD_MONEY}?type=${cardType}&card=${card}&error=true`);
     return data;
   };
 
@@ -149,7 +149,7 @@ const LoadMoney = () => {
         }
         actions={
           <Link
-            to={`${ROUTES.CARDS}`}
+            to={`${ROUTES.CARDS}?${SELECT}`}
             className="tw-w-full tw-flex tw-items-center tw-justify-between tw-p-4 hover:tw-bg-neutral-gray-500 tw-transition"
           >
             <div className="tw-flex tw-items-center tw-gap-x-4">

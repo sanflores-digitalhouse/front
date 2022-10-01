@@ -1,0 +1,21 @@
+[
+  {
+    "id": "12312312312",
+    "cards": [
+      {
+        "type": "Debit",
+        "number": "4111972602542349",
+        "name": "Mauricio Brito",
+        "expiration": "2022-09-17T20:57:38+00:00",
+        "cvc": "123"
+      },
+      {
+        "type": "Debit",
+        "number": "5547302659359356",
+        "name": "Mauricio Brito",
+        "expiration": "2022-09-17T20:57:38+00:00",
+        "cvc": "123"
+      }
+    ]
+  }
+]

@@ -1,6 +1,5 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { usePagination } from '../../hooks/usePagination';
-import { USER } from '../../data/user';
 import {
   CardCustom,
   ErrorMessage,
@@ -9,6 +8,8 @@ import {
   RecordProps,
   Records,
   RecordVariant,
+  Card,
+  IRecord,
 } from '../../components';
 import { Button, Pagination, PaginationItem } from '@mui/material';
 import { Link } from 'react-router-dom';
@@ -33,29 +34,32 @@ import {
   isValueEmpty,
   transformExpiration,
   valuesHaveErrors,
+  parseCards,
+  getUserCards,
+  parseRecordContent,
 } from '../../utils/';
 import { pageQuery } from '../../common';
 
-const { account } = USER;
-const { cards } = account;
-const userCards = cards.map((card) => {
-  const { number, name, type } = card;
-  return {
-    content: {
-      number,
-      name,
-      type,
-    },
-    variant: RecordVariant.CARD,
-  };
-});
-
+const recordsPerPage = 10;
 const Cards = () => {
-  const recordsPerPage = 10;
+  const [userCards, setUserCards] = useState<IRecord[]>([]);
+
   const { pageNumber, numberOfPages, isRecordsGreeterThanOnePage } =
     usePagination(userCards as RecordProps[], recordsPerPage);
   const [searchParams] = useSearchParams();
   const isAdding = !!searchParams.get('add');
+
+  useEffect(() => {
+    if (!isAdding) {
+      getUserCards('12312312312').then((cards) => {
+        const parsedActivities = parseCards(cards);
+        const parsedRecords = parsedActivities.map((parsedCard: Card) =>
+          parseRecordContent(parsedCard, RecordVariant.CARD)
+        );
+        setUserCards(parsedRecords);
+      });
+    }
+  }, [isAdding]);
 
   return (
     <div className="tw-w-full">
