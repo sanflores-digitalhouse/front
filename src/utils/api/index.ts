@@ -31,7 +31,7 @@ export const getUserActivity = async (userId: string, activityId: string) => {
     activity.id === userId ? activity : null
   ).activities;
   const userActivity = userActivities.find(
-    (activity: any) => activity.activity_id === activityId
+    (activity: any) => activity.id === activityId
   );
   return userActivity;
 };

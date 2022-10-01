@@ -2,23 +2,23 @@ import { IRecord, Transaction } from '../../components';
 
 export const parseActivities = (activities: any): Transaction[] => {
   return activities.map((activity: any) => {
-    const { name, amount, date, activity_id } = activity;
+    const { name, amount, date, id } = activity;
     return {
       name,
       amount,
       date,
-      id: activity_id,
+      id,
     };
   });
 };
 
 export const parseActivity = (activity: any): Transaction => {
-  const { name, amount, date, activity_id } = activity;
+  const { name, amount, date, id } = activity;
   return {
     name,
     amount,
     date,
-    id: activity_id,
+    id,
   };
 };
 
