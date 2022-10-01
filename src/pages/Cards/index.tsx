@@ -128,7 +128,6 @@ function CardForm() {
   const {
     register,
     handleSubmit,
-    // watch,
     formState: { errors, isDirty },
   } = useForm<ReactCreditCardProps>({
     criteriaMode: 'all',

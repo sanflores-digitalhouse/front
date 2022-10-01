@@ -32,7 +32,6 @@ export const FormSingle = ({
   const {
     register,
     handleSubmit,
-    // watch,
     formState: { errors, isDirty },
   } = useForm({
     criteriaMode: 'all',
