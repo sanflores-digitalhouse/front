@@ -12,6 +12,18 @@ export const parseActivities = (activities: any): Transaction[] => {
   });
 };
 
+export const parseCards = (cards: any): any[] => {
+  return cards.map((card: any) => {
+    const { name, number, id, type } = card;
+    return {
+      name,
+      number,
+      id,
+      type,
+    };
+  });
+};
+
 export const parseActivity = (activity: any): Transaction => {
   const { name, amount, date, id } = activity;
   return {
