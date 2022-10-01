@@ -929,6 +929,10 @@ label {
   color: var(--neutral-gray-100);
 }
 
+#root .tw-text-error {
+  color: var(--error);
+}
+
 #root .tw-text-neutral-gray-300 {
   color: var(--neutral-gray-300);
 }
