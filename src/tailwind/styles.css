@@ -852,6 +852,14 @@ label {
   background-color: var(--primary);
 }
 
+#root .tw-bg-success {
+  background-color: var(--success);
+}
+
+#root .tw-bg-error {
+  background-color: var(--error);
+}
+
 #root .tw-fill-neutral-gray-500 {
   fill: var(--neutral-gray-500);
 }
