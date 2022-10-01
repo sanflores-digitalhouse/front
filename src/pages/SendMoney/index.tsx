@@ -6,14 +6,16 @@ import {
   RecordVariant,
   FormSingle,
 } from '../../components';
-import { ROUTES, STEP } from '../../constants';
+import { currencies, ROUTES, STEP } from '../../constants';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { USER } from '../../data/user';
 import {
   handleChange,
-  dniValidationConfig,
+  moneyValidationConfig,
   aliasValidationConfig,
+  formatCurrency,
 } from '../../utils';
+import { Button } from '@mui/material';
 
 const { account } = USER;
 const { accounts } = account;
@@ -100,9 +102,12 @@ function SendMoneyForm() {
     }
   }, [step, formState, navigate]);
 
-  return <>{renderStep()}</>;
+  return <>{renderStep(formState)}</>;
 
-  function renderStep() {
+  function renderStep(formState: { alias: string; amount: string }) {
+    const { amount } = formState;
+    const { Argentina } = currencies;
+    const { locales, currency } = Argentina;
     switch (step) {
       case '1':
         return (
@@ -128,7 +133,7 @@ function SendMoneyForm() {
             label="Monto"
             type="number"
             actionLabel="Continuar"
-            validation={dniValidationConfig}
+            validation={moneyValidationConfig}
             formState={formState}
             handleChange={(
               event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -137,7 +142,50 @@ function SendMoneyForm() {
           />
         );
       case '3':
-        return <>3</>;
+        return (
+          <>
+            <CardCustom
+              content={
+                <div className="tw-flex tw-flex-col">
+                  <div className="tw-flex tw-justify-between tw-mb-4">
+                    <p className="tw-font-bold">Revisá que está todo bien</p>
+                  </div>
+                  <div className="tw-flex tw-flex-col tw-mb-4">
+                    <div className="tw-flex tw-gap-2">
+                      <p className="">Vas a transferir</p>
+                      <Link to={`${ROUTES.SEND_MONEY}?${STEP}2`}>
+                        <Icon type="edit" />
+                      </Link>
+                    </div>
+                    <p className="tw-font-bold">
+                      {formatCurrency(locales, currency, parseFloat(amount))}
+                    </p>
+                  </div>
+                  <div className="tw-flex tw-flex-col tw-mb-4">
+                    <p className="">Para</p>
+                    <p className="tw-font-bold">John Esteban</p>
+                  </div>
+                  <div className="tw-flex tw-flex-col tw-mb-4">
+                    <p className="">Brubank</p>
+                    <p className="tw-font-bold">CVU: 03249239420940932923</p>
+                  </div>
+                </div>
+              }
+              actions={
+                <div className="tw-flex tw-w-full tw-justify-end tw-mt-6">
+                  <Button
+                    type="submit"
+                    className="tw-h-12 tw-w-64"
+                    variant="outlined"
+                    onClick={() => console.log('Transfiriendo...')}
+                  >
+                    Transferir
+                  </Button>
+                </div>
+              }
+            />
+          </>
+        );
     }
   }
 }

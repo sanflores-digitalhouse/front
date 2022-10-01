@@ -768,6 +768,10 @@ label {
   gap: 1rem;
 }
 
+#root .tw-gap-2 {
+  gap: 0.5rem;
+}
+
 #root .tw-gap-y-4 {
   row-gap: 1rem;
 }
@@ -923,10 +927,6 @@ label {
 
 #root .tw-text-neutral-gray-100 {
   color: var(--neutral-gray-100);
-}
-
-#root .tw-text-red {
-  color: var(--red);
 }
 
 #root .tw-text-neutral-gray-300 {
