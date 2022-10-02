@@ -10,6 +10,8 @@ import {
   RecordVariant,
   Card,
   IRecord,
+  Skeleton,
+  SkeletonVariant,
 } from '../../components';
 import { Button, Pagination, PaginationItem } from '@mui/material';
 import { Link } from 'react-router-dom';
@@ -94,10 +96,17 @@ const Cards = () => {
                 <div>
                   <p className="tw-mb-4 tw-font-bold">Tus tarjetas</p>
                 </div>
-                <Records
-                  records={userCards}
-                  initialRecord={pageNumber * recordsPerPage - recordsPerPage}
-                />
+                {userCards.length > 0 ? (
+                  <Records
+                    records={userCards}
+                    initialRecord={pageNumber * recordsPerPage - recordsPerPage}
+                  />
+                ) : (
+                  <Skeleton
+                    variant={SkeletonVariant.RECORD_LIST}
+                    numberOfItems={5}
+                  />
+                )}
               </>
             }
             actions={

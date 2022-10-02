@@ -623,6 +623,14 @@ label {
   margin-top: 2rem;
 }
 
+#root .tw-mb-0\.5 {
+  margin-bottom: 0.125rem;
+}
+
+#root .tw-mb-0 {
+  margin-bottom: 0px;
+}
+
 #root .tw-mb-2 {
   margin-bottom: 0.5rem;
 }
@@ -633,14 +641,6 @@ label {
 
 #root .tw-mb-4 {
   margin-bottom: 1rem;
-}
-
-#root .tw-mb-0\.5 {
-  margin-bottom: 0.125rem;
-}
-
-#root .tw-mb-0 {
-  margin-bottom: 0px;
 }
 
 #root .tw-mt-4 {
@@ -898,6 +898,11 @@ label {
   padding-right: 0px;
 }
 
+#root .tw-py-5 {
+  padding-top: 1.25rem;
+  padding-bottom: 1.25rem;
+}
+
 #root .tw-px-4 {
   padding-left: 1rem;
   padding-right: 1rem;
@@ -906,11 +911,6 @@ label {
 #root .tw-py-2 {
   padding-top: 0.5rem;
   padding-bottom: 0.5rem;
-}
-
-#root .tw-py-5 {
-  padding-top: 1.25rem;
-  padding-bottom: 1.25rem;
 }
 
 #root .tw-pt-4 {

@@ -21,8 +21,11 @@ export const Skeleton = ({
       {variant === SkeletonVariant.RECORD_LIST && (
         <div className={`tw-w-full ${className}`}>
           {[...Array(numberOfItems)].map((_, index) => (
-            <div key={index} className="tw-mb-0.5">
-              <CustomSkeleton variant="rectangular" height={88} />
+            <div
+              key={index}
+              className="tw-flex tw-items-center tw-w-full tw-py-5 tw-mb-0.5"
+            >
+              <CustomSkeleton variant="rectangular" height={48} width="100%" />
             </div>
           ))}
         </div>
