@@ -68,7 +68,6 @@ export const Record = ({
 }: RecordProps) => {
   const [searchParams] = useSearchParams();
   const isSelecting = !!searchParams.get('select');
-  console.log(isSelecting);
 
   return (
     <li

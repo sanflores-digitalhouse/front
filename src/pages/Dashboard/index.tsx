@@ -9,6 +9,8 @@ import {
   Icon,
   SnackBar,
   IRecord,
+  Skeleton,
+  SkeletonVariant,
 } from '../../components';
 import {
   formatCurrency,
@@ -126,7 +128,14 @@ const Dashboard = () => {
             <div>
               <p className="tw-mb-4 tw-font-bold">Tu actividad reciente</p>
             </div>
-            <Records records={userActivities} maxRecords={5} />
+            {userActivities.length > 0 ? (
+              <Records records={userActivities} maxRecords={5} />
+            ) : (
+              <Skeleton
+                variant={SkeletonVariant.RECORD_LIST}
+                numberOfItems={5}
+              />
+            )}
           </>
         }
         actions={

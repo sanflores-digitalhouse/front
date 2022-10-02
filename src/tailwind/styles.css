@@ -635,6 +635,14 @@ label {
   margin-bottom: 1rem;
 }
 
+#root .tw-mb-0\.5 {
+  margin-bottom: 0.125rem;
+}
+
+#root .tw-mb-0 {
+  margin-bottom: 0px;
+}
+
 #root .tw-mt-4 {
   margin-top: 1rem;
 }

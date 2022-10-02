@@ -54,7 +54,7 @@ const LoadMoney = () => {
   ) => handleChange(event, setFormState);
 
   const onSubmit: SubmitHandler<any> = (data) => {
-    const fakeCondition = true;
+    const fakeCondition = false;
 
     if (fakeCondition) {
       navigate('/?success=true');

@@ -1,6 +1,13 @@
 import React, { useEffect, useState } from 'react';
-import { RecordVariant, IRecord } from '../../components/Records/';
-import { CardCustom, Records, Transaction } from '../../components';
+import {
+  CardCustom,
+  Records,
+  RecordVariant,
+  IRecord,
+  Transaction,
+  Skeleton,
+  SkeletonVariant,
+} from '../../components';
 import Pagination from '@mui/material/Pagination';
 import { usePagination } from '../../hooks/usePagination';
 import { ROUTES } from '../../constants';
@@ -41,10 +48,14 @@ const Activity = () => {
             <div>
               <p className="tw-mb-4 tw-font-bold">Tu actividad</p>
             </div>
-            <Records
-              records={userActivities}
-              initialRecord={pageNumber * recordsPerPage - recordsPerPage}
-            />
+            {userActivities.length > 0 ? (
+              <Records
+                records={userActivities}
+                initialRecord={pageNumber * recordsPerPage - recordsPerPage}
+              />
+            ) : (
+              <Skeleton variant={SkeletonVariant.RECORD_LIST} />
+            )}
           </>
         }
         actions={

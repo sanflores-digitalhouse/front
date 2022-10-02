@@ -7,3 +7,4 @@ export * from './Records';
 export * from './Tooltip';
 export * from './SnackBar';
 export * from './FormSingle';
+export * from './Skeleton';
