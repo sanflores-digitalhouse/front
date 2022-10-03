@@ -1,6 +1,5 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { usePagination } from '../../hooks/usePagination';
-import { USER } from '../../data/user';
 import {
   CardCustom,
   ErrorMessage,
@@ -9,8 +8,12 @@ import {
   RecordProps,
   Records,
   RecordVariant,
+  Card,
+  IRecord,
+  Skeleton,
+  SkeletonVariant,
 } from '../../components';
-import { Button, Pagination } from '@mui/material';
+import { Button, Pagination, PaginationItem } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { ROUTES, ADD, CARDS_PLACEHOLDERS } from '../../constants';
 import { useSearchParams } from 'react-router-dom';
@@ -33,28 +36,32 @@ import {
   isValueEmpty,
   transformExpiration,
   valuesHaveErrors,
+  parseCards,
+  getUserCards,
+  parseRecordContent,
 } from '../../utils/';
+import { pageQuery } from '../../common';
 
-const { account } = USER;
-const { cards } = account;
-const userCards = cards.map((card) => {
-  const { number, name, type } = card;
-  return {
-    content: {
-      number,
-      name,
-      type,
-    },
-    variant: RecordVariant.CARD,
-  };
-});
-
+const recordsPerPage = 10;
 const Cards = () => {
-  const recordsPerPage = 10;
-  const { page, handleChange, numberOfPages, isRecordsGreeterThanOnePage } =
+  const [userCards, setUserCards] = useState<IRecord[]>([]);
+
+  const { pageNumber, numberOfPages, isRecordsGreeterThanOnePage } =
     usePagination(userCards as RecordProps[], recordsPerPage);
   const [searchParams] = useSearchParams();
   const isAdding = !!searchParams.get('add');
+
+  useEffect(() => {
+    if (!isAdding) {
+      getUserCards('12312312312').then((cards) => {
+        const parsedActivities = parseCards(cards);
+        const parsedRecords = parsedActivities.map((parsedCard: Card) =>
+          parseRecordContent(parsedCard, RecordVariant.CARD)
+        );
+        setUserCards(parsedRecords);
+      });
+    }
+  }, [isAdding]);
 
   return (
     <div className="tw-w-full">
@@ -89,10 +96,17 @@ const Cards = () => {
                 <div>
                   <p className="tw-mb-4 tw-font-bold">Tus tarjetas</p>
                 </div>
-                <Records
-                  records={userCards}
-                  initialRecord={page * recordsPerPage - recordsPerPage}
-                />
+                {userCards.length > 0 ? (
+                  <Records
+                    records={userCards}
+                    initialRecord={pageNumber * recordsPerPage - recordsPerPage}
+                  />
+                ) : (
+                  <Skeleton
+                    variant={SkeletonVariant.RECORD_LIST}
+                    numberOfItems={5}
+                  />
+                )}
               </>
             }
             actions={
@@ -100,8 +114,14 @@ const Cards = () => {
                 <div className="tw-h-12 tw-w-full tw-flex tw-items-center tw-justify-center tw-px-4 tw-mt-4">
                   <Pagination
                     count={numberOfPages}
-                    onChange={handleChange}
                     shape="rounded"
+                    renderItem={(item) => (
+                      <PaginationItem
+                        component={Link}
+                        to={pageQuery(ROUTES.CARDS, item.page as number)}
+                        {...item}
+                      />
+                    )}
                   />
                 </div>
               )
@@ -121,7 +141,6 @@ function CardForm() {
   const {
     register,
     handleSubmit,
-    // watch,
     formState: { errors, isDirty },
   } = useForm<ReactCreditCardProps>({
     criteriaMode: 'all',
@@ -157,6 +176,9 @@ function CardForm() {
         className="tw-max-w-5xl"
         content={
           <div className="tw-flex tw-flex-col" id="PaymentForm">
+            <div className="tw-flex tw-justify-between tw-mb-4">
+              <p className="tw-font-bold">Agregá una nueva tarjeta</p>
+            </div>
             <div className="tw-mb-5">
               <CardsComponent
                 cvc={formState.cvc}

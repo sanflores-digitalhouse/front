@@ -1,20 +1,28 @@
-import React from 'react';
-import { RecordProps } from '../components/Records/';
-
+import { useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
+import { IRecord } from '../components/Records/';
+import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '../constants';
 export const usePagination = (
-  records: RecordProps[],
+  records: IRecord[],
   recordsPerPage: number,
   initialPage = 1
 ) => {
-  const [page, setPage] = React.useState(initialPage);
-  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
-    setPage(value);
-  };
+  const [searchParams] = useSearchParams();
+  const page = searchParams.get('page');
+  const pageNumber = (page && parseInt(page, 10)) || initialPage;
   const numberOfPages = Math.ceil(records.length / recordsPerPage);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (numberOfPages !== 0 && pageNumber > numberOfPages) {
+      navigate(ROUTES.NOT_FOUND);
+    }
+  }, [pageNumber, numberOfPages, navigate]);
+
   const isRecordsGreeterThanOnePage = records.length > recordsPerPage;
   return {
-    page,
-    handleChange,
+    pageNumber,
     numberOfPages,
     isRecordsGreeterThanOnePage,
   };

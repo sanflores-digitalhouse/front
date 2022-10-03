@@ -6,17 +6,25 @@ import InputLabel from '@mui/material/InputLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { ROUTES, EDIT } from '../../constants';
-import { CardCustom, Tooltip, TooltipPosition, Icon, ErrorMessage, Errors, SnackBar  } from '../../components';
-import { 
+import {
+  CardCustom,
+  Tooltip,
+  TooltipPosition,
+  Icon,
+  ErrorMessage,
+  Errors,
+  SnackBar,
+} from '../../components';
+import {
   handleChange,
   aliasValidationConfig,
   isValueEmpty,
   valuesHaveErrors,
-  copyToClipboard
+  copyToClipboard,
 } from '../../utils';
 
 export interface IProfile {
-  alias?: string 
+  alias?: string;
 }
 
 const Profile = () => {
@@ -29,12 +37,14 @@ const Profile = () => {
   const {
     register,
     handleSubmit,
-    // watch,
     formState: { errors, isDirty },
   } = useForm({
-    criteriaMode: 'all'
+    criteriaMode: 'all',
   });
-  const [formState, setFormState] = useState<{alias: string, focused: undefined | string}>({
+  const [formState, setFormState] = useState<{
+    alias: string;
+    focused: undefined | string;
+  }>({
     alias: 'estealias.no.existe',
     focused: undefined,
   });
@@ -56,7 +66,7 @@ const Profile = () => {
     if (fakeCondition) {
       navigate('/profile?success=true');
       return data;
-    } 
+    }
 
     navigate('/profile?edit=true&error=true');
     return data;
@@ -64,108 +74,118 @@ const Profile = () => {
 
   return (
     <div className="tw-w-full">
-      {
-        !isEditing ?
-          <CardCustom
-            className="tw-max-w-5xl"
-            content={
-              <div className="tw-flex tw-gap-4 tw-flex-col tw-w-full">
-                <p className="tw-font-bold">
-                  Copia tu cvu o alias para ingresar o transferir dinero desde otra
-                  cuenta
-                </p>
-                <div className="tw-flex tw-mb-4 tw-justify-between tw-items-center">
-                  <div>
-                    <p className="tw-font-bold tw-text-primary">CVU</p>
-                    <p className="">0000002100075320000000</p>
-                  </div>
+      {!isEditing ? (
+        <CardCustom
+          className="tw-max-w-5xl"
+          content={
+            <div className="tw-flex tw-gap-4 tw-flex-col tw-w-full">
+              <p className="tw-font-bold">
+                Copia tu cvu o alias para ingresar o transferir dinero desde
+                otra cuenta
+              </p>
+              <div className="tw-flex tw-mb-4 tw-justify-between tw-items-center">
+                <div>
+                  <p className="tw-font-bold tw-text-primary">CVU</p>
+                  <p className="">0000002100075320000000</p>
+                </div>
+                <Tooltip
+                  className="tw-cursor-pointer"
+                  message="Copiado"
+                  position={TooltipPosition.top}
+                >
+                  <button
+                    onClick={() => copyToClipboard('0000002100075320000000')}
+                  >
+                    <Icon type="copy" />
+                  </button>
+                </Tooltip>
+              </div>
+              <div className="tw-flex tw-justify-between tw-items-center">
+                <div>
+                  <p className="tw-font-bold tw-text-primary">Alias</p>
+                  <p className="">estealias.no.existe</p>
+                </div>
+                <div className="tw-flex">
+                  <Link to={`${ROUTES.PROFILE}?${EDIT}`}>
+                    <Icon type="edit" />
+                  </Link>
                   <Tooltip
-                    className="tw-cursor-pointer"
+                    className="tw-cursor-pointer tw-ml-4"
                     message="Copiado"
                     position={TooltipPosition.top}
                   >
                     <button
-                      onClick={() => copyToClipboard('0000002100075320000000')}
+                      onClick={() => copyToClipboard('estealias.no.existe')}
                     >
                       <Icon type="copy" />
                     </button>
                   </Tooltip>
                 </div>
-                <div className="tw-flex tw-justify-between tw-items-center">
-                  <div>
-                    <p className="tw-font-bold tw-text-primary">Alias</p>
-                    <p className="">estealias.no.existe</p>
-                  </div>
-                  <div className="tw-flex">
-                    <Link
-                      to={`${ROUTES.PROFILE}?${EDIT}`}
+              </div>
+            </div>
+          }
+        />
+      ) : (
+        <CardCustom
+          className="tw-max-w-5xl"
+          content={
+            <div className="tw-flex tw-flex-col">
+              <p className="tw-font-bold tw-mb-4">Editar alias</p>
+
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <div>
+                  <FormControl variant="outlined">
+                    <InputLabel htmlFor="outlined-adornment-alias">
+                      Alias
+                    </InputLabel>
+                    <OutlinedInput
+                      id="outlined-adornment-alias"
+                      type="text"
+                      value={formState.alias}
+                      {...register('alias', aliasValidationConfig)}
+                      onChange={onChange}
+                      label="alias"
+                      autoComplete="off"
+                      onFocus={handleFocus}
+                    />
+                  </FormControl>
+                  {errors.alias && (
+                    <ErrorMessage errors={errors.alias as Errors} />
+                  )}
+                  <div className="tw-flex tw-w-full tw-justify-end tw-mt-6">
+                    <Button
+                      type="submit"
+                      className={`tw-h-12 tw-w-64 ${
+                        hasErrors || !isDirty || isEmpty
+                          ? 'tw-text-neutral-gray-300 tw-border-neutral-gray-300 tw-cursor-not-allowed'
+                          : ''
+                      }`}
+                      variant="outlined"
+                      disabled={hasErrors || !isDirty || isEmpty}
                     >
-                      <Icon type="edit" />
-                    </Link>
-                    <Tooltip
-                      className="tw-cursor-pointer tw-ml-4"
-                      message="Copiado"
-                      position={TooltipPosition.top}
-                    >
-                      <button onClick={() => copyToClipboard('estealias.no.existe')}>
-                        <Icon type="copy" />
-                      </button>
-                    </Tooltip>
+                      Confirmar
+                    </Button>
                   </div>
                 </div>
-              </div>
-            }
-          /> :
-          <CardCustom
-            className="tw-max-w-5xl"
-            content={
-              <div className="tw-flex tw-flex-col">
-                <p className="tw-font-bold tw-mb-4">Editar alias</p>
-
-                <form onSubmit={handleSubmit(onSubmit)}>
-                  <div>
-                    <FormControl variant="outlined">
-                      <InputLabel htmlFor="outlined-adornment-alias">
-                        Alias
-                      </InputLabel>
-                      <OutlinedInput
-                        id="outlined-adornment-alias"
-                        type="text"
-                        value={formState.alias}
-                        {...register('alias', aliasValidationConfig)}
-                        onChange={onChange}
-                        label="alias"
-                        autoComplete="off"
-                        onFocus={handleFocus}
-                      />
-                    </FormControl>
-                    {errors.alias && <ErrorMessage errors={errors.alias as Errors} />}
-                    <div className="tw-flex tw-w-full tw-justify-end tw-mt-6">
-                      <Button
-                        type="submit"
-                        className={`tw-h-12 tw-w-64 ${
-                          hasErrors || !isDirty || isEmpty
-                            ? 'tw-text-neutral-gray-300 tw-border-neutral-gray-300 tw-cursor-not-allowed'
-                            : ''
-                        }`}
-                        variant="outlined"
-                        disabled={hasErrors || !isDirty || isEmpty}
-                      >
-                        Confirmar
-                      </Button>
-                    </div>
-                  </div>
-                </form>
-              </div>
-            }
-          />
-      }
-      {
-        isSuccess && <SnackBar duration={3000} message="El alias se actualizó correctamente" type="success" />
-      }
-      {
-        isError && <SnackBar duration={3000} message="El alias seleccionado ya existe. Debe ingresar uno nuevo." type="error" />
-      }
+              </form>
+            </div>
+          }
+        />
+      )}
+      {isSuccess && (
+        <SnackBar
+          duration={3000}
+          message="El alias se actualizó correctamente"
+          type="success"
+        />
+      )}
+      {isError && (
+        <SnackBar
+          duration={3000}
+          message="El alias seleccionado ya existe. Debe ingresar uno nuevo."
+          type="error"
+        />
+      )}
     </div>
   );
 };

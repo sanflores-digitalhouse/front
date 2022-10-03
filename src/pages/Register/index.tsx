@@ -79,10 +79,6 @@ const Register = () => {
     event.preventDefault();
   };
 
-  // const handleChange =
-  //   (prop: keyof RegisterState) => (event: React.ChangeEvent<HTMLInputElement>) => {
-  //     setValues({ ...values, [prop]: event.target.value });
-  //   };
   const onChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     maxLength?: number

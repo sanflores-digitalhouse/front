@@ -5,8 +5,8 @@ import {
   isVisa,
   isMastercard,
 } from '../../../utils/';
-import { currencies } from '../../../constants/';
-import { useSearchParams, useNavigate } from 'react-router-dom';
+import { currencies, ROUTES, ID } from '../../../constants/';
+import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { Icon, IconType } from './../../Icon';
 import { ActivityType } from '../../../common';
 
@@ -15,27 +15,32 @@ export enum RecordVariant {
   CARD = 'card',
   ACCOUNT = 'account',
 }
-interface Transaction {
+export interface Transaction {
   amount: number;
   name?: string;
   date: string;
   id?: string;
 }
 
-interface Card {
+export interface Card {
   number: string;
   name: string;
   type: string;
-  isSelecting: boolean;
+  id: string;
+  isSelecting?: boolean;
 }
 
 interface Account {
   name: string;
 }
-export interface RecordProps {
+
+export interface IRecord {
   content: Transaction | Card | Account;
-  className?: string;
   variant?: RecordVariant;
+}
+
+export interface RecordProps extends IRecord {
+  className?: string;
 }
 const { Argentina } = currencies;
 const { locales, currency } = Argentina;
@@ -81,10 +86,13 @@ export const Record = ({
   );
 };
 
-function TransactionItem({ amount, name, date }: Transaction) {
+function TransactionItem({ amount, name, date, id }: Transaction) {
   const calculatedType = calculateType(amount);
   return (
-    <>
+    <Link
+      className="tw-w-full tw-flex tw-justify-between tw-items-center"
+      to={`${ROUTES.ACTIVITY_DETAILS}?${ID}${id}`}
+    >
       <div className="tw-flex tw-items-center tw-gap-x-4">
         {calculatedType && (
           <Icon
@@ -100,7 +108,7 @@ function TransactionItem({ amount, name, date }: Transaction) {
         <p>{formatCurrency(locales, currency, amount)}</p>
         <p>{formatDateFromString(date)}</p>
       </div>
-    </>
+    </Link>
   );
 }
 
@@ -124,11 +132,19 @@ function CardItem({ number, type, isSelecting }: Card) {
         </p>
       </div>
       <div className="tw-flex tw-text-left tw-gap-x-4 tw-items-center">
-        {
-          !isSelecting ? 
-          <button onClick={() => navigate(`/load-money?type=${cardType}&card=${lastFourDigits}`)}>Seleccionar</button> :
+        {isSelecting ? (
+          <button
+            onClick={() =>
+              navigate(
+                `${ROUTES.LOAD_MONEY}?type=${cardType}&card=${lastFourDigits}`
+              )
+            }
+          >
+            Seleccionar
+          </button>
+        ) : (
           <button>Eliminar</button>
-        }
+        )}
       </div>
     </>
   );

@@ -1,28 +1,43 @@
-import React from 'react';
-import { RecordVariant, RecordProps } from '../../components/Records/';
-import { CardCustom, Records } from '../../components';
+import React, { useEffect, useState } from 'react';
+import {
+  CardCustom,
+  Records,
+  RecordVariant,
+  IRecord,
+  Transaction,
+  Skeleton,
+  SkeletonVariant,
+} from '../../components';
 import Pagination from '@mui/material/Pagination';
-import { USER } from '../../data/user';
 import { usePagination } from '../../hooks/usePagination';
-
-const { account } = USER;
-const { activities } = account;
-const transactions = activities.map((activity) => {
-  const { amount, name, date } = activity;
-  return {
-    content: {
-      amount,
-      name,
-      date
-    },
-    variant: RecordVariant.TRANSACTION,
-  };
-});
+import { ROUTES } from '../../constants';
+import PaginationItem from '@mui/material/PaginationItem';
+import { Link } from 'react-router-dom';
+import { pageQuery } from '../../common/';
+import {
+  getUserActivities,
+  parseActivities,
+  parseRecordContent,
+} from '../../utils';
 
 const recordsPerPage = 10;
 const Activity = () => {
-  const { page, handleChange, numberOfPages, isRecordsGreeterThanOnePage } =
-    usePagination(transactions as RecordProps[], recordsPerPage);
+  const [userActivities, setUserActivities] = useState<IRecord[]>([]);
+
+  const { pageNumber, numberOfPages, isRecordsGreeterThanOnePage } =
+    usePagination(userActivities as IRecord[], recordsPerPage);
+  //TODO: replace with real data
+
+  useEffect(() => {
+    getUserActivities('12312312312').then((activities) => {
+      const parsedActivities = parseActivities(activities);
+      const parsedRecords = parsedActivities.map(
+        (parsedActivity: Transaction) =>
+          parseRecordContent(parsedActivity, RecordVariant.TRANSACTION)
+      );
+      setUserActivities(parsedRecords);
+    });
+  }, []);
 
   return (
     <div className="tw-w-full">
@@ -33,10 +48,14 @@ const Activity = () => {
             <div>
               <p className="tw-mb-4 tw-font-bold">Tu actividad</p>
             </div>
-            <Records
-              records={transactions}
-              initialRecord={page * recordsPerPage - recordsPerPage}
-            />
+            {userActivities.length > 0 ? (
+              <Records
+                records={userActivities}
+                initialRecord={pageNumber * recordsPerPage - recordsPerPage}
+              />
+            ) : (
+              <Skeleton variant={SkeletonVariant.RECORD_LIST} />
+            )}
           </>
         }
         actions={
@@ -44,8 +63,14 @@ const Activity = () => {
             <div className="tw-h-12 tw-w-full tw-flex tw-items-center tw-justify-center tw-px-4 tw-mt-4">
               <Pagination
                 count={numberOfPages}
-                onChange={handleChange}
                 shape="rounded"
+                renderItem={(item) => (
+                  <PaginationItem
+                    component={Link}
+                    to={pageQuery(ROUTES.ACTIVITY, item.page as number)}
+                    {...item}
+                  />
+                )}
               />
             </div>
           )

@@ -1,18 +1,33 @@
-import React from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { CardCustom, Icon } from '../../components/';
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { CardCustom, Icon, Transaction } from '../../components/';
 import { currencies, ROUTES } from '../../constants';
 import { Button } from '@mui/material';
-import { formatCurrency, formatDateFromString, printPage } from '../../utils';
+import {
+  formatCurrency,
+  formatDateFromString,
+  getUserActivity,
+  printPage,
+  parseActivity,
+} from '../../utils';
 
 const ActivityDetails = () => {
-  const { id } = useParams();
+  const [userActivity, setUserActivity] = useState<Transaction>();
+
+  const [searchParams] = useSearchParams();
+  const activityId = searchParams.get('id') || '0';
   const navigate = useNavigate();
   const { Argentina } = currencies;
   const { locales, currency } = Argentina;
-  console.log(id);
 
-  //TODO: replace with real date
+  //TODO: replace with real data
+
+  useEffect(() => {
+    getUserActivity('12312312312', activityId).then((activity: any) => {
+      const parsedActivity = parseActivity(activity);
+      setUserActivity(parsedActivity);
+    });
+  }, [activityId]);
 
   return (
     <div>
@@ -28,13 +43,16 @@ const ActivityDetails = () => {
               <div className="tw-flex tw-flex-col tw-gap-y-2 tw-items-center">
                 <p>Monto transferido</p>
                 <p className="tw-text-xl tw-font-bold">
-                  {formatCurrency(locales, currency, 300)}
+                  {userActivity &&
+                    formatCurrency(locales, currency, userActivity.amount)}
                 </p>
               </div>
               <div className="tw-flex tw-flex-col tw-gap-y-2 tw-items-center">
                 <p>Tranferido a</p>
-                <p className="tw-text-xl tw-font-bold">Juan Perez</p>
-                <i>{formatDateFromString('2022-09-17T20:57:38+00:00')}</i>
+                <p className="tw-text-xl tw-font-bold">
+                  {userActivity && userActivity.name}
+                </p>
+                <i>{userActivity && formatDateFromString(userActivity.date)}</i>
               </div>
             </div>
           </div>
