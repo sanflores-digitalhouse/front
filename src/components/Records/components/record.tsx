@@ -9,30 +9,12 @@ import {
 import { currencies, ROUTES, ID } from '../../../constants/';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { Icon, IconType } from './../../Icon';
-import { ActivityType } from '../../../common';
+import { Transaction, Card, Account, ActivityType } from '../../../types';
 
 export enum RecordVariant {
   TRANSACTION = 'transaction',
   CARD = 'card',
   ACCOUNT = 'account',
-}
-export interface Transaction {
-  amount: number;
-  name?: string;
-  date: string;
-  id?: string;
-}
-
-export interface Card {
-  number: string;
-  name: string;
-  type: string;
-  id: string;
-  isSelecting?: boolean;
-}
-
-interface Account {
-  name: string;
 }
 
 export interface IRecord {
@@ -42,6 +24,7 @@ export interface IRecord {
 
 export interface RecordProps extends IRecord {
   className?: string;
+  setRecords?: React.Dispatch<React.SetStateAction<IRecord[]>>;
 }
 const { Argentina } = currencies;
 const { locales, currency } = Argentina;
@@ -66,6 +49,7 @@ export const Record = ({
   className,
   content,
   variant = RecordVariant.TRANSACTION,
+  setRecords,
 }: RecordProps) => {
   const [searchParams] = useSearchParams();
   const isSelecting = !!searchParams.get('select');
@@ -78,7 +62,11 @@ export const Record = ({
         <TransactionItem {...(content as Transaction)} />
       )}
       {variant === RecordVariant.CARD && (
-        <CardItem {...(content as Card)} isSelecting={isSelecting} />
+        <CardItem
+          {...(content as Card)}
+          setRecords={setRecords}
+          isSelecting={isSelecting}
+        />
       )}
       {variant === RecordVariant.ACCOUNT && (
         <AccountItem {...(content as Account)} />
@@ -113,7 +101,16 @@ function TransactionItem({ amount, name, date, id }: Transaction) {
   );
 }
 
-function CardItem({ number, type, isSelecting, id }: Card) {
+function CardItem({
+  number,
+  type,
+  isSelecting,
+  id,
+  setRecords,
+}: Card & {
+  setRecords?: React.Dispatch<React.SetStateAction<IRecord[]>>;
+  isSelecting: boolean;
+}) {
   const navigate = useNavigate();
   const lastFourDigits = number.slice(-4);
   const isVisaCard = isVisa(number);
@@ -123,6 +120,16 @@ function CardItem({ number, type, isSelecting, id }: Card) {
     : isMasterCard
     ? 'mastercard'
     : 'credit-card';
+
+  const handleDelete = () => {
+    if (setRecords) {
+      setRecords((prev) =>
+        prev.filter((record) => (record.content as Card).id !== id)
+      );
+    }
+    deleteUserCard('1', id);
+  };
+
   return (
     <>
       <div className="tw-flex tw-items-center tw-gap-x-4">
@@ -144,7 +151,7 @@ function CardItem({ number, type, isSelecting, id }: Card) {
             Seleccionar
           </button>
         ) : (
-          <button onClick={() => deleteUserCard('1', id)}>Eliminar</button>
+          <button onClick={handleDelete}>Eliminar</button>
         )}
       </div>
     </>

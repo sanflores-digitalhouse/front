@@ -8,7 +8,6 @@ import {
   RecordProps,
   Records,
   RecordVariant,
-  Card,
   IRecord,
   Skeleton,
   SkeletonVariant,
@@ -40,8 +39,9 @@ import {
   getUserCards,
   parseRecordContent,
   createUserCard,
+  pageQuery,
 } from '../../utils/';
-import { pageQuery } from '../../common';
+import { Card } from '../../types';
 
 const recordsPerPage = 10;
 const Cards = () => {
@@ -104,6 +104,7 @@ const Cards = () => {
                   <Records
                     records={userCards}
                     initialRecord={pageNumber * recordsPerPage - recordsPerPage}
+                    setRecords={setUserCards}
                   />
                 )}
                 {userCards.length === 0 && !isLoading && (
@@ -160,7 +161,6 @@ function CardForm() {
     cvc: '',
     focused: undefined,
   });
-
   const isEmpty = isValueEmpty(formState);
   const hasErrors = useMemo(() => valuesHaveErrors(errors), [errors]);
 
