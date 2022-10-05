@@ -39,12 +39,14 @@ import {
   parseCards,
   getUserCards,
   parseRecordContent,
+  createUserCard,
 } from '../../utils/';
 import { pageQuery } from '../../common';
 
 const recordsPerPage = 10;
 const Cards = () => {
   const [userCards, setUserCards] = useState<IRecord[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const { pageNumber, numberOfPages, isRecordsGreeterThanOnePage } =
     usePagination(userCards as RecordProps[], recordsPerPage);
@@ -53,15 +55,17 @@ const Cards = () => {
 
   useEffect(() => {
     if (!isAdding) {
-      getUserCards('12312312312').then((cards) => {
-        const parsedActivities = parseCards(cards);
-        const parsedRecords = parsedActivities.map((parsedCard: Card) =>
-          parseRecordContent(parsedCard, RecordVariant.CARD)
-        );
-        setUserCards(parsedRecords);
-      });
+      getUserCards('1')
+        .then((cards) => {
+          const parsedActivities = parseCards(cards);
+          const parsedRecords = parsedActivities.map((parsedCard: Card) =>
+            parseRecordContent(parsedCard, RecordVariant.CARD)
+          );
+          setUserCards(parsedRecords);
+        })
+        .finally(() => setIsLoading(false));
     }
-  }, [isAdding]);
+  }, [isAdding, isLoading]);
 
   return (
     <div className="tw-w-full">
@@ -96,12 +100,16 @@ const Cards = () => {
                 <div>
                   <p className="tw-mb-4 tw-font-bold">Tus tarjetas</p>
                 </div>
-                {userCards.length > 0 ? (
+                {userCards.length > 0 && !isLoading && (
                   <Records
                     records={userCards}
                     initialRecord={pageNumber * recordsPerPage - recordsPerPage}
                   />
-                ) : (
+                )}
+                {userCards.length === 0 && !isLoading && (
+                  <p>No hay tarjetas asociadas</p>
+                )}
+                {isLoading && (
                   <Skeleton
                     variant={SkeletonVariant.RECORD_LIST}
                     numberOfItems={5}
@@ -166,8 +174,14 @@ function CardForm() {
   };
 
   const onSubmit: SubmitHandler<ReactCreditCardProps> = (data) => {
-    const { expiry } = data;
+    const { expiry, number, name, cvc } = data;
     transformExpiration(expiry as number);
+    createUserCard('1', {
+      expiration: expiry,
+      number,
+      name,
+      cvc,
+    });
   };
 
   return (
