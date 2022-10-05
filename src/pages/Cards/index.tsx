@@ -8,14 +8,22 @@ import {
   RecordProps,
   Records,
   RecordVariant,
-  Card,
   IRecord,
   Skeleton,
   SkeletonVariant,
+  SnackBar,
 } from '../../components';
 import { Button, Pagination, PaginationItem } from '@mui/material';
-import { Link } from 'react-router-dom';
-import { ROUTES, ADD, CARDS_PLACEHOLDERS } from '../../constants';
+import { Link, useNavigate } from 'react-router-dom';
+import {
+  ROUTES,
+  ADD,
+  SUCCESS,
+  CARDS_PLACEHOLDERS,
+  SUCCESS_MESSAGES,
+  SUCCESS_MESSAGES_KEYS,
+  MESSAGE,
+} from '../../constants';
 import { useSearchParams } from 'react-router-dom';
 import {
   default as CardsComponent,
@@ -39,27 +47,34 @@ import {
   parseCards,
   getUserCards,
   parseRecordContent,
+  createUserCard,
+  pageQuery,
 } from '../../utils/';
-import { pageQuery } from '../../common';
+import { Card } from '../../types';
 
 const recordsPerPage = 10;
 const Cards = () => {
   const [userCards, setUserCards] = useState<IRecord[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const { pageNumber, numberOfPages, isRecordsGreeterThanOnePage } =
     usePagination(userCards as RecordProps[], recordsPerPage);
   const [searchParams] = useSearchParams();
   const isAdding = !!searchParams.get('add');
+  const isSuccess = !!searchParams.get('success');
+  const message = (searchParams.get('message') as SUCCESS_MESSAGES_KEYS) || '';
 
   useEffect(() => {
     if (!isAdding) {
-      getUserCards('12312312312').then((cards) => {
-        const parsedActivities = parseCards(cards);
-        const parsedRecords = parsedActivities.map((parsedCard: Card) =>
-          parseRecordContent(parsedCard, RecordVariant.CARD)
-        );
-        setUserCards(parsedRecords);
-      });
+      getUserCards('1')
+        .then((cards) => {
+          const parsedActivities = parseCards(cards);
+          const parsedRecords = parsedActivities.map((parsedCard: Card) =>
+            parseRecordContent(parsedCard, RecordVariant.CARD)
+          );
+          setUserCards(parsedRecords);
+        })
+        .finally(() => setIsLoading(false));
     }
   }, [isAdding]);
 
@@ -96,12 +111,17 @@ const Cards = () => {
                 <div>
                   <p className="tw-mb-4 tw-font-bold">Tus tarjetas</p>
                 </div>
-                {userCards.length > 0 ? (
+                {userCards.length > 0 && !isLoading && (
                   <Records
                     records={userCards}
                     initialRecord={pageNumber * recordsPerPage - recordsPerPage}
+                    setRecords={setUserCards}
                   />
-                ) : (
+                )}
+                {userCards.length === 0 && !isLoading && (
+                  <p>No hay tarjetas asociadas</p>
+                )}
+                {isLoading && (
                   <Skeleton
                     variant={SkeletonVariant.RECORD_LIST}
                     numberOfItems={5}
@@ -131,6 +151,13 @@ const Cards = () => {
       ) : (
         <CardForm />
       )}
+      {isSuccess && (
+        <SnackBar
+          duration={3000}
+          message={SUCCESS_MESSAGES[message] ? SUCCESS_MESSAGES[message] : ''}
+          type="success"
+        />
+      )}
     </div>
   );
 };
@@ -152,9 +179,11 @@ function CardForm() {
     cvc: '',
     focused: undefined,
   });
-
+  const [isError, setIsError] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
   const isEmpty = isValueEmpty(formState);
   const hasErrors = useMemo(() => valuesHaveErrors(errors), [errors]);
+  const navigate = useNavigate();
 
   const onChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -166,8 +195,23 @@ function CardForm() {
   };
 
   const onSubmit: SubmitHandler<ReactCreditCardProps> = (data) => {
-    const { expiry } = data;
+    const { expiry, number, name, cvc } = data;
     transformExpiration(expiry as number);
+
+    try {
+      createUserCard('1', {
+        expiration: expiry,
+        number,
+        name,
+        cvc,
+      });
+      navigate(
+        `${ROUTES.CARDS}?${SUCCESS}&${MESSAGE}${SUCCESS_MESSAGES_KEYS.CARD_ADDED}`
+      );
+    } catch (err) {
+      setIsError(true);
+      setErrorMessage(err as string);
+    }
   };
 
   return (
@@ -289,6 +333,9 @@ function CardForm() {
           </div>
         }
       />
+      {isError && (
+        <SnackBar duration={3000} message={errorMessage} type="error" />
+      )}
     </>
   );
 }

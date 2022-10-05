@@ -5,7 +5,14 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import { useForm, SubmitHandler } from 'react-hook-form';
-import { ROUTES, EDIT } from '../../constants';
+import {
+  ROUTES,
+  EDIT,
+  SUCCESS,
+  SUCCESS_MESSAGES,
+  MESSAGE,
+  SUCCESS_MESSAGES_KEYS,
+} from '../../constants';
 import {
   CardCustom,
   Tooltip,
@@ -33,6 +40,7 @@ const Profile = () => {
   const isEditing = !!searchParams.get('edit');
   const isSuccess = !!searchParams.get('success');
   const isError = !!searchParams.get('error');
+  const message = (searchParams.get('message') as SUCCESS_MESSAGES_KEYS) || '';
 
   const {
     register,
@@ -64,7 +72,9 @@ const Profile = () => {
     const fakeCondition = true;
 
     if (fakeCondition) {
-      navigate('/profile?success=true');
+      navigate(
+        `${ROUTES.PROFILE}?${SUCCESS}&${MESSAGE}${SUCCESS_MESSAGES.ALIAS_EDITED}`
+      );
       return data;
     }
 
@@ -175,7 +185,7 @@ const Profile = () => {
       {isSuccess && (
         <SnackBar
           duration={3000}
-          message="El alias se actualizó correctamente"
+          message={SUCCESS_MESSAGES[message] ? SUCCESS_MESSAGES[message] : ''}
           type="success"
         />
       )}

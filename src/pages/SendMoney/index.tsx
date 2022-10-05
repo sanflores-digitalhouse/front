@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   CardCustom,
   Icon,
   Records,
-  RecordVariant,
   FormSingle,
+  RecordProps,
 } from '../../components';
 import { currencies, ROUTES, STEP, ID } from '../../constants';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
-import { USER } from '../../data/user';
 import {
   handleChange,
   moneyValidationConfig,
@@ -17,17 +16,7 @@ import {
 } from '../../utils';
 import { Button } from '@mui/material';
 
-const { account } = USER;
-const { accounts } = account;
-const userAccounts = accounts.map((account) => {
-  const { name } = account;
-  return {
-    content: {
-      name,
-    },
-    variant: RecordVariant.ACCOUNT,
-  };
-});
+const userAccounts: RecordProps[] = [];
 
 const SendMoney = () => {
   const [searchParams] = useSearchParams();
@@ -66,7 +55,8 @@ const SendMoney = () => {
                 <div>
                   <p className="tw-mb-4 tw-font-bold">Últimas cuentas</p>
                 </div>
-                <Records records={userAccounts} />
+                {userAccounts.length > 0 && <Records records={userAccounts} />}
+                {userAccounts.length === 0 && <p>No hay cuentas registradas</p>}  
               </>
             }
           />
@@ -92,15 +82,18 @@ function SendMoneyForm() {
     maxLength?: number
   ) => handleChange(event, setFormState, maxLength);
 
-  const onNavigate = (step: number) => {
-    navigate(`${ROUTES.SEND_MONEY}?${STEP}${step}`);
-  };
+  const onNavigate = useCallback(
+    (step: number) => {
+      navigate(`${ROUTES.SEND_MONEY}?${STEP}${step}`);
+    },
+    [navigate]
+  );
 
   useEffect(() => {
     if (step !== '1' && formState.alias === '') {
       setTimeout(() => onNavigate(1));
     }
-  }, [step, formState, navigate]);
+  }, [step, formState, navigate, onNavigate]);
 
   return <>{renderStep(formState)}</>;
 

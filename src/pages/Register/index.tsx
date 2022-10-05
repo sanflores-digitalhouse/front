@@ -19,7 +19,7 @@ import {
   handleChange,
 } from '../../utils/';
 import { ErrorMessage, Errors } from '../../components/ErrorMessage';
-import { ERROR_MESSAGES } from '../../constants/errorMessages';
+import { ERROR_MESSAGES } from '../../constants/';
 
 interface RegisterState {
   name: string;

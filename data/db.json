@@ -1,0 +1,112 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "name": "Mauricio Brito",
+      "email": "mauricio@gmail.com",
+      "alias": "mauricio.brito.digital"
+    },
+    {
+      "id": "2",
+      "name": "Carla Maria"
+    }
+  ],
+  "activities": [
+    {
+      "id": "1",
+      "name": "Aitana",
+      "amount": 3500.64,
+      "date": "2022-09-17T20:57:38+00:00",
+      "userId": "1"
+    },
+    {
+      "id": "2",
+      "name": "Brendys",
+      "amount": -1895,
+      "date": "2022-09-17T20:57:38+00:00",
+      "userId": "1"
+    },
+    {
+      "id": "3",
+      "name": "Brendys",
+      "amount": -1895,
+      "date": "2022-09-17T20:57:38+00:00",
+      "userId": "1"
+    },
+    {
+      "id": "4",
+      "name": "Brendys",
+      "amount": -1895,
+      "date": "2022-09-17T20:57:38+00:00",
+      "userId": "1"
+    },
+    {
+      "id": "5",
+      "name": "Brendys",
+      "amount": -1895,
+      "date": "2022-09-17T20:57:38+00:00",
+      "userId": "1"
+    },
+    {
+      "id": "6",
+      "name": "Brendys",
+      "amount": -1895,
+      "date": "2022-09-17T20:57:38+00:00",
+      "userId": "1"
+    },
+    {
+      "id": "7",
+      "name": "Brendys",
+      "amount": -1895,
+      "date": "2022-09-17T20:57:38+00:00",
+      "userId": "1"
+    },
+    {
+      "id": "8",
+      "name": "Brendys",
+      "amount": -1895,
+      "date": "2022-09-17T20:57:38+00:00",
+      "userId": "1"
+    },
+    {
+      "id": "9",
+      "name": "Brendys",
+      "amount": -1895,
+      "date": "2022-09-17T20:57:38+00:00",
+      "userId": "1"
+    },
+    {
+      "id": "10",
+      "name": "Brendys",
+      "amount": -1895,
+      "date": "2022-09-17T20:57:38+00:00",
+      "userId": "1"
+    },
+    {
+      "id": "11",
+      "name": "Brendys",
+      "amount": -1895,
+      "date": "2022-09-17T20:57:38+00:00",
+      "userId": "2"
+    }
+  ],
+  "cards": [
+    {
+      "id": "3",
+      "type": "Debit",
+      "number": "5547302659359356",
+      "name": "Carla Maria",
+      "expiration": "2022-09-17T20:57:38+00:00",
+      "cvc": "123",
+      "userId": "2"
+    },
+    {
+      "number": "5547302659359356",
+      "name": "Carla Maria",
+      "expiration": "2022-09-17T20:57:38+00:00",
+      "cvc": "123",
+      "userId": "1",
+      "id": "LT7brr-223222233"
+    }
+  ]
+}
