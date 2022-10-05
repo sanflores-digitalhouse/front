@@ -4,7 +4,6 @@ import {
   Records,
   RecordVariant,
   IRecord,
-  Transaction,
   Skeleton,
   SkeletonVariant,
 } from '../../components';
@@ -13,12 +12,13 @@ import { usePagination } from '../../hooks/usePagination';
 import { ROUTES } from '../../constants';
 import PaginationItem from '@mui/material/PaginationItem';
 import { Link } from 'react-router-dom';
-import { pageQuery } from '../../common/';
 import {
   getUserActivities,
   parseActivities,
   parseRecordContent,
+  pageQuery
 } from '../../utils';
+import { Transaction } from '../../types';
 
 const recordsPerPage = 10;
 const Activity = () => {

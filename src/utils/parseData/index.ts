@@ -1,6 +1,7 @@
-import { IRecord, Transaction } from '../../components';
+import { IRecord } from '../../components';
+import { Transaction, Card } from '../../types/';
 
-export const parseActivities = (activities: any): Transaction[] => {
+export const parseActivities = (activities: Transaction[]): Transaction[] => {
   return activities.map((activity: any) => {
     const { name, amount, date, id } = activity;
     return {
@@ -12,8 +13,18 @@ export const parseActivities = (activities: any): Transaction[] => {
   });
 };
 
-export const parseCards = (cards: any): any[] => {
-  return cards.map((card: any) => {
+export const parseActivity = (activity: Transaction): Transaction => {
+  const { name, amount, date, id } = activity;
+  return {
+    name,
+    amount,
+    date,
+    id,
+  };
+};
+
+export const parseCards = (cards: Card[]): Card[] => {
+  return cards.map((card: Card) => {
     const { name, number, id, type } = card;
     return {
       name,
@@ -22,16 +33,6 @@ export const parseCards = (cards: any): any[] => {
       type,
     };
   });
-};
-
-export const parseActivity = (activity: any): Transaction => {
-  const { name, amount, date, id } = activity;
-  return {
-    name,
-    amount,
-    date,
-    id,
-  };
 };
 
 export const parseRecordContent = (record: any, variant: any): IRecord => {

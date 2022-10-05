@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { CardCustom, Icon, Transaction } from '../../components/';
+import { CardCustom, Icon } from '../../components/';
 import { currencies, ROUTES } from '../../constants';
 import { Button } from '@mui/material';
 import {
@@ -10,12 +10,13 @@ import {
   printPage,
   parseActivity,
 } from '../../utils';
+import { Transaction } from '../../types';
 
 const ActivityDetails = () => {
   const [userActivity, setUserActivity] = useState<Transaction>();
 
   const [searchParams] = useSearchParams();
-  const activityId = searchParams.get('id') || '0';
+  const activityId = searchParams.get('id') || '1';
   const navigate = useNavigate();
   const { Argentina } = currencies;
   const { locales, currency } = Argentina;
@@ -23,7 +24,7 @@ const ActivityDetails = () => {
   //TODO: replace with real data
 
   useEffect(() => {
-    getUserActivity('12312312312', activityId).then((activity: any) => {
+    getUserActivity('1', activityId).then((activity: any) => {
       const parsedActivity = parseActivity(activity);
       setUserActivity(parsedActivity);
     });
