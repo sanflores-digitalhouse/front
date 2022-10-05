@@ -23,20 +23,23 @@ import {
 const recordsPerPage = 10;
 const Activity = () => {
   const [userActivities, setUserActivities] = useState<IRecord[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   const { pageNumber, numberOfPages, isRecordsGreeterThanOnePage } =
     usePagination(userActivities as IRecord[], recordsPerPage);
   //TODO: replace with real data
 
   useEffect(() => {
-    getUserActivities('12312312312').then((activities) => {
-      const parsedActivities = parseActivities(activities);
-      const parsedRecords = parsedActivities.map(
-        (parsedActivity: Transaction) =>
-          parseRecordContent(parsedActivity, RecordVariant.TRANSACTION)
-      );
-      setUserActivities(parsedRecords);
-    });
+    getUserActivities('1')
+      .then((activities) => {
+        const parsedActivities = parseActivities(activities);
+        const parsedRecords = parsedActivities.map(
+          (parsedActivity: Transaction) =>
+            parseRecordContent(parsedActivity, RecordVariant.TRANSACTION)
+        );
+        setUserActivities(parsedRecords);
+      })
+      .finally(() => setIsLoading(false));
   }, []);
 
   return (
@@ -48,14 +51,16 @@ const Activity = () => {
             <div>
               <p className="tw-mb-4 tw-font-bold">Tu actividad</p>
             </div>
-            {userActivities.length > 0 ? (
+            {userActivities.length > 0 && !isLoading && (
               <Records
                 records={userActivities}
                 initialRecord={pageNumber * recordsPerPage - recordsPerPage}
               />
-            ) : (
-              <Skeleton variant={SkeletonVariant.RECORD_LIST} />
             )}
+            {userActivities.length === 0 && !isLoading && (
+              <p>No hay actividad registrada</p>
+            )}
+            {isLoading && <Skeleton variant={SkeletonVariant.RECORD_LIST} />}
           </>
         }
         actions={

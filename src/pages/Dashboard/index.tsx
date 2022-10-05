@@ -62,7 +62,7 @@ const Dashboard = () => {
   const [userActivities, setUserActivities] = useState<IRecord[]>([]);
 
   useEffect(() => {
-    getUserActivities('12312312312').then((activities) => {
+    getUserActivities('1').then((activities) => {
       const parsedActivities = parseActivities(activities);
       const parsedRecords = parsedActivities.map((parsedActivity: any) =>
         parseRecordContent(parsedActivity, RecordVariant.TRANSACTION)
