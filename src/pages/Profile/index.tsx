@@ -28,6 +28,7 @@ import {
   isValueEmpty,
   valuesHaveErrors,
   copyToClipboard,
+  updateUser,
 } from '../../utils';
 
 export interface IProfile {
@@ -39,8 +40,8 @@ const Profile = () => {
   const [searchParams] = useSearchParams();
   const isEditing = !!searchParams.get('edit');
   const isSuccess = !!searchParams.get('success');
-  const isError = !!searchParams.get('error');
   const message = (searchParams.get('message') as SUCCESS_MESSAGES_KEYS) || '';
+  const [isError, setIsError] = useState<boolean>(!!searchParams.get('error'));
 
   const {
     register,
@@ -69,17 +70,17 @@ const Profile = () => {
   ) => handleChange(event, setFormState);
 
   const onSubmit: SubmitHandler<IProfile> = (data) => {
-    const fakeCondition = true;
-
-    if (fakeCondition) {
-      navigate(
-        `${ROUTES.PROFILE}?${SUCCESS}&${MESSAGE}${SUCCESS_MESSAGES.ALIAS_EDITED}`
-      );
-      return data;
-    }
-
-    navigate('/profile?edit=true&error=true');
-    return data;
+    updateUser('2', { alias: data })
+      .then((response) => {
+        if (response.status) {
+          setIsError(true);
+        } else {
+          navigate(
+            `${ROUTES.PROFILE}?${SUCCESS}&${MESSAGE}${SUCCESS_MESSAGES_KEYS.ALIAS_EDITED}`
+          );
+        }
+      })
+      .catch((error) => console.error(error));
   };
 
   return (
