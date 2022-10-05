@@ -4,6 +4,7 @@ import {
   formatDateFromString,
   isVisa,
   isMastercard,
+  deleteUserCard,
 } from '../../../utils/';
 import { currencies, ROUTES, ID } from '../../../constants/';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
@@ -112,7 +113,7 @@ function TransactionItem({ amount, name, date, id }: Transaction) {
   );
 }
 
-function CardItem({ number, type, isSelecting }: Card) {
+function CardItem({ number, type, isSelecting, id }: Card) {
   const navigate = useNavigate();
   const lastFourDigits = number.slice(-4);
   const isVisaCard = isVisa(number);
@@ -143,7 +144,7 @@ function CardItem({ number, type, isSelecting }: Card) {
             Seleccionar
           </button>
         ) : (
-          <button>Eliminar</button>
+          <button onClick={() => deleteUserCard('1', id)}>Eliminar</button>
         )}
       </div>
     </>
