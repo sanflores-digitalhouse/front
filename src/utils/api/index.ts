@@ -80,6 +80,11 @@ export const createUserCard = async (userId: string, card: any) => {
         body: JSON.stringify(card),
       }
     );
+    if (!response.ok) {
+      const errorMessage = await response.text();
+
+      throw new Error(errorMessage);
+    }
     const data = await response.json();
     return data;
   } catch (err) {

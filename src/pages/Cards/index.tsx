@@ -11,9 +11,10 @@ import {
   IRecord,
   Skeleton,
   SkeletonVariant,
+  SnackBar,
 } from '../../components';
 import { Button, Pagination, PaginationItem } from '@mui/material';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ROUTES, ADD, CARDS_PLACEHOLDERS } from '../../constants';
 import { useSearchParams } from 'react-router-dom';
 import {
@@ -52,6 +53,7 @@ const Cards = () => {
     usePagination(userCards as RecordProps[], recordsPerPage);
   const [searchParams] = useSearchParams();
   const isAdding = !!searchParams.get('add');
+  const isSuccess = !!searchParams.get('success');
 
   useEffect(() => {
     if (!isAdding) {
@@ -140,6 +142,13 @@ const Cards = () => {
       ) : (
         <CardForm />
       )}
+      {isSuccess && (
+        <SnackBar
+          duration={3000}
+          message="Se agregó la tarjeta correctamente"
+          type="success"
+        />
+      )}
     </div>
   );
 };
@@ -161,8 +170,11 @@ function CardForm() {
     cvc: '',
     focused: undefined,
   });
+  const [isError, setIsError] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>('');
   const isEmpty = isValueEmpty(formState);
   const hasErrors = useMemo(() => valuesHaveErrors(errors), [errors]);
+  const navigate = useNavigate();
 
   const onChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -176,12 +188,19 @@ function CardForm() {
   const onSubmit: SubmitHandler<ReactCreditCardProps> = (data) => {
     const { expiry, number, name, cvc } = data;
     transformExpiration(expiry as number);
-    createUserCard('1', {
-      expiration: expiry,
-      number,
-      name,
-      cvc,
-    });
+
+    try {
+      createUserCard('1', {
+        expiration: expiry,
+        number,
+        name,
+        cvc,
+      });
+      navigate(`${ROUTES.CARDS}?success=true`);
+    } catch (err) {
+      setIsError(true);
+      setErrorMessage(err as string);
+    }
   };
 
   return (
@@ -303,6 +322,9 @@ function CardForm() {
           </div>
         }
       />
+      {isError && (
+        <SnackBar duration={3000} message={errorMessage} type="error" />
+      )}
     </>
   );
 }
