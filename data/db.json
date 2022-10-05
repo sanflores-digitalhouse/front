@@ -2,7 +2,9 @@
   "users": [
     {
       "id": "1",
-      "name": "Mauricio Brito"
+      "name": "Mauricio Brito",
+      "email": "mauricio@gmail.com",
+      "alias": "mauricio.brito.digital"
     },
     {
       "id": "2",
@@ -104,23 +106,7 @@
       "expiration": "2022-09-17T20:57:38+00:00",
       "cvc": "123",
       "userId": "1",
-      "id": "LT7brr-"
-    },
-    {
-      "number": "5547302659359356",
-      "name": "Carla Maria",
-      "expiration": "2022-09-17T20:57:38+00:00",
-      "cvc": "123",
-      "userId": "1",
-      "id": "qbMIMkc"
-    },
-    {
-      "expiration": "1125",
-      "number": "5547302659359356",
-      "name": "Romulo Gallegos",
-      "cvc": "899",
-      "userId": "1",
-      "id": "P0qvknM"
+      "id": "LT7brr-223222233"
     }
   ]
 }
