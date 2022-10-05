@@ -1,5 +1,10 @@
 {
   "/api/*": "/$1",
-  "/accounts/:accountId/cards/:cardId": "/cards/:cardId",
-  "/accounts/:accountId/activities/:activityId": "/activities/:activityId"
+  "/users/:userId/cards/": "/users/:userId/cards",
+  "/users/:userId/activities": "/users/:userId/activities",
+  "/users/:userId/activities/:activityId": "/activities/:activityId",
+  "/users/:userId/cards/:cardId": "/cards/cardId"
+
+
+
 }
