@@ -1,0 +1,128 @@
+{
+  "accounts": [
+    {
+      "id": "1",
+      "name": "Mauricio Brito"
+    },
+    {
+      "id": "2",
+      "name": "Carla Maria"
+    }
+  ],
+  "activities": [
+    {
+      "id": "1",
+      "name": "Aitana",
+      "amount": 3500.64,
+      "date": "2022-09-17T20:57:38+00:00",
+      "accountId": "1"
+    },
+    {
+      "id": "2",
+      "name": "Brendys",
+      "amount": -1895,
+      "date": "2022-09-17T20:57:38+00:00"
+    },
+    {
+      "id": "3",
+      "name": "Brendys",
+      "amount": -1895,
+      "date": "2022-09-17T20:57:38+00:00",
+      "accountId": "1"
+    },
+    {
+      "id": "4",
+      "name": "Brendys",
+      "amount": -1895,
+      "date": "2022-09-17T20:57:38+00:00",
+      "accountId": "1"
+    },
+    {
+      "id": "5",
+      "name": "Brendys",
+      "amount": -1895,
+      "date": "2022-09-17T20:57:38+00:00",
+      "accountId": "1"
+    },
+    {
+      "id": "6",
+      "name": "Brendys",
+      "amount": -1895,
+      "date": "2022-09-17T20:57:38+00:00",
+      "accountId": "1"
+    },
+    {
+      "id": "7",
+      "name": "Brendys",
+      "amount": -1895,
+      "date": "2022-09-17T20:57:38+00:00",
+      "accountId": "1"
+    },
+    {
+      "id": "8",
+      "name": "Brendys",
+      "amount": -1895,
+      "date": "2022-09-17T20:57:38+00:00",
+      "accountId": "1"
+    },
+    {
+      "id": "9",
+      "name": "Brendys",
+      "amount": -1895,
+      "date": "2022-09-17T20:57:38+00:00",
+      "accountId": "1"
+    },
+    {
+      "id": "10",
+      "name": "Brendys",
+      "amount": -1895,
+      "date": "2022-09-17T20:57:38+00:00",
+      "accountId": "1"
+    },
+    {
+      "id": "11",
+      "name": "Brendys",
+      "amount": -1895,
+      "date": "2022-09-17T20:57:38+00:00",
+      "accountId": "1"
+    }
+  ],
+  "cards": [
+    {
+      "id": "1",
+      "type": "Debit",
+      "number": "4111972602542349",
+      "name": "Mauricio Brito",
+      "expiration": "2022-09-17T20:57:38+00:00",
+      "cvc": "123",
+      "accountId": "1"
+    },
+    {
+      "id": "12",
+      "type": "Debit",
+      "number": "4111972602542349",
+      "name": "Mauricio Brito",
+      "expiration": "2022-09-17T20:57:38+00:00",
+      "cvc": "123",
+      "accountId": "1"
+    },
+    {
+      "id": "2",
+      "type": "Debit",
+      "number": "5547302659359356",
+      "name": "Carla Maria",
+      "expiration": "2022-09-17T20:57:38+00:00",
+      "cvc": "123",
+      "accountId": "2"
+    },
+    {
+      "id": "3",
+      "type": "Debit",
+      "number": "5547302659359356",
+      "name": "Carla Maria",
+      "expiration": "2022-09-17T20:57:38+00:00",
+      "cvc": "123",
+      "accountId": "2"
+    }
+  ]
+}
