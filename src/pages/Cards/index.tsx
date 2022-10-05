@@ -15,7 +15,15 @@ import {
 } from '../../components';
 import { Button, Pagination, PaginationItem } from '@mui/material';
 import { Link, useNavigate } from 'react-router-dom';
-import { ROUTES, ADD, CARDS_PLACEHOLDERS } from '../../constants';
+import {
+  ROUTES,
+  ADD,
+  SUCCESS,
+  CARDS_PLACEHOLDERS,
+  SUCCESS_MESSAGES,
+  SUCCESS_MESSAGES_KEYS,
+  MESSAGE,
+} from '../../constants';
 import { useSearchParams } from 'react-router-dom';
 import {
   default as CardsComponent,
@@ -54,6 +62,7 @@ const Cards = () => {
   const [searchParams] = useSearchParams();
   const isAdding = !!searchParams.get('add');
   const isSuccess = !!searchParams.get('success');
+  const message = (searchParams.get('message') as SUCCESS_MESSAGES_KEYS) || '';
 
   useEffect(() => {
     if (!isAdding) {
@@ -67,7 +76,7 @@ const Cards = () => {
         })
         .finally(() => setIsLoading(false));
     }
-  }, [isAdding, isLoading]);
+  }, [isAdding]);
 
   return (
     <div className="tw-w-full">
@@ -145,7 +154,7 @@ const Cards = () => {
       {isSuccess && (
         <SnackBar
           duration={3000}
-          message="Se agregó la tarjeta correctamente"
+          message={SUCCESS_MESSAGES[message] ? SUCCESS_MESSAGES[message] : ''}
           type="success"
         />
       )}
@@ -196,7 +205,9 @@ function CardForm() {
         name,
         cvc,
       });
-      navigate(`${ROUTES.CARDS}?success=true`);
+      navigate(
+        `${ROUTES.CARDS}?${SUCCESS}&${MESSAGE}${SUCCESS_MESSAGES_KEYS.CARD_ADDED}`
+      );
     } catch (err) {
       setIsError(true);
       setErrorMessage(err as string);

@@ -1,4 +1,4 @@
-export const ERROR_MESSAGES = {
+export const ERROR_MESSAGES: Record<string, string> = {
   INVALID_EMAIL: 'Correo electrónico inválido',
   INVALID_PASSWORD: 'Contraseña inválida',
   PASSWORDS_DO_NOT_MATCH: 'Las contraseñas no coinciden',
@@ -17,4 +17,16 @@ export const ERROR_MESSAGES = {
   MIN_LENGHT_NAME: 'Debe tener al menos 2 caracteres',
   MIN_LENGHT_ALIAS: 'Debe tener al menos 10 caracteres',
   MIN_LENGHT_MONEY: 'El mínimo para ingresar a la cuenta es de $100',
+};
+
+export enum SUCCESS_MESSAGES_KEYS {
+  CARD_DELETED = 'CARD_DELETED',
+  ALIAS_EDITED = 'ALIAS_EDITED',
+  CARD_ADDED = 'CARD_ADDED',
+}
+
+export const SUCCESS_MESSAGES: Record<SUCCESS_MESSAGES_KEYS, string> = {
+  CARD_DELETED: 'Tarjeta eliminada correctamente',
+  ALIAS_EDITED: 'El alias se actualizó correctamente',
+  CARD_ADDED : 'Tarjeta agregada correctamente',
 };

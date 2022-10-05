@@ -6,7 +6,14 @@ import {
   isMastercard,
   deleteUserCard,
 } from '../../../utils/';
-import { currencies, ROUTES, ID } from '../../../constants/';
+import {
+  currencies,
+  ROUTES,
+  ID,
+  SUCCESS,
+  MESSAGE,
+  SUCCESS_MESSAGES_KEYS,
+} from '../../../constants/';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { Icon, IconType } from './../../Icon';
 import { Transaction, Card, Account, ActivityType } from '../../../types';
@@ -128,6 +135,9 @@ function CardItem({
       );
     }
     deleteUserCard('1', id);
+    navigate(
+      `${ROUTES.CARDS}?${SUCCESS}&${MESSAGE}${SUCCESS_MESSAGES_KEYS.CARD_DELETED}`
+    );
   };
 
   return (
