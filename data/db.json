@@ -2,13 +2,15 @@
   "users": [
     {
       "id": "1",
-      "name": "Mauricio Brito",
+      "firstName": "Mauricio",
+      "lastName": "Brito",
       "email": "mauricio@gmail.com",
-      "alias": "mauricio.brito.digital"
-    },
-    {
-      "id": "2",
-      "name": "Carla Maria"
+      "password": "bestPassw0rd",
+      "alias": {
+        "alias": "estealias.no.existee"
+      },
+      "balance": "13450",
+      "cvu": "1234567890123456"
     }
   ],
   "activities": [
@@ -81,25 +83,9 @@
       "amount": -1895,
       "date": "2022-09-17T20:57:38+00:00",
       "userId": "1"
-    },
-    {
-      "id": "11",
-      "name": "Brendys",
-      "amount": -1895,
-      "date": "2022-09-17T20:57:38+00:00",
-      "userId": "2"
     }
   ],
   "cards": [
-    {
-      "id": "3",
-      "type": "Debit",
-      "number": "5547302659359356",
-      "name": "Carla Maria",
-      "expiration": "2022-09-17T20:57:38+00:00",
-      "cvc": "123",
-      "userId": "2"
-    },
     {
       "number": "5547302659359356",
       "name": "Carla Maria",
