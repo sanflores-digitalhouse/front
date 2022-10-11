@@ -2,13 +2,13 @@
   "users": [
     {
       "id": "1",
-      "name": "Mauricio Brito",
+      "firstName": "Mauricio",
+      "lastName": "Brito",
       "email": "mauricio@gmail.com",
-      "alias": "mauricio.brito.digital"
-    },
-    {
-      "id": "2",
-      "name": "Carla Maria"
+      "password": "bestPassw0rd",
+      "alias": "mi.alias.m",
+      "balance": "13450",
+      "cvu": "1234567890123456"
     }
   ],
   "activities": [
@@ -81,25 +81,9 @@
       "amount": -1895,
       "date": "2022-09-17T20:57:38+00:00",
       "userId": "1"
-    },
-    {
-      "id": "11",
-      "name": "Brendys",
-      "amount": -1895,
-      "date": "2022-09-17T20:57:38+00:00",
-      "userId": "2"
     }
   ],
   "cards": [
-    {
-      "id": "3",
-      "type": "Debit",
-      "number": "5547302659359356",
-      "name": "Carla Maria",
-      "expiration": "2022-09-17T20:57:38+00:00",
-      "cvc": "123",
-      "userId": "2"
-    },
     {
       "number": "5547302659359356",
       "name": "Carla Maria",
@@ -107,6 +91,30 @@
       "cvc": "123",
       "userId": "1",
       "id": "LT7brr-223222233"
+    },
+    {
+      "expiration": "1123",
+      "number": "4111972333333333",
+      "name": "Jose Leon",
+      "cvc": "111",
+      "userId": "1",
+      "id": "igorrIM"
+    },
+    {
+      "expiration": "1024",
+      "number": "4111972644444444",
+      "name": "Jesus Rodriguez",
+      "cvc": "222",
+      "userId": "1",
+      "id": "0SaS7ga"
+    },
+    {
+      "expiration": "1224",
+      "number": "4111555555555555",
+      "name": "Anibal Sifontes",
+      "cvc": "000",
+      "userId": "1",
+      "id": "dhrM6ST"
     }
   ]
 }

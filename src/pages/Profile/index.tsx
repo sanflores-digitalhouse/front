@@ -23,12 +23,13 @@ import {
   SnackBar,
 } from '../../components';
 import {
-  handleChange,
   aliasValidationConfig,
   isValueEmpty,
   valuesHaveErrors,
   copyToClipboard,
+  updateUser,
 } from '../../utils';
+import { useUserInfo } from '../../hooks';
 
 export interface IProfile {
   alias?: string;
@@ -39,8 +40,10 @@ const Profile = () => {
   const [searchParams] = useSearchParams();
   const isEditing = !!searchParams.get('edit');
   const isSuccess = !!searchParams.get('success');
-  const isError = !!searchParams.get('error');
   const message = (searchParams.get('message') as SUCCESS_MESSAGES_KEYS) || '';
+  const [isError, setIsError] = useState<boolean>(!!searchParams.get('error'));
+  const { user } = useUserInfo();
+  const { alias, id, cvu } = user;
 
   const {
     register,
@@ -49,37 +52,28 @@ const Profile = () => {
   } = useForm({
     criteriaMode: 'all',
   });
-  const [formState, setFormState] = useState<{
-    alias: string;
-    focused: undefined | string;
-  }>({
-    alias: 'estealias.no.existe',
-    focused: undefined,
-  });
 
-  const handleFocus = (event: React.FocusEvent<HTMLInputElement>) => {
-    setFormState({ ...formState, focused: event.target.name });
-  };
+  const [userAlias, setUserAlias] = useState<string>(alias || '');
 
-  const isEmpty = isValueEmpty(formState);
+  const isEmpty = isValueEmpty(userAlias);
   const hasErrors = useMemo(() => valuesHaveErrors(errors), [errors]);
 
   const onChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => handleChange(event, setFormState);
+  ) => setUserAlias(event.target.value);
 
   const onSubmit: SubmitHandler<IProfile> = (data) => {
-    const fakeCondition = true;
-
-    if (fakeCondition) {
-      navigate(
-        `${ROUTES.PROFILE}?${SUCCESS}&${MESSAGE}${SUCCESS_MESSAGES.ALIAS_EDITED}`
-      );
-      return data;
-    }
-
-    navigate('/profile?edit=true&error=true');
-    return data;
+    updateUser(id, { alias: data.alias })
+      .then((response) => {
+        if (response.status) {
+          setIsError(true);
+        } else {
+          navigate(
+            `${ROUTES.PROFILE}?${SUCCESS}&${MESSAGE}${SUCCESS_MESSAGES_KEYS.ALIAS_EDITED}`
+          );
+        }
+      })
+      .catch((error) => console.error(error));
   };
 
   return (
@@ -96,7 +90,7 @@ const Profile = () => {
               <div className="tw-flex tw-mb-4 tw-justify-between tw-items-center">
                 <div>
                   <p className="tw-font-bold tw-text-primary">CVU</p>
-                  <p className="">0000002100075320000000</p>
+                  <p className="">{cvu}</p>
                 </div>
                 <Tooltip
                   className="tw-cursor-pointer"
@@ -113,7 +107,7 @@ const Profile = () => {
               <div className="tw-flex tw-justify-between tw-items-center">
                 <div>
                   <p className="tw-font-bold tw-text-primary">Alias</p>
-                  <p className="">estealias.no.existe</p>
+                  <p className="">{userAlias}</p>
                 </div>
                 <div className="tw-flex">
                   <Link to={`${ROUTES.PROFILE}?${EDIT}`}>
@@ -151,16 +145,15 @@ const Profile = () => {
                     <OutlinedInput
                       id="outlined-adornment-alias"
                       type="text"
-                      value={formState.alias}
-                      {...register('alias', aliasValidationConfig)}
+                      value={userAlias}
+                      {...register('userAlias', aliasValidationConfig)}
                       onChange={onChange}
-                      label="alias"
+                      label="userAlias"
                       autoComplete="off"
-                      onFocus={handleFocus}
                     />
                   </FormControl>
-                  {errors.alias && (
-                    <ErrorMessage errors={errors.alias as Errors} />
+                  {errors.userAlias && (
+                    <ErrorMessage errors={errors.userAlias as Errors} />
                   )}
                   <div className="tw-flex tw-w-full tw-justify-end tw-mt-6">
                     <Button

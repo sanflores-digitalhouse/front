@@ -11,6 +11,30 @@ const myInit = (method = 'GET') => {
 const myRequest = (endpoint: string, method: string) =>
   new Request(endpoint, myInit(method));
 const baseUrl = 'http://localhost:3500';
+const rejectPromise = (response: Response) =>
+  Promise.reject({
+    status: response.status || '00',
+    statusText: response.statusText || 'Ocurrió un error',
+    err: true,
+  });
+
+export const getUser = (id: string): Promise<Response> => {
+  return fetch(myRequest(`${baseUrl}/users/${id}`, 'GET'))
+    .then((response) =>
+      response.ok ? response.json() : rejectPromise(response)
+    )
+    .catch((err) => err);
+};
+
+export const updateUser = (id: string, data: any): Promise<Response> => {
+  return fetch(myRequest(`${baseUrl}/users/${id}`, 'PATCH'), {
+    body: JSON.stringify(data),
+  })
+    .then((response) =>
+      response.ok ? response.json() : rejectPromise(response)
+    )
+    .catch((err) => err);
+};
 
 export const getUserActivities = async (userId: string) => {
   try {
@@ -72,21 +96,15 @@ export const deleteUserCard = async (userId: string, cardId: string) => {
   }
 };
 
-export const createUserCard = async (userId: string, card: any) => {
-  try {
-    const response = await fetch(
-      myRequest(`${baseUrl}/users/${userId}/cards`, 'POST'),
-      {
-        body: JSON.stringify(card),
-      }
-    );
-    if (!response.ok) {
-      const errorMessage = await response.text();
-      throw new Error(errorMessage);
-    }
-    const data = await response.json();
-    return data;
-  } catch (err) {
-    console.error(err);
-  }
+export const createUserCard = (
+  userId: string,
+  card: any
+): Promise<Response> => {
+  return fetch(myRequest(`${baseUrl}/users/${userId}/cards`, 'POST'), {
+    body: JSON.stringify(card),
+  })
+    .then((response) =>
+      response.ok ? response.json() : rejectPromise(response)
+    )
+    .catch((err) => err);
 };

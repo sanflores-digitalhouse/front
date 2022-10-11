@@ -198,20 +198,25 @@ function CardForm() {
     const { expiry, number, name, cvc } = data;
     transformExpiration(expiry as number);
 
-    try {
-      createUserCard('1', {
-        expiration: expiry,
-        number,
-        name,
-        cvc,
+    createUserCard('1', {
+      expiration: expiry,
+      number,
+      name,
+      cvc,
+    })
+      .then((response) => {
+        if (response.status) {
+          setIsError(true);
+          setErrorMessage(response.statusText as string);
+        } else {
+          navigate(
+            `${ROUTES.CARDS}?${SUCCESS}&${MESSAGE}${SUCCESS_MESSAGES_KEYS.CARD_ADDED}`
+          );
+        }
+      })
+      .catch((error) => {
+        console.log(error);
       });
-      navigate(
-        `${ROUTES.CARDS}?${SUCCESS}&${MESSAGE}${SUCCESS_MESSAGES_KEYS.CARD_ADDED}`
-      );
-    } catch (err) {
-      setIsError(true);
-      setErrorMessage(err as string);
-    }
   };
 
   return (
