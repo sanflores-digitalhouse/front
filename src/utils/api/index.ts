@@ -18,9 +18,12 @@ const rejectPromise = (response: Response) =>
     err: true,
   });
 
-export const getUser = async (id: string) => {
-  const response = await fetch(myRequest(`${baseUrl}/users/${id}`, 'GET'));
-  return response.json();
+export const getUser = (id: string): Promise<Response> => {
+  return fetch(myRequest(`${baseUrl}/users/${id}`, 'GET'))
+    .then((response) =>
+      response.ok ? response.json() : rejectPromise(response)
+    )
+    .catch((err) => err);
 };
 
 export const updateUser = (id: string, data: any): Promise<Response> => {

@@ -1,9 +1,8 @@
 import React, { createContext, useReducer } from 'react';
 import userReducer from './userReducer';
 import { User } from '../../types';
-
 export interface UserInfoState {
-  user: User;
+  user: any;
   loading: boolean;
 }
 
@@ -13,7 +12,7 @@ const initialState = {
 };
 
 export const userInfoContext = createContext<{
-  user: User;
+  user: any;
   loading: boolean;
   dispatch: React.Dispatch<any>;
 }>({

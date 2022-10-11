@@ -21,59 +21,25 @@ import {
 import { currencies } from '../../constants/';
 import { useUserInfo } from '../../hooks/useUserInfo';
 
-const newUser = {
-  name: 'Mauricio',
-  lastName: 'Garcia',
-  email: 'mauricio@gmail.com',
-  password: '123456N"',
-  phone: '1234567890',
-  balance: 100000,
-  account: {
-    activities: [
-      {
-        sourceAccount: '1234567890',
-        amount: 100000,
-        date: '2021-10-10',
-      },
-    ],
-    cards: [
-      {
-        number: '1234567890',
-        name: 'Mauricio Garcia',
-        expiration: '10/2025',
-        cvc: '123',
-      },
-    ],
-    accounts: [
-      {
-        name: 'Mauricio Garcia',
-      },
-    ],
-  },
-};
-
 const Dashboard = () => {
   const { Argentina } = currencies;
   const { locales, currency } = Argentina;
   const navigate = useNavigate();
-  const { dispatch } = useUserInfo();
+  const { user } = useUserInfo();
+  const { balance, id } = user;
   const [searchParams] = useSearchParams();
   const isSuccess = !!searchParams.get('success');
   const [userActivities, setUserActivities] = useState<IRecord[]>([]);
 
   useEffect(() => {
-    getUserActivities('1').then((activities) => {
+    getUserActivities(id).then((activities) => {
       const parsedActivities = parseActivities(activities);
       const parsedRecords = parsedActivities.map((parsedActivity: any) =>
         parseRecordContent(parsedActivity, RecordVariant.TRANSACTION)
       );
       setUserActivities(parsedRecords);
     });
-  }, []);
-
-  useEffect(() => {
-    dispatch({ type: 'SET_USER', payload: newUser });
-  }, [dispatch]);
+  }, [id]);
 
   return (
     <div className="tw-w-full">
@@ -83,7 +49,7 @@ const Dashboard = () => {
             <div>
               <p className="tw-mb-4 tw-font-bold">Dinero disponible</p>
               <p className="tw-text-xl tw-font-bold">
-                {formatCurrency(locales, currency, 6890534.17)}
+                {formatCurrency(locales, currency, balance)}
               </p>
             </div>
             <div className="tw-flex tw-justify-between tw-items-start tw-flex-wrap tw-gap-x-4">
