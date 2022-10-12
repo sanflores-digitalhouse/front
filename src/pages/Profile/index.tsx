@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import FormControl from '@mui/material/FormControl';
@@ -27,9 +27,11 @@ import {
   isValueEmpty,
   valuesHaveErrors,
   copyToClipboard,
-  updateUser,
+  updateAccount,
+  getAccount,
 } from '../../utils';
 import { useUserInfo } from '../../hooks';
+import { UserAccount } from '../../types';
 
 export interface IProfile {
   alias?: string;
@@ -43,7 +45,12 @@ const Profile = () => {
   const message = (searchParams.get('message') as SUCCESS_MESSAGES_KEYS) || '';
   const [isError, setIsError] = useState<boolean>(!!searchParams.get('error'));
   const { user } = useUserInfo();
-  const { alias, id, cvu } = user;
+  const { id } = user;
+
+  const [userAccount, setUserAccount] = useState({
+    alias: '',
+    cvu: '',
+  });
 
   const {
     register,
@@ -53,17 +60,26 @@ const Profile = () => {
     criteriaMode: 'all',
   });
 
-  const [userAlias, setUserAlias] = useState<string>(alias || '');
-
-  const isEmpty = isValueEmpty(userAlias);
+  const isEmpty = isValueEmpty(userAccount.alias);
   const hasErrors = useMemo(() => valuesHaveErrors(errors), [errors]);
+
+  useEffect(() => {
+    if (id) {
+      getAccount(id).then((account: UserAccount) => {
+        setUserAccount({
+          alias: account.alias,
+          cvu: account.cvu,
+        });
+      });
+    }
+  }, [id]);
 
   const onChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => setUserAlias(event.target.value);
+  ) => setUserAccount({ ...userAccount, alias: event.target.value });
 
   const onSubmit: SubmitHandler<IProfile> = (data) => {
-    updateUser(id, { alias: data.alias })
+    updateAccount(id, { alias: data.alias })
       .then((response) => {
         if (response.status) {
           setIsError(true);
@@ -90,7 +106,7 @@ const Profile = () => {
               <div className="tw-flex tw-mb-4 tw-justify-between tw-items-center">
                 <div>
                   <p className="tw-font-bold tw-text-primary">CVU</p>
-                  <p className="">{cvu}</p>
+                  <p className="">{userAccount.cvu}</p>
                 </div>
                 <Tooltip
                   className="tw-cursor-pointer"
@@ -107,7 +123,7 @@ const Profile = () => {
               <div className="tw-flex tw-justify-between tw-items-center">
                 <div>
                   <p className="tw-font-bold tw-text-primary">Alias</p>
-                  <p className="">{userAlias}</p>
+                  <p className="">{userAccount.alias}</p>
                 </div>
                 <div className="tw-flex">
                   <Link to={`${ROUTES.PROFILE}?${EDIT}`}>
@@ -145,15 +161,15 @@ const Profile = () => {
                     <OutlinedInput
                       id="outlined-adornment-alias"
                       type="text"
-                      value={userAlias}
-                      {...register('userAlias', aliasValidationConfig)}
+                      value={userAccount.alias}
+                      {...register('alias', aliasValidationConfig)}
                       onChange={onChange}
-                      label="userAlias"
+                      label="alias"
                       autoComplete="off"
                     />
                   </FormControl>
-                  {errors.userAlias && (
-                    <ErrorMessage errors={errors.userAlias as Errors} />
+                  {errors.alias && (
+                    <ErrorMessage errors={errors.alias as Errors} />
                   )}
                   <div className="tw-flex tw-w-full tw-justify-end tw-mt-6">
                     <Button

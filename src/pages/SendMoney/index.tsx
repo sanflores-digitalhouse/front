@@ -27,7 +27,6 @@ const SendMoney = () => {
   const step = searchParams.get('step');
   const [userActivities, setUserActivities] = useState<Transaction[]>([]);
   const [userAccounts, setUserAccounts] = useState<IRecord[]>([]);
-  console.log(userActivities);
 
   useEffect(() => {
     getUserActivities('1').then((activities) => {
@@ -52,7 +51,7 @@ const SendMoney = () => {
             RecordVariant.ACCOUNT
           )
         );
-        
+
       const uniqueRecords = parsedRecords.filter(
         (record, index, self) =>
           index ===
@@ -114,12 +113,13 @@ const SendMoney = () => {
 export default SendMoney;
 
 function SendMoneyForm() {
+  const [searchParams] = useSearchParams();
+  const account = searchParams.get('account');
+  const step = searchParams.get('step');
   const [formState, setFormState] = useState({
-    alias: '',
+    alias: account || '',
     amount: '',
   });
-  const [searchParams] = useSearchParams();
-  const step = searchParams.get('step');
   const navigate = useNavigate();
 
   const onChange = (

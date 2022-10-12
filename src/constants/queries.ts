@@ -7,3 +7,4 @@ export const SUCCESS = 'success=true';
 export const ERROR = 'error=true';
 export const ID = 'id=';
 export const MESSAGE = 'message=';
+export const ACCOUNT= 'account=';
