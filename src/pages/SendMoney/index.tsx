@@ -4,7 +4,8 @@ import {
   Icon,
   Records,
   FormSingle,
-  RecordProps,
+  IRecord,
+  RecordVariant,
 } from '../../components';
 import { currencies, ROUTES, STEP, ID } from '../../constants';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
@@ -13,14 +14,58 @@ import {
   moneyValidationConfig,
   aliasValidationConfig,
   formatCurrency,
+  getUserActivities,
+  parseActivities,
+  parseRecordContent,
+  calculateTransacionType,
 } from '../../utils';
 import { Button } from '@mui/material';
-
-const userAccounts: RecordProps[] = [];
+import { ActivityType, Transaction, TransactionType } from '../../types';
 
 const SendMoney = () => {
   const [searchParams] = useSearchParams();
   const step = searchParams.get('step');
+  const [userActivities, setUserActivities] = useState<Transaction[]>([]);
+  const [userAccounts, setUserAccounts] = useState<IRecord[]>([]);
+  console.log(userActivities);
+
+  useEffect(() => {
+    getUserActivities('1').then((activities) => {
+      const parsedActivities = parseActivities(activities).filter(
+        (activity) => activity.type === TransactionType.Transfer
+      );
+      setUserActivities(parsedActivities);
+    });
+  }, []);
+
+  useEffect(() => {
+    if (userActivities.length > 0) {
+      const parsedRecords = userActivities
+        .filter(
+          (activity: Transaction) =>
+            calculateTransacionType(activity.amount, activity.type) ===
+            ActivityType.TRANSFER_IN
+        )
+        .map((activity: Transaction) =>
+          parseRecordContent(
+            { name: activity.name, origin: activity.origin },
+            RecordVariant.ACCOUNT
+          )
+        );
+        
+      const uniqueRecords = parsedRecords.filter(
+        (record, index, self) =>
+          index ===
+          self.findIndex(
+            (t) =>
+              (t.content as Transaction).origin ===
+              (record.content as Transaction).origin
+          )
+      );
+
+      setUserAccounts(uniqueRecords);
+    }
+  }, [userActivities]);
 
   return (
     <div className="tw-w-full">
@@ -56,7 +101,7 @@ const SendMoney = () => {
                   <p className="tw-mb-4 tw-font-bold">Últimas cuentas</p>
                 </div>
                 {userAccounts.length > 0 && <Records records={userAccounts} />}
-                {userAccounts.length === 0 && <p>No hay cuentas registradas</p>}  
+                {userAccounts.length === 0 && <p>No hay cuentas registradas</p>}
               </>
             }
           />
