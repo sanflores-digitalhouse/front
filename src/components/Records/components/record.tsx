@@ -5,7 +5,7 @@ import {
   isVisa,
   isMastercard,
   deleteUserCard,
-  calculateTransacionType
+  calculateTransacionType,
 } from '../../../utils/';
 import {
   currencies,
@@ -15,6 +15,8 @@ import {
   MESSAGE,
   SUCCESS_MESSAGES_KEYS,
   RECORD_MESSAGES,
+  STEP,
+  ACCOUNT,
 } from '../../../constants/';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { Icon, IconType } from './../../Icon';
@@ -161,7 +163,9 @@ function CardItem({
   );
 }
 
-function AccountItem({ name }: Account) {
+function AccountItem({ name, origin }: Account) {
+  const navigate = useNavigate();
+
   return (
     <>
       <div className="tw-flex tw-items-center tw-gap-x-4">
@@ -169,7 +173,13 @@ function AccountItem({ name }: Account) {
         <p>{name}</p>
       </div>
       <div className="tw-flex tw-text-left tw-gap-x-4 tw-items-center">
-        <p>Seleccionar</p>
+        <button
+          onClick={() =>
+            navigate(`${ROUTES.SEND_MONEY}?${STEP}2&${ACCOUNT}${origin}`)
+          }
+        >
+          Seleccionar
+        </button>
       </div>
     </>
   );
