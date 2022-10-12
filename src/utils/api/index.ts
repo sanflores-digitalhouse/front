@@ -1,3 +1,5 @@
+import { UserAccount } from '../../types';
+
 const myInit = (method = 'GET') => {
   return {
     method,
@@ -29,6 +31,24 @@ export const getUser = (id: string): Promise<Response> => {
 
 export const updateUser = (id: string, data: any): Promise<Response> => {
   return fetch(myRequest(`${baseUrl}/users/${id}`, 'PATCH'), {
+    body: JSON.stringify(data),
+  })
+    .then((response) =>
+      response.ok ? response.json() : rejectPromise(response)
+    )
+    .catch((err) => err);
+};
+
+export const getAccount = (id: string): Promise<UserAccount> => {
+  return fetch(myRequest(`${baseUrl}/accounts/${id}`, 'GET'))
+    .then((response) =>
+      response.ok ? response.json() : rejectPromise(response)
+    )
+    .catch((err) => err);
+};
+
+export const updateAccount = (id: string, data: any): Promise<Response> => {
+  return fetch(myRequest(`${baseUrl}/users/${id}/accounts/1`, 'PATCH'), {
     body: JSON.stringify(data),
   })
     .then((response) =>

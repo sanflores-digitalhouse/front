@@ -22,3 +22,9 @@ export interface User {
     }[];
   };
 }
+
+export interface UserAccount {
+  balance: string;
+  cvu: string;
+  alias: string;
+} 

@@ -5,10 +5,16 @@
       "firstName": "Mauricio",
       "lastName": "Brito",
       "email": "mauricio@gmail.com",
-      "password": "bestPassw0rd",
-      "alias": "mi.alias.m",
+      "password": "bestPassw0rd"
+    }
+  ],
+  "accounts": [
+    {
+      "id": "1",
+      "userId": "1",
       "balance": "13450",
-      "cvu": "1234567890123456"
+      "cvu": "1234567890123456",
+      "alias": "mi.alias.sideberia"
     }
   ],
   "activities": [

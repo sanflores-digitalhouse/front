@@ -17,19 +17,24 @@ import {
   getUserActivities,
   parseActivities,
   parseRecordContent,
+  getAccount,
 } from '../../utils/';
 import { currencies } from '../../constants/';
 import { useUserInfo } from '../../hooks/useUserInfo';
+import { UserAccount } from '../../types/';
 
 const Dashboard = () => {
   const { Argentina } = currencies;
   const { locales, currency } = Argentina;
   const navigate = useNavigate();
   const { user } = useUserInfo();
-  const { balance, id } = user;
+  const { id } = user;
   const [searchParams] = useSearchParams();
   const isSuccess = !!searchParams.get('success');
   const [userActivities, setUserActivities] = useState<IRecord[]>([]);
+  const [userAccount, setUserAccount] = useState({
+    balance: 0,
+  });
 
   useEffect(() => {
     getUserActivities(id).then((activities) => {
@@ -41,6 +46,16 @@ const Dashboard = () => {
     });
   }, [id]);
 
+  useEffect(() => {
+    if (id) {
+      getAccount(id).then((account: UserAccount) => {
+        setUserAccount({
+          balance: parseFloat(account.balance),
+        });
+      });
+    }
+  }, [id]);
+
   return (
     <div className="tw-w-full">
       <CardCustom
@@ -49,7 +64,7 @@ const Dashboard = () => {
             <div>
               <p className="tw-mb-4 tw-font-bold">Dinero disponible</p>
               <p className="tw-text-xl tw-font-bold">
-                {formatCurrency(locales, currency, balance)}
+                {formatCurrency(locales, currency, userAccount?.balance)}
               </p>
             </div>
             <div className="tw-flex tw-justify-between tw-items-start tw-flex-wrap tw-gap-x-4">
