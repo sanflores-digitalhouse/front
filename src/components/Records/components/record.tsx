@@ -76,7 +76,7 @@ export const Record = ({
   );
 };
 
-function TransactionItem({ amount, name, date, id, type }: Transaction) {
+function TransactionItem({ amount, name, dated, id, type }: Transaction) {
   const calculatedType = calculateTransacionType(amount, type);
   return (
     <Link
@@ -97,7 +97,7 @@ function TransactionItem({ amount, name, date, id, type }: Transaction) {
       </div>
       <div className="tw-flex tw-text-left tw-flex-col tw-items-end">
         <p>{formatCurrency(locales, currency, amount)}</p>
-        <p>{formatDateFromString(date)}</p>
+        <p>{formatDateFromString(dated)}</p>
       </div>
     </Link>
   );

@@ -16,9 +16,10 @@ import {
   getUserActivities,
   parseActivities,
   parseRecordContent,
-  pageQuery
+  pageQuery,
 } from '../../utils';
 import { Transaction } from '../../types';
+import { useUserInfo } from '../../hooks';
 
 const recordsPerPage = 10;
 const Activity = () => {
@@ -27,10 +28,12 @@ const Activity = () => {
 
   const { pageNumber, numberOfPages, isRecordsGreeterThanOnePage } =
     usePagination(userActivities as IRecord[], recordsPerPage);
-  //TODO: replace with real data
+
+  const { user } = useUserInfo();
+  const { id } = user;
 
   useEffect(() => {
-    getUserActivities('1')
+    getUserActivities(id)
       .then((activities) => {
         const parsedActivities = parseActivities(activities);
         const parsedRecords = parsedActivities.map(
@@ -40,7 +43,7 @@ const Activity = () => {
         setUserActivities(parsedRecords);
       })
       .finally(() => setIsLoading(false));
-  }, []);
+  }, [id]);
 
   return (
     <div className="tw-w-full">

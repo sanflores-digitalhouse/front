@@ -51,6 +51,7 @@ import {
   pageQuery,
 } from '../../utils/';
 import { Card } from '../../types';
+import { useUserInfo } from '../../hooks';
 
 const recordsPerPage = 10;
 const Cards = () => {
@@ -64,9 +65,12 @@ const Cards = () => {
   const isSuccess = !!searchParams.get('success');
   const message = (searchParams.get('message') as SUCCESS_MESSAGES_KEYS) || '';
 
+  const { user } = useUserInfo();
+  const { id } = user;
+
   useEffect(() => {
     if (!isAdding) {
-      getUserCards('1')
+      getUserCards(id)
         .then((cards) => {
           const parsedActivities = parseCards(cards);
           const parsedRecords = parsedActivities.map((parsedCard: Card) =>
@@ -76,7 +80,7 @@ const Cards = () => {
         })
         .finally(() => setIsLoading(false));
     }
-  }, [isAdding]);
+  }, [id, isAdding]);
 
   return (
     <div className="tw-w-full">
@@ -184,6 +188,8 @@ function CardForm() {
   const isEmpty = isValueEmpty(formState);
   const hasErrors = useMemo(() => valuesHaveErrors(errors), [errors]);
   const navigate = useNavigate();
+  const { user } = useUserInfo();
+  const { id } = user;
 
   const onChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -198,7 +204,7 @@ function CardForm() {
     const { expiry, number, name, cvc } = data;
     transformExpiration(expiry as number);
 
-    createUserCard('1', {
+    createUserCard(id, {
       expiration: expiry,
       number,
       name,

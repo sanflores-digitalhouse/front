@@ -37,9 +37,11 @@ const SendMoney = () => {
   const step = searchParams.get('step');
   const [userActivities, setUserActivities] = useState<Transaction[]>([]);
   const [userAccounts, setUserAccounts] = useState<IRecord[]>([]);
+  const { user } = useUserInfo();
+  const { id } = user;
 
   useEffect(() => {
-    getUserActivities('1').then((activities) => {
+    getUserActivities(id).then((activities) => {
       const parsedActivities = parseActivities(activities).filter(
         (activity) => activity.type === TransactionType.Transfer
       );
