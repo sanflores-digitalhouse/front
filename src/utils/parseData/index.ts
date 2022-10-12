@@ -3,23 +3,27 @@ import { Transaction, Card } from '../../types/';
 
 export const parseActivities = (activities: Transaction[]): Transaction[] => {
   return activities.map((activity: any) => {
-    const { name, amount, date, id } = activity;
+    const { name, amount, date, id, type, origin } = activity;
     return {
       name,
       amount,
       date,
       id,
+      type,
+      origin,
     };
   });
 };
 
 export const parseActivity = (activity: Transaction): Transaction => {
-  const { name, amount, date, id } = activity;
+  const { name, amount, date, id, type, origin } = activity;
   return {
     name,
     amount,
     date,
     id,
+    type,
+    origin,
   };
 };
 

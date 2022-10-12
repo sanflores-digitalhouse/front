@@ -1,3 +1,5 @@
+import { ActivityType } from '../types';
+
 export const ERROR_MESSAGES: Record<string, string> = {
   INVALID_EMAIL: 'Correo electrónico inválido',
   INVALID_PASSWORD: 'Contraseña inválida',
@@ -28,5 +30,11 @@ export enum SUCCESS_MESSAGES_KEYS {
 export const SUCCESS_MESSAGES: Record<SUCCESS_MESSAGES_KEYS, string> = {
   CARD_DELETED: 'Tarjeta eliminada correctamente',
   ALIAS_EDITED: 'El alias se actualizó correctamente',
-  CARD_ADDED : 'Tarjeta agregada correctamente',
+  CARD_ADDED: 'Tarjeta agregada correctamente',
+};
+
+export const RECORD_MESSAGES: Record<ActivityType, string> = {
+  [ActivityType.TRANSFER_IN]: 'Recibiste de',
+  [ActivityType.TRANSFER_OUT]: 'Enviaste a',
+  [ActivityType.DEPOSIT]: 'Ingresaste',
 };

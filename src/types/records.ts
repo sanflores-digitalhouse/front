@@ -1,8 +1,14 @@
+export enum TransactionType {
+  Transfer = 'Transfer',
+  Deposit = 'Deposit',
+}
 export interface Transaction {
   amount: number;
   name?: string;
   date: string;
   id?: string;
+  type: TransactionType;
+  origin?: string;
 }
 
 export interface Card {
@@ -14,10 +20,11 @@ export interface Card {
 
 export interface Account {
   name: string;
+  origin: string;
 }
 
 export enum ActivityType {
   TRANSFER_IN = 'transfer-in',
   TRANSFER_OUT = 'transfer-out',
-  INCOME = 'income',
+  DEPOSIT = 'deposit',
 }

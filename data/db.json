@@ -17,70 +17,100 @@
       "name": "Aitana",
       "amount": 3500.64,
       "date": "2022-09-17T20:57:38+00:00",
-      "userId": "1"
+      "userId": "1",
+      "origin": "1234567890123777",
+      "destination": "1234567890123456",
+      "type": "Transfer"
     },
     {
       "id": "2",
       "name": "Brendys",
       "amount": -1895,
       "date": "2022-09-17T20:57:38+00:00",
-      "userId": "1"
+      "userId": "1",
+      "origin": "1234567890123999",
+      "destination": "1234567890123456",
+      "type": "Transfer"
     },
     {
       "id": "3",
       "name": "Brendys",
       "amount": -1895,
       "date": "2022-09-17T20:57:38+00:00",
-      "userId": "1"
+      "userId": "1",
+      "origin": "1234567890123999",
+      "destination": "1234567890123456",
+      "type": "Transfer"
     },
     {
       "id": "4",
       "name": "Brendys",
       "amount": -1895,
       "date": "2022-09-17T20:57:38+00:00",
-      "userId": "1"
+      "userId": "1",
+      "origin": "1234567890123999",
+      "destination": "1234567890123456",
+      "type": "Transfer"
     },
     {
       "id": "5",
       "name": "Brendys",
       "amount": -1895,
       "date": "2022-09-17T20:57:38+00:00",
-      "userId": "1"
+      "userId": "1",
+      "origin": "1234567890123999",
+      "destination": "1234567890123456",
+      "type": "Transfer"
     },
     {
       "id": "6",
       "name": "Brendys",
       "amount": -1895,
       "date": "2022-09-17T20:57:38+00:00",
-      "userId": "1"
+      "userId": "1",
+      "origin": "1234567890123999",
+      "destination": "1234567890123456",
+      "type": "Transfer"
     },
     {
       "id": "7",
       "name": "Brendys",
       "amount": -1895,
       "date": "2022-09-17T20:57:38+00:00",
-      "userId": "1"
+      "userId": "1",
+      "origin": "1234567890123999",
+      "destination": "1234567890123456",
+      "type": "Transfer"
     },
     {
       "id": "8",
       "name": "Brendys",
       "amount": -1895,
       "date": "2022-09-17T20:57:38+00:00",
-      "userId": "1"
+      "userId": "1",
+      "origin": "1234567890123999",
+      "destination": "1234567890123456",
+      "type": "Transfer"
     },
     {
       "id": "9",
       "name": "Brendys",
       "amount": -1895,
       "date": "2022-09-17T20:57:38+00:00",
-      "userId": "1"
+      "userId": "1",
+      "origin": "1234567890123999",
+      "destination": "1234567890123456",
+      "type": "Transfer"
     },
     {
       "id": "10",
       "name": "Brendys",
       "amount": -1895,
       "date": "2022-09-17T20:57:38+00:00",
-      "userId": "1"
+      "userId": "1",
+      "origin": "1234567890123999",
+      "destination": "1234567890123456",
+      "type": "Transfer"
     }
   ],
   "cards": [
@@ -115,6 +145,12 @@
       "cvc": "000",
       "userId": "1",
       "id": "dhrM6ST"
+    }
+  ],
+  "balances": [
+    {
+      "id": "dhrM6ST",
+      "balance": 10000
     }
   ]
 }

@@ -11,6 +11,7 @@ const myInit = (method = 'GET') => {
 const myRequest = (endpoint: string, method: string) =>
   new Request(endpoint, myInit(method));
 const baseUrl = 'http://localhost:3500';
+
 const rejectPromise = (response: Response) =>
   Promise.reject({
     status: response.status || '00',

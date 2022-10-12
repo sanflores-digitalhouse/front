@@ -5,6 +5,7 @@ import {
   isVisa,
   isMastercard,
   deleteUserCard,
+  calculateTransacionType
 } from '../../../utils/';
 import {
   currencies,
@@ -13,6 +14,7 @@ import {
   SUCCESS,
   MESSAGE,
   SUCCESS_MESSAGES_KEYS,
+  RECORD_MESSAGES,
 } from '../../../constants/';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { Icon, IconType } from './../../Icon';
@@ -39,17 +41,7 @@ const { locales, currency } = Argentina;
 const iconType: Record<ActivityType, IconType> = {
   [ActivityType.TRANSFER_IN]: 'transfer-in',
   [ActivityType.TRANSFER_OUT]: 'transfer-out',
-  [ActivityType.INCOME]: 'income',
-};
-const messageType: Record<ActivityType, string> = {
-  [ActivityType.TRANSFER_IN]: 'Recibiste de',
-  [ActivityType.TRANSFER_OUT]: 'Enviaste a',
-  [ActivityType.INCOME]: 'Ingresaste',
-};
-
-export const calculateType = (amount: number) => {
-  const isNegative = amount < 0;
-  return isNegative ? ActivityType.TRANSFER_OUT : ActivityType.TRANSFER_IN;
+  [ActivityType.DEPOSIT]: 'deposit',
 };
 
 export const Record = ({
@@ -82,8 +74,8 @@ export const Record = ({
   );
 };
 
-function TransactionItem({ amount, name, date, id }: Transaction) {
-  const calculatedType = calculateType(amount);
+function TransactionItem({ amount, name, date, id, type }: Transaction) {
+  const calculatedType = calculateTransacionType(amount, type);
   return (
     <Link
       className="tw-w-full tw-flex tw-justify-between tw-items-center"
@@ -97,7 +89,8 @@ function TransactionItem({ amount, name, date, id }: Transaction) {
           />
         )}
         <p>
-          {messageType[calculatedType] && messageType[calculatedType]} {name}
+          {RECORD_MESSAGES[calculatedType] && RECORD_MESSAGES[calculatedType]}{' '}
+          {name}
         </p>
       </div>
       <div className="tw-flex tw-text-left tw-flex-col tw-items-end">
