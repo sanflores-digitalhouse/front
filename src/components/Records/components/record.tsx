@@ -16,7 +16,7 @@ import {
   SUCCESS_MESSAGES_KEYS,
   RECORD_MESSAGES,
   STEP,
-  ACCOUNT,
+  CVU,
 } from '../../../constants/';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { Icon, IconType } from './../../Icon';
@@ -76,7 +76,7 @@ export const Record = ({
   );
 };
 
-function TransactionItem({ amount, name, date, id, type }: Transaction) {
+function TransactionItem({ amount, name, dated, id, type }: Transaction) {
   const calculatedType = calculateTransacionType(amount, type);
   return (
     <Link
@@ -97,7 +97,7 @@ function TransactionItem({ amount, name, date, id, type }: Transaction) {
       </div>
       <div className="tw-flex tw-text-left tw-flex-col tw-items-end">
         <p>{formatCurrency(locales, currency, amount)}</p>
-        <p>{formatDateFromString(date)}</p>
+        <p>{formatDateFromString(dated)}</p>
       </div>
     </Link>
   );
@@ -175,7 +175,7 @@ function AccountItem({ name, origin }: Account) {
       <div className="tw-flex tw-text-left tw-gap-x-4 tw-items-center">
         <button
           onClick={() =>
-            navigate(`${ROUTES.SEND_MONEY}?${STEP}2&${ACCOUNT}${origin}`)
+            navigate(`${ROUTES.SEND_MONEY}?${STEP}2&${CVU}${origin}`)
           }
         >
           Seleccionar

@@ -5,7 +5,7 @@ export enum TransactionType {
 export interface Transaction {
   amount: number;
   name?: string;
-  date: string;
+  dated: string;
   id?: string;
   type: TransactionType;
   origin?: string;

@@ -6,6 +6,20 @@
       "lastName": "Brito",
       "email": "mauricio@gmail.com",
       "password": "bestPassw0rd"
+    },
+    {
+      "id": "2",
+      "firstName": "Aitana",
+      "lastName": "Doe",
+      "email": "doe@gmail.com",
+      "password": "bestPassw0rd2"
+    },
+    {
+      "id": "3",
+      "firstName": "Brendys",
+      "lastName": "Doe",
+      "email": "doe@gmail.com",
+      "password": "bestPassw0rd3"
     }
   ],
   "accounts": [
@@ -15,6 +29,20 @@
       "balance": "13450",
       "cvu": "1234567890123456",
       "alias": "mi.alias.sideberia"
+    },
+    {
+      "id": "2",
+      "userId": "2",
+      "balance": "1000",
+      "cvu": "1234567890123777",
+      "alias": "mi.alias.sideberia2"
+    },
+    {
+      "id": "3",
+      "userId": "3",
+      "balance": "1000",
+      "cvu": "1234567890123888",
+      "alias": "mi.alias.sideberia3"
     }
   ],
   "activities": [
@@ -22,7 +50,7 @@
       "id": "1",
       "name": "Aitana",
       "amount": 3500.64,
-      "date": "2022-09-17T20:57:38+00:00",
+      "dated": "2022-09-17T20:57:38+00:00",
       "userId": "1",
       "origin": "1234567890123777",
       "destination": "1234567890123456",
@@ -32,7 +60,7 @@
       "id": "2",
       "name": "Brendys",
       "amount": -1895,
-      "date": "2022-09-17T20:57:38+00:00",
+      "dated": "2022-09-17T20:57:38+00:00",
       "userId": "1",
       "origin": "1234567890123999",
       "destination": "1234567890123456",
@@ -42,7 +70,7 @@
       "id": "3",
       "name": "Brendys",
       "amount": -1895,
-      "date": "2022-09-17T20:57:38+00:00",
+      "dated": "2022-09-17T20:57:38+00:00",
       "userId": "1",
       "origin": "1234567890123999",
       "destination": "1234567890123456",
@@ -52,7 +80,7 @@
       "id": "4",
       "name": "Brendys",
       "amount": -1895,
-      "date": "2022-09-17T20:57:38+00:00",
+      "dated": "2022-09-17T20:57:38+00:00",
       "userId": "1",
       "origin": "1234567890123999",
       "destination": "1234567890123456",
@@ -62,7 +90,7 @@
       "id": "5",
       "name": "Brendys",
       "amount": -1895,
-      "date": "2022-09-17T20:57:38+00:00",
+      "dated": "2022-09-17T20:57:38+00:00",
       "userId": "1",
       "origin": "1234567890123999",
       "destination": "1234567890123456",
@@ -72,7 +100,7 @@
       "id": "6",
       "name": "Brendys",
       "amount": -1895,
-      "date": "2022-09-17T20:57:38+00:00",
+      "dated": "2022-09-17T20:57:38+00:00",
       "userId": "1",
       "origin": "1234567890123999",
       "destination": "1234567890123456",
@@ -82,7 +110,7 @@
       "id": "7",
       "name": "Brendys",
       "amount": -1895,
-      "date": "2022-09-17T20:57:38+00:00",
+      "dated": "2022-09-17T20:57:38+00:00",
       "userId": "1",
       "origin": "1234567890123999",
       "destination": "1234567890123456",
@@ -92,7 +120,7 @@
       "id": "8",
       "name": "Brendys",
       "amount": -1895,
-      "date": "2022-09-17T20:57:38+00:00",
+      "dated": "2022-09-17T20:57:38+00:00",
       "userId": "1",
       "origin": "1234567890123999",
       "destination": "1234567890123456",
@@ -102,7 +130,7 @@
       "id": "9",
       "name": "Brendys",
       "amount": -1895,
-      "date": "2022-09-17T20:57:38+00:00",
+      "dated": "2022-09-17T20:57:38+00:00",
       "userId": "1",
       "origin": "1234567890123999",
       "destination": "1234567890123456",
@@ -112,7 +140,7 @@
       "id": "10",
       "name": "Brendys",
       "amount": -1895,
-      "date": "2022-09-17T20:57:38+00:00",
+      "dated": "2022-09-17T20:57:38+00:00",
       "userId": "1",
       "origin": "1234567890123999",
       "destination": "1234567890123456",

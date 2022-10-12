@@ -12,6 +12,7 @@ import {
   calculateTransacionType,
 } from '../../utils';
 import { Transaction, ActivityType } from '../../types';
+import { useUserInfo } from '../../hooks';
 
 const ActivityDetails = () => {
   const [userActivity, setUserActivity] = useState<Transaction>();
@@ -25,17 +26,18 @@ const ActivityDetails = () => {
   const { Argentina } = currencies;
   const { locales, currency } = Argentina;
 
-  //TODO: replace with real data
+  const { user } = useUserInfo();
+  const { id } = user;
 
   useEffect(() => {
-    getUserActivity('1', activityId).then((activity: any) => {
+    getUserActivity(id, activityId).then((activity: any) => {
       const parsedActivity = parseActivity(activity);
       setUserActivity(parsedActivity);
       setActivityType(
         calculateTransacionType(parsedActivity.amount, parsedActivity.type)
       );
     });
-  }, [activityId]);
+  }, [activityId, id]);
 
   return (
     <div>
@@ -67,7 +69,9 @@ const ActivityDetails = () => {
                 <p className="tw-text-xl tw-font-bold">
                   {userActivity && userActivity.name}
                 </p>
-                <i>{userActivity && formatDateFromString(userActivity.date)}</i>
+                <i>
+                  {userActivity && formatDateFromString(userActivity.dated)}
+                </i>
               </div>
             </div>
           </div>

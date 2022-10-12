@@ -1,4 +1,4 @@
-import { UserAccount } from '../../types';
+import { UserAccount, User } from '../../types';
 
 const myInit = (method = 'GET') => {
   return {
@@ -21,7 +21,7 @@ const rejectPromise = (response: Response) =>
     err: true,
   });
 
-export const getUser = (id: string): Promise<Response> => {
+export const getUser = (id: string): Promise<User> => {
   return fetch(myRequest(`${baseUrl}/users/${id}`, 'GET'))
     .then((response) =>
       response.ok ? response.json() : rejectPromise(response)
@@ -41,6 +41,14 @@ export const updateUser = (id: string, data: any): Promise<Response> => {
 
 export const getAccount = (id: string): Promise<UserAccount> => {
   return fetch(myRequest(`${baseUrl}/accounts/${id}`, 'GET'))
+    .then((response) =>
+      response.ok ? response.json() : rejectPromise(response)
+    )
+    .catch((err) => err);
+};
+
+export const getAccounts = (): Promise<UserAccount[]> => {
+  return fetch(myRequest(`${baseUrl}/accounts`, 'GET'))
     .then((response) =>
       response.ok ? response.json() : rejectPromise(response)
     )
@@ -123,6 +131,26 @@ export const createUserCard = (
 ): Promise<Response> => {
   return fetch(myRequest(`${baseUrl}/users/${userId}/cards`, 'POST'), {
     body: JSON.stringify(card),
+  })
+    .then((response) =>
+      response.ok ? response.json() : rejectPromise(response)
+    )
+    .catch((err) => err);
+};
+
+export const createTransferActivity = (
+  userId: string,
+  origin: string,
+  destination: string,
+  amount: number,
+) => {
+  fetch(myRequest(`${baseUrl}/users/${userId}/activities`, 'POST'), {
+    body: JSON.stringify({
+      type: 'Transfer',
+      amount: amount,
+      origin,
+      destination,
+    }),
   })
     .then((response) =>
       response.ok ? response.json() : rejectPromise(response)

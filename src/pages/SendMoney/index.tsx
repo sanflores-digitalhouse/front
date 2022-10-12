@@ -7,7 +7,7 @@ import {
   IRecord,
   RecordVariant,
 } from '../../components';
-import { currencies, ROUTES, STEP, ID } from '../../constants';
+import { currencies, ROUTES, STEP } from '../../constants';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import {
   handleChange,
@@ -18,18 +18,30 @@ import {
   parseActivities,
   parseRecordContent,
   calculateTransacionType,
+  getAccounts,
+  getUser,
+  createTransferActivity,
 } from '../../utils';
 import { Button } from '@mui/material';
-import { ActivityType, Transaction, TransactionType } from '../../types';
+import {
+  ActivityType,
+  Transaction,
+  TransactionType,
+  UserAccount,
+  User,
+} from '../../types';
+import { useUserInfo } from '../../hooks';
 
 const SendMoney = () => {
   const [searchParams] = useSearchParams();
   const step = searchParams.get('step');
   const [userActivities, setUserActivities] = useState<Transaction[]>([]);
   const [userAccounts, setUserAccounts] = useState<IRecord[]>([]);
+  const { user } = useUserInfo();
+  const { id } = user;
 
   useEffect(() => {
-    getUserActivities('1').then((activities) => {
+    getUserActivities(id).then((activities) => {
       const parsedActivities = parseActivities(activities).filter(
         (activity) => activity.type === TransactionType.Transfer
       );
@@ -114,18 +126,48 @@ export default SendMoney;
 
 function SendMoneyForm() {
   const [searchParams] = useSearchParams();
-  const account = searchParams.get('account');
+  const cvu = searchParams.get('cvu');
   const step = searchParams.get('step');
   const [formState, setFormState] = useState({
-    alias: account || '',
+    alias: cvu || '',
     amount: '',
   });
+  const [userDestinationAccount, setUserDestinationAccount] =
+    useState<UserAccount>();
+  const [userDestination, setUserDestination] = useState<User>();
+  const [userOriginAccount, setUserOriginAccount] = useState<UserAccount>();
   const navigate = useNavigate();
+  const { user } = useUserInfo();
+  const { id } = user;
 
-  const onChange = (
-    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-    maxLength?: number
-  ) => handleChange(event, setFormState, maxLength);
+  useEffect(() => {
+    getAccounts().then((accounts) => {
+      const userAccount = accounts.find((account) => account.cvu === cvu);
+      if (userAccount) {
+        setUserDestinationAccount(userAccount);
+      }
+    });
+  }, [cvu]);
+
+  useEffect(() => {
+    if (userDestinationAccount) {
+      const { userId } = userDestinationAccount;
+      getUser(userId).then((user) => {
+        setUserDestination(user);
+      });
+    }
+  }, [userDestinationAccount]);
+
+  useEffect(() => {
+    if (id) {
+      getAccounts().then((accounts) => {
+        const userAccount = accounts.find((account) => account.userId === id);
+        if (userAccount) {
+          setUserOriginAccount(userAccount);
+        }
+      });
+    }
+  }, [id]);
 
   const onNavigate = useCallback(
     (step: number) => {
@@ -140,12 +182,27 @@ function SendMoneyForm() {
     }
   }, [step, formState, navigate, onNavigate]);
 
+  const onChange = (
+    event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
+    maxLength?: number
+  ) => handleChange(event, setFormState, maxLength);
+
   return <>{renderStep(formState)}</>;
 
   function renderStep(formState: { alias: string; amount: string }) {
     const { amount } = formState;
     const { Argentina } = currencies;
     const { locales, currency } = Argentina;
+
+    const handleClick = (
+      userId: string,
+      origin: string,
+      destination: string,
+      amount: number
+    ) => {
+      createTransferActivity(userId, origin, destination, amount);
+    };
+
     switch (step) {
       case '1':
         return (
@@ -167,7 +224,9 @@ function SendMoneyForm() {
         return (
           <FormSingle
             name="amount"
-            title="¿Cuanto quieres transferir a ?"
+            title={`¿Cuanto quieres transferir a ${
+              userDestination && userDestination.firstName
+            } ?`}
             label="Monto"
             type="number"
             actionLabel="Continuar"
@@ -201,11 +260,13 @@ function SendMoneyForm() {
                   </div>
                   <div className="tw-flex tw-flex-col tw-mb-4">
                     <p className="">Para</p>
-                    <p className="tw-font-bold">John Esteban</p>
+                    <p className="tw-font-bold">
+                      {userDestination &&
+                        `${userDestination.firstName} ${userDestination.lastName}`}
+                    </p>
                   </div>
                   <div className="tw-flex tw-flex-col tw-mb-4">
-                    <p className="">Brubank</p>
-                    <p className="tw-font-bold">CVU: 03249239420940932923</p>
+                    <p className="tw-font-bold">CVU: {formState.alias}</p>
                   </div>
                 </div>
               }
@@ -216,7 +277,12 @@ function SendMoneyForm() {
                     className="tw-h-12 tw-w-64"
                     variant="outlined"
                     onClick={() =>
-                      navigate(`${ROUTES.ACTIVITY_DETAILS}?${ID}1`)
+                      handleClick(
+                        id,
+                        userOriginAccount?.cvu || '',
+                        userDestinationAccount?.cvu || '',
+                        parseFloat(amount)
+                      )
                     }
                   >
                     Transferir
