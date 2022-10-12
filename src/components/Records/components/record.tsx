@@ -16,7 +16,7 @@ import {
   SUCCESS_MESSAGES_KEYS,
   RECORD_MESSAGES,
   STEP,
-  ACCOUNT,
+  CVU,
 } from '../../../constants/';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { Icon, IconType } from './../../Icon';
@@ -175,7 +175,7 @@ function AccountItem({ name, origin }: Account) {
       <div className="tw-flex tw-text-left tw-gap-x-4 tw-items-center">
         <button
           onClick={() =>
-            navigate(`${ROUTES.SEND_MONEY}?${STEP}2&${ACCOUNT}${origin}`)
+            navigate(`${ROUTES.SEND_MONEY}?${STEP}2&${CVU}${origin}`)
           }
         >
           Seleccionar
