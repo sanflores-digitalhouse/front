@@ -3,5 +3,6 @@
   "/users/:userId/activities": "/users/:userId/activities",
   "/users/:userId/activities/:activityId": "/activities/:activityId",
   "/users/:userId/cards/": "/users/:userId/cards",
-  "/users/:userId/cards/:cardId": "/cards/:cardId"
+  "/users/:userId/cards/:cardId": "/cards/:cardId",
+  "/balances/:balanceId": "/balances/:balanceId"
 }
