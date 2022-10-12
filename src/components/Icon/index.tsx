@@ -21,7 +21,7 @@ export type IconType =
   | 'add'
   | 'copy'
   | 'credit-card'
-  | 'income'
+  | 'deposit'
   | 'mastercard'
   | 'visa'
   | 'transfer-in'
@@ -44,7 +44,7 @@ const icons: Record<
   add: (props) => <SvgAdd role="img" {...props} />,
   copy: (props) => <SvgCopy role="img" {...props} />,
   'credit-card': (props) => <SvgCreditCard role="img" {...props} />,
-  income: (props) => <SvgIncome role="img" {...props} />,
+  deposit: (props) => <SvgIncome role="img" {...props} />,
   mastercard: (props) => <SvgMastercard role="img" {...props} />,
   visa: (props) => <SvgVisa role="img" {...props} />,
   'transfer-in': (props) => <SvgTransferIn role="img" {...props} />,

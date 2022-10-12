@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { CardCustom, Icon } from '../../components/';
-import { currencies, ROUTES } from '../../constants';
+import { currencies, RECORD_MESSAGES, ROUTES } from '../../constants';
 import { Button } from '@mui/material';
 import {
   formatCurrency,
@@ -9,11 +9,15 @@ import {
   getUserActivity,
   printPage,
   parseActivity,
+  calculateTransacionType,
 } from '../../utils';
-import { Transaction } from '../../types';
+import { Transaction, ActivityType } from '../../types';
 
 const ActivityDetails = () => {
   const [userActivity, setUserActivity] = useState<Transaction>();
+  const [activityType, setActivityType] = useState<ActivityType>(
+    ActivityType.DEPOSIT
+  );
 
   const [searchParams] = useSearchParams();
   const activityId = searchParams.get('id') || '1';
@@ -27,6 +31,9 @@ const ActivityDetails = () => {
     getUserActivity('1', activityId).then((activity: any) => {
       const parsedActivity = parseActivity(activity);
       setUserActivity(parsedActivity);
+      setActivityType(
+        calculateTransacionType(parsedActivity.amount, parsedActivity.type)
+      );
     });
   }, [activityId]);
 
@@ -42,14 +49,21 @@ const ActivityDetails = () => {
             />
             <div className="tw-flex tw-flex-col tw-gap-y-6 tw-justify-center tw-mb-8 print:tw-mb-0">
               <div className="tw-flex tw-flex-col tw-gap-y-2 tw-items-center">
-                <p>Monto transferido</p>
+                <p>Monto</p>
                 <p className="tw-text-xl tw-font-bold">
                   {userActivity &&
-                    formatCurrency(locales, currency, userActivity.amount)}
+                    formatCurrency(
+                      locales,
+                      currency,
+                      Math.abs(userActivity.amount)
+                    )}
                 </p>
               </div>
               <div className="tw-flex tw-flex-col tw-gap-y-2 tw-items-center">
-                <p>Tranferido a</p>
+                <p>
+                  {RECORD_MESSAGES[activityType] &&
+                    RECORD_MESSAGES[activityType]}{' '}
+                </p>
                 <p className="tw-text-xl tw-font-bold">
                   {userActivity && userActivity.name}
                 </p>
