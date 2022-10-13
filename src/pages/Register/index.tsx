@@ -17,9 +17,12 @@ import {
   phoneValidationConfig,
   dniValidationConfig,
   handleChange,
+  createAnUser,
 } from '../../utils/';
 import { ErrorMessage, Errors } from '../../components/ErrorMessage';
+import { SnackBar } from '../../components';
 import { ERROR_MESSAGES } from '../../constants/';
+import { useLocalStorage } from '../../hooks';
 
 interface RegisterState {
   name: string;
@@ -52,6 +55,9 @@ const Register = () => {
     criteriaMode: 'all',
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [token, setToken] = useLocalStorage('token');
+
   const [values, setValues] = React.useState<RegisterState>({
     email: '',
     password: '',
@@ -62,6 +68,7 @@ const Register = () => {
     passwordRepeated: '',
     showPassword: false,
   });
+  const [isSuccess, setIsSuccess] = React.useState<boolean>(false);
 
   const isEmpty = isValueEmpty(values);
   const hasErrors = useMemo(() => valuesHaveErrors(errors), [errors]);
@@ -84,7 +91,30 @@ const Register = () => {
     maxLength?: number
   ) => handleChange<RegisterState>(event, setValues, maxLength);
 
-  const onSubmit: SubmitHandler<RegisterInputs> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<RegisterInputs> = ({
+    name,
+    lastName,
+    password,
+    phone,
+    dni,
+    email,
+  }) => {
+    createAnUser({
+      firstName: name,
+      lastName,
+      password,
+      phone,
+      dni,
+      email,
+    })
+      .then(response => {
+        setIsSuccess(true);
+        setToken(response.accessToken);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   return (
     <div className="tw-w-full tw-h-full tw-flex tw-flex-col tw-flex-1 tw-items-center tw-justify-center">
@@ -106,7 +136,6 @@ const Register = () => {
                 {...register('name', nameValidationConfig)}
                 onChange={onChange}
                 label="nombre"
-                autoComplete="off"
               />
             </FormControl>
             {errors.name && <ErrorMessage errors={errors.name as Errors} />}
@@ -123,7 +152,6 @@ const Register = () => {
                 {...register('lastName', nameValidationConfig)}
                 onChange={onChange}
                 label="lastName"
-                autoComplete="off"
               />
             </FormControl>
             {errors.lastName && (
@@ -158,7 +186,6 @@ const Register = () => {
                 {...register('email', emailValidationConfig)}
                 onChange={onChange}
                 label="email"
-                autoComplete="off"
               />
             </FormControl>
             {errors.email && <ErrorMessage errors={errors.email as Errors} />}
@@ -245,7 +272,6 @@ const Register = () => {
                 {...register('phone', phoneValidationConfig)}
                 onChange={onChange}
                 label="phone"
-                autoComplete="off"
               />
             </FormControl>
             {errors.phone && <ErrorMessage errors={errors.phone as Errors} />}
@@ -266,6 +292,9 @@ const Register = () => {
           </div>
         </form>
       </div>
+      {isSuccess && (
+        <SnackBar duration={3000} message="Usuario Creado" type="success" />
+      )}
     </div>
   );
 };

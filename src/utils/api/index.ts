@@ -21,6 +21,38 @@ const rejectPromise = (response: Response) =>
     err: true,
   });
 
+export const createAnUser = (user: User) => {
+  return fetch(myRequest(`${baseUrl}/register`, 'POST'), {
+    body: JSON.stringify(user),
+  })
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+      return rejectPromise(response);
+    })
+    .catch((err) => {
+      console.log(err);
+      return rejectPromise(err);
+    });
+};
+
+export const login = (email: string, password: string) => {
+  return fetch(myRequest(`${baseUrl}/login`, 'POST'), {
+    body: JSON.stringify({ email, password }),
+  })
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+      return rejectPromise(response);
+    })
+    .catch((err) => {
+      console.log(err);
+      return rejectPromise(err);
+    });
+};
+
 export const getUser = (id: string): Promise<User> => {
   return fetch(myRequest(`${baseUrl}/users/${id}`, 'GET'))
     .then((response) =>
@@ -40,9 +72,11 @@ export const updateUser = (id: string, data: any): Promise<Response> => {
 };
 
 export const getAccount = (id: string): Promise<UserAccount> => {
-  return fetch(myRequest(`${baseUrl}/accounts/${id}`, 'GET'))
+  return fetch(myRequest(`${baseUrl}/users/${id}/accounts`, 'GET'))
     .then((response) =>
-      response.ok ? response.json() : rejectPromise(response)
+      response.ok
+        ? response.json().then((account) => account[0])
+        : rejectPromise(response)
     )
     .catch((err) => err);
 };
@@ -65,10 +99,24 @@ export const updateAccount = (id: string, data: any): Promise<Response> => {
     .catch((err) => err);
 };
 
-export const getUserActivities = async (userId: string) => {
+export const getUserActivities = async (
+  userId: string,
+  token: string,
+  limit?: number
+) => {
   try {
     const response = await fetch(
-      myRequest(`${baseUrl}/activities?userId=${userId}`, 'GET')
+      myRequest(
+        `${baseUrl}/users/${userId}/activities${
+          limit ? `_limit=${limit}` : ''
+        }`,
+        'GET'
+      ),
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
     );
     const data = await response.json();
     return data;
@@ -142,7 +190,7 @@ export const createTransferActivity = (
   userId: string,
   origin: string,
   destination: string,
-  amount: number,
+  amount: number
 ) => {
   fetch(myRequest(`${baseUrl}/users/${userId}/activities`, 'POST'), {
     body: JSON.stringify({

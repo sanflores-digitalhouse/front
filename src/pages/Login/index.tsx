@@ -14,8 +14,13 @@ import {
   emailValidationConfig,
   passwordValidationConfig,
   handleChange,
+  login,
 } from '../../utils/';
 import { ErrorMessage, Errors } from '../../components/ErrorMessage';
+import { useLocalStorage, useUserInfo } from '../../hooks';
+import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '../../constants';
+
 interface LoginState {
   email: string;
   password: string;
@@ -36,6 +41,10 @@ const Login = () => {
     criteriaMode: 'all',
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [token, setToken] = useLocalStorage('token');
+  const { dispatch } = useUserInfo();
+  const navigate = useNavigate();
   const [values, setValues] = useState<LoginState>({
     email: '',
     password: '',
@@ -63,7 +72,18 @@ const Login = () => {
     maxLength?: number
   ) => handleChange<LoginState>(event, setValues, maxLength);
 
-  const onSubmit: SubmitHandler<LoginInputs> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<LoginInputs> = ({ email, password }) => {
+    login(email, password)
+      .then((response) => {
+        setToken(response.accessToken);
+        dispatch({ type: 'SET_USER', payload: response.user });
+        setTimeout(() => navigate(ROUTES.HOME));
+      })
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.log(error);
+      });
+  };
 
   return (
     <div
