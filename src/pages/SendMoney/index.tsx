@@ -30,7 +30,7 @@ import {
   UserAccount,
   User,
 } from '../../types';
-import { useUserInfo } from '../../hooks';
+import { useLocalStorage, useUserInfo } from '../../hooks';
 
 const SendMoney = () => {
   const [searchParams] = useSearchParams();
@@ -39,9 +39,10 @@ const SendMoney = () => {
   const [userAccounts, setUserAccounts] = useState<IRecord[]>([]);
   const { user } = useUserInfo();
   const { id } = user;
+  const [token] = useLocalStorage('token');
 
   useEffect(() => {
-    getUserActivities(id).then((activities) => {
+    getUserActivities(id, token).then((activities) => {
       const parsedActivities = parseActivities(activities).filter(
         (activity) => activity.type === TransactionType.Transfer
       );

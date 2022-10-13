@@ -19,12 +19,13 @@ import {
   pageQuery,
 } from '../../utils';
 import { Transaction } from '../../types';
-import { useUserInfo } from '../../hooks';
+import { useUserInfo, useLocalStorage } from '../../hooks';
 
 const recordsPerPage = 10;
 const Activity = () => {
   const [userActivities, setUserActivities] = useState<IRecord[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [token] = useLocalStorage('token');
 
   const { pageNumber, numberOfPages, isRecordsGreeterThanOnePage } =
     usePagination(userActivities as IRecord[], recordsPerPage);
@@ -33,7 +34,7 @@ const Activity = () => {
   const { id } = user;
 
   useEffect(() => {
-    getUserActivities(id)
+    getUserActivities(id, token)
       .then((activities) => {
         const parsedActivities = parseActivities(activities);
         const parsedRecords = parsedActivities.map(
@@ -43,7 +44,7 @@ const Activity = () => {
         setUserActivities(parsedRecords);
       })
       .finally(() => setIsLoading(false));
-  }, [id]);
+  }, [id, token]);
 
   return (
     <div className="tw-w-full">

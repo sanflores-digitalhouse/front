@@ -22,12 +22,16 @@ import {
 import { currencies } from '../../constants/';
 import { useUserInfo } from '../../hooks/useUserInfo';
 import { UserAccount } from '../../types/';
+import { useLocalStorage } from '../../hooks';
+
+const numberOfActivities = 5;
 
 const Dashboard = () => {
   const { Argentina } = currencies;
   const { locales, currency } = Argentina;
   const navigate = useNavigate();
   const { user } = useUserInfo();
+  const [token] = useLocalStorage('token');
   const { id } = user;
   const [searchParams] = useSearchParams();
   const isSuccess = !!searchParams.get('success');
@@ -35,22 +39,25 @@ const Dashboard = () => {
   const [userAccount, setUserAccount] = useState({
     balance: 0,
   });
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    getUserActivities(id).then((activities) => {
-      const parsedActivities = parseActivities(activities);
-      const parsedRecords = parsedActivities.map((parsedActivity: any) =>
-        parseRecordContent(parsedActivity, RecordVariant.TRANSACTION)
-      );
-      setUserActivities(parsedRecords);
-    });
-  }, [id]);
+    getUserActivities(id, token, numberOfActivities)
+      .then((activities) => {
+        const parsedActivities = parseActivities(activities);
+        const parsedRecords = parsedActivities.map((parsedActivity: any) =>
+          parseRecordContent(parsedActivity, RecordVariant.TRANSACTION)
+        );
+        setUserActivities(parsedRecords);
+      })
+      .finally(() => setIsLoading(false));
+  }, [id, token]);
 
   useEffect(() => {
     if (id) {
       getAccount(id).then((account: UserAccount) => {
         setUserAccount({
-          balance: parseFloat(account.balance),
+          balance: parseFloat(account.balance) || 0,
         });
       });
     }
@@ -109,24 +116,31 @@ const Dashboard = () => {
             <div>
               <p className="tw-mb-4 tw-font-bold">Tu actividad reciente</p>
             </div>
-            {userActivities.length > 0 ? (
+            {userActivities.length === 0 && !isLoading && (
+              <p>No hay actividad registrada</p>
+            )}
+            {userActivities.length > 0 && (
               <Records records={userActivities} maxRecords={5} />
-            ) : (
+            )}
+
+            {isLoading && (
               <Skeleton
                 variant={SkeletonVariant.RECORD_LIST}
-                numberOfItems={5}
+                numberOfItems={numberOfActivities}
               />
             )}
           </>
         }
         actions={
-          <Link
-            to={ROUTES.ACTIVITY}
-            className="tw-h-12 tw-w-full tw-flex tw-items-center tw-justify-between tw-mt-4 hover:tw-text-primary tw-px-4 hover:tw-bg-neutral-gray-500 tw-transition"
-          >
-            <span>Ver toda tu actividad</span>
-            <Icon type="arrow-right" />
-          </Link>
+          userActivities.length === 0 && !isLoading ? null : (
+            <Link
+              to={ROUTES.ACTIVITY}
+              className="tw-h-12 tw-w-full tw-flex tw-items-center tw-justify-between tw-mt-4 hover:tw-text-primary tw-px-4 hover:tw-bg-neutral-gray-500 tw-transition"
+            >
+              <span>Ver toda tu actividad</span>
+              <Icon type="arrow-right" />
+            </Link>
+          )
         }
       />
       {isSuccess && (
