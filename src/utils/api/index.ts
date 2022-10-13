@@ -1,4 +1,4 @@
-import { UserAccount, User } from '../../types';
+import { UserAccount, User, Transaction } from '../../types';
 
 const myInit = (method = 'GET') => {
   return {
@@ -99,30 +99,32 @@ export const updateAccount = (id: string, data: any): Promise<Response> => {
     .catch((err) => err);
 };
 
-export const getUserActivities = async (
+export const getUserActivities = (
   userId: string,
   token: string,
   limit?: number
-) => {
-  try {
-    const response = await fetch(
-      myRequest(
-        `${baseUrl}/users/${userId}/activities${
-          limit ? `?_limit=${limit}` : ''
-        }`,
-        'GET'
-      ),
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
+): Promise<Transaction[]> => {
+  return fetch(
+    myRequest(
+      `${baseUrl}/users/${userId}/activities${limit ? `?_limit=${limit}` : ''}`,
+      'GET'
+    ),
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  )
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
       }
-    );
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error(error);
-  }
+      return rejectPromise(response);
+    })
+    .catch((err) => {
+      console.log(err);
+      return rejectPromise(err);
+    });
 };
 
 export const getUserActivity = async (userId: string, activityId: string) => {

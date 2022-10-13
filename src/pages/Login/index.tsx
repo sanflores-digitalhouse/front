@@ -1,4 +1,5 @@
-import React, { useState, useMemo } from 'react';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React, { useState, useMemo, SetStateAction } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
@@ -17,7 +18,7 @@ import {
   login,
 } from '../../utils/';
 import { ErrorMessage, Errors } from '../../components/ErrorMessage';
-import { useLocalStorage, useUserInfo } from '../../hooks';
+import { useLocalStorage } from '../../hooks';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../constants';
 
@@ -32,7 +33,11 @@ export interface LoginInputs {
   password: string;
 }
 
-const Login = () => {
+const Login = ({
+  setIsAuthenticated,
+}: {
+  setIsAuthenticated: React.Dispatch<SetStateAction<boolean>>;
+}) => {
   const {
     register,
     handleSubmit,
@@ -43,13 +48,12 @@ const Login = () => {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [token, setToken] = useLocalStorage('token');
-  const { dispatch } = useUserInfo();
-  const navigate = useNavigate();
   const [values, setValues] = useState<LoginState>({
     email: '',
     password: '',
     showPassword: false,
   });
+  const navigate = useNavigate();
 
   const isEmpty = isValueEmpty(values);
   const hasErrors = useMemo(() => valuesHaveErrors(errors), [errors]);
@@ -76,8 +80,7 @@ const Login = () => {
     login(email, password)
       .then((response) => {
         setToken(response.accessToken);
-        dispatch({ type: 'SET_USER', payload: response.user });
-        setTimeout(() => navigate(ROUTES.HOME));
+        setTimeout(() => setIsAuthenticated(true));
       })
       .catch((error) => {
         // eslint-disable-next-line no-console

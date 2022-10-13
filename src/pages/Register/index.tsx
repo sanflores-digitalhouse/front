@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { SetStateAction, useMemo } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
@@ -45,7 +45,11 @@ interface RegisterInputs {
   passwordRepeated: string;
 }
 
-const Register = () => {
+const Register = ({
+  setIsAuthenticated,
+}: {
+  setIsAuthenticated: React.Dispatch<SetStateAction<boolean>>;
+}) => {
   const {
     register,
     handleSubmit,
@@ -107,9 +111,10 @@ const Register = () => {
       dni,
       email,
     })
-      .then(response => {
+      .then((response) => {
         setIsSuccess(true);
         setToken(response.accessToken);
+        setTimeout(() => setIsAuthenticated(true), 3000);
       })
       .catch((error) => {
         console.log(error);

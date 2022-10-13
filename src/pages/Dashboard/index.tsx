@@ -31,7 +31,7 @@ const Dashboard = () => {
   const { locales, currency } = Argentina;
   const navigate = useNavigate();
   const { user } = useUserInfo();
-  const [token] = useLocalStorage('token');
+  const [token, setToken] = useLocalStorage('token');
   const { id } = user;
   const [searchParams] = useSearchParams();
   const isSuccess = !!searchParams.get('success');
@@ -42,16 +42,23 @@ const Dashboard = () => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    getUserActivities(id, token, numberOfActivities)
-      .then((activities) => {
-        const parsedActivities = parseActivities(activities);
-        const parsedRecords = parsedActivities.map((parsedActivity: any) =>
-          parseRecordContent(parsedActivity, RecordVariant.TRANSACTION)
-        );
-        setUserActivities(parsedRecords);
-      })
-      .finally(() => setIsLoading(false));
-  }, [id, token]);
+    if (token) {
+      getUserActivities(id, token, numberOfActivities)
+        .then((activities) => {
+          const parsedActivities = parseActivities(activities);
+          const parsedRecords = parsedActivities.map((parsedActivity: any) =>
+            parseRecordContent(parsedActivity, RecordVariant.TRANSACTION)
+          );
+          setUserActivities(parsedRecords);
+        })
+        .catch((error) => {
+          if (error.status === 401) {
+            setToken(null);
+          }
+        })
+        .finally(() => setIsLoading(false));
+    }
+  }, [id, navigate, setToken, token]);
 
   useEffect(() => {
     if (id) {

@@ -1,12 +1,12 @@
-import React, { Suspense, useEffect } from 'react';
+import React, { Suspense, useEffect, useState } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { PrivateRoutes } from './components';
 import { ROUTES } from './constants';
 import { Layout } from './components/Layout';
 import './tailwind/styles.css';
 import CircularProgress from '@mui/material/CircularProgress';
-import { getUser } from './utils';
-import { useUserInfo } from './hooks';
+import { getUser, parseJwt } from './utils';
+import { useUserInfo, useLocalStorage } from './hooks';
 
 // pages
 const Login = React.lazy(() => import('./pages/Login'));
@@ -20,17 +20,30 @@ const LoadMoney = React.lazy(() => import('./pages/LoadMoney'));
 const Profile = React.lazy(() => import('./pages/Profile'));
 const PageNotFound = React.lazy(() => import('./pages/PageNotFound'));
 
-const auth = { token: true };
 function App() {
   const { dispatch } = useUserInfo();
+  const [token] = useLocalStorage('token');
+  const [isAuthenticated, setIsAuthenticated] = useState<boolean>(!!token);
 
   useEffect(() => {
-    getUser('1').then((user) => dispatch({ type: 'SET_USER', payload: user }));
-  }, [dispatch]);
+    if (isAuthenticated) {
+      const token = window.localStorage.getItem('token');
+      if (token) {
+        setIsAuthenticated(true);
+        const info = parseJwt(token);
+        const userId = info && info.sub;
+        userId &&
+          getUser(userId).then((res) =>
+            dispatch({ type: 'SET_USER', payload: res })
+          );
+      }
+    }
+  }, [dispatch, isAuthenticated]);
+
   return (
     <>
       <BrowserRouter>
-        <Layout isAuthenticated={auth.token}>
+        <Layout isAuthenticated={isAuthenticated}>
           <Suspense
             fallback={
               <div className="tw-w-full tw-h-full tw-flex tw-flex-col tw-items-center tw-justify-center">
@@ -42,7 +55,7 @@ function App() {
               <React.Fragment></React.Fragment>
               <Route
                 path={ROUTES.HOME}
-                element={<PrivateRoutes isAuthenticated={auth.token} />}
+                element={<PrivateRoutes isAuthenticated={isAuthenticated} />}
               >
                 <Route element={<Dashboard />} path={ROUTES.HOME} />
                 <Route element={<Activity />} path={`${ROUTES.ACTIVITY}`} />
@@ -57,16 +70,20 @@ function App() {
               </Route>
               <Route
                 element={
-                  auth.token ? <Navigate replace to={ROUTES.HOME} /> : <Login />
+                  isAuthenticated ? (
+                    <Navigate replace to={ROUTES.HOME} />
+                  ) : (
+                    <Login setIsAuthenticated={setIsAuthenticated} />
+                  )
                 }
                 path={ROUTES.LOGIN}
               />
               <Route
                 element={
-                  auth.token ? (
+                  isAuthenticated ? (
                     <Navigate replace to={ROUTES.HOME} />
                   ) : (
-                    <Register />
+                    <Register setIsAuthenticated={setIsAuthenticated} />
                   )
                 }
                 path={ROUTES.REGISTER}
