@@ -30,12 +30,14 @@ const ActivityDetails = () => {
   const { id } = user;
 
   useEffect(() => {
-    getUserActivity(id, activityId).then((activity: any) => {
-      const parsedActivity = parseActivity(activity);
-      setUserActivity(parsedActivity);
-      setActivityType(
-        calculateTransacionType(parsedActivity.amount, parsedActivity.type)
-      );
+    getUserActivity(id, activityId).then((activity) => {
+      if (activity) {
+        const parsedActivity = parseActivity(activity);
+        setUserActivity(parsedActivity);
+        setActivityType(
+          calculateTransacionType(parsedActivity.amount, parsedActivity.type)
+        );
+      }
     });
   }, [activityId, id]);
 

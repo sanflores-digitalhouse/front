@@ -36,12 +36,14 @@ const Activity = () => {
   useEffect(() => {
     getUserActivities(id, token)
       .then((activities) => {
-        const parsedActivities = parseActivities(activities);
-        const parsedRecords = parsedActivities.map(
-          (parsedActivity: Transaction) =>
-            parseRecordContent(parsedActivity, RecordVariant.TRANSACTION)
-        );
-        setUserActivities(parsedRecords);
+        const parsedActivities = activities && parseActivities(activities);
+        if (parsedActivities) {
+          const parsedRecords = parsedActivities.map(
+            (parsedActivity: Transaction) =>
+              parseRecordContent(parsedActivity, RecordVariant.TRANSACTION)
+          );
+          setUserActivities(parsedRecords);
+        }
       })
       .finally(() => setIsLoading(false));
   }, [id, token]);

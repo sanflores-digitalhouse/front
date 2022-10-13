@@ -108,7 +108,7 @@ export const getUserActivities = async (
     const response = await fetch(
       myRequest(
         `${baseUrl}/users/${userId}/activities${
-          limit ? `_limit=${limit}` : ''
+          limit ? `?_limit=${limit}` : ''
         }`,
         'GET'
       ),
