@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { CardCustom, Icon } from '../../components/';
-import { currencies, RECORD_MESSAGES, ROUTES } from '../../constants';
+import {
+  currencies,
+  RECORD_MESSAGES,
+  ROUTES,
+  UNAUTHORIZED,
+} from '../../constants';
 import { Button } from '@mui/material';
 import {
   formatCurrency,
@@ -11,7 +16,7 @@ import {
   calculateTransacionType,
 } from '../../utils';
 import { Transaction, ActivityType } from '../../types';
-import { useLocalStorage, useUserInfo } from '../../hooks';
+import { useAuth, useLocalStorage, useUserInfo } from '../../hooks';
 
 const ActivityDetails = () => {
   const [userActivity, setUserActivity] = useState<Transaction>();
@@ -25,31 +30,30 @@ const ActivityDetails = () => {
   const { Argentina } = currencies;
   const { locales, currency } = Argentina;
   const [token, setToken] = useLocalStorage('token');
+  const { setIsAuthenticated } = useAuth();
   const { user } = useUserInfo();
   const { id } = user;
 
   useEffect(() => {
     if (token) {
-      getUserActivity(id, activityId).then((activity) => {
-        if ((activity as Response).status === 401) {
-          setToken(null);
-        }
-        if (
-          activity &&
-          (activity as Transaction).amount &&
-          (activity as Transaction).type
-        ) {
-          setUserActivity(activity as Transaction);
-          setActivityType(
-            calculateTransacionType(
-              (activity as Transaction).amount,
-              (activity as Transaction).type
-            )
-          );
-        }
-      });
+      getUserActivity(id, activityId, token)
+        .then((activity) => {
+          if (activity && activity.amount && activity.type) {
+            setUserActivity(activity);
+            setActivityType(
+              calculateTransacionType(activity.amount, activity.type)
+            );
+          }
+        })
+        .catch((error) => {
+          if (error.status === UNAUTHORIZED) {
+            setToken(null);
+          }
+        });
+    } else {
+      setIsAuthenticated(false);
     }
-  }, [activityId, id, setToken, token]);
+  }, [activityId, id, setIsAuthenticated, setToken, token]);
 
   return (
     <div>

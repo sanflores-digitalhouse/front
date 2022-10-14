@@ -7,7 +7,7 @@ import {
   IRecord,
   RecordVariant,
 } from '../../components';
-import { currencies, ROUTES, STEP } from '../../constants';
+import { currencies, ROUTES, STEP, UNAUTHORIZED } from '../../constants';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import {
   handleChange,
@@ -29,30 +29,39 @@ import {
   UserAccount,
   User,
 } from '../../types';
-import { useLocalStorage, useUserInfo } from '../../hooks';
+import { useAuth, useLocalStorage, useUserInfo } from '../../hooks';
 
 const SendMoney = () => {
   const [searchParams] = useSearchParams();
   const step = searchParams.get('step');
   const [userActivities, setUserActivities] = useState<Transaction[]>([]);
   const [userAccounts, setUserAccounts] = useState<IRecord[]>([]);
+  const { setIsAuthenticated } = useAuth();
   const { user } = useUserInfo();
   const { id } = user;
   const [token, setToken] = useLocalStorage('token');
 
   useEffect(() => {
-    getUserActivities(id, token).then((activities) => {
-      if ((activities as Response).status === 401) {
-        setToken(null);
-      }
-      if ((activities as Transaction[]).length > 0) {
-        const parsedActivities = (activities as Transaction[]).filter(
-          (activity: Transaction) => activity.type === TransactionType.Transfer
-        );
-        setUserActivities(parsedActivities);
-      }
-    });
-  }, [id, setToken, token]);
+    if (token) {
+      getUserActivities(id, token)
+        .then((activities) => {
+          if ((activities as Transaction[]).length > 0) {
+            const parsedActivities = activities.filter(
+              (activity: Transaction) =>
+                activity.type === TransactionType.Transfer
+            );
+            setUserActivities(parsedActivities);
+          }
+        })
+        .catch((error) => {
+          if (error.status === UNAUTHORIZED) {
+            setToken(null);
+          }
+        });
+    } else {
+      setIsAuthenticated(false);
+    }
+  }, [id, setIsAuthenticated, setToken, token]);
 
   useEffect(() => {
     if (userActivities.length > 0) {

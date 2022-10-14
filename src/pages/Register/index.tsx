@@ -1,4 +1,4 @@
-import React, { SetStateAction, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
@@ -22,7 +22,7 @@ import {
 import { ErrorMessage, Errors } from '../../components/ErrorMessage';
 import { SnackBar } from '../../components';
 import { ERROR_MESSAGES } from '../../constants/';
-import { useLocalStorage } from '../../hooks';
+import { useAuth, useLocalStorage } from '../../hooks';
 
 interface RegisterState {
   name: string;
@@ -45,11 +45,7 @@ interface RegisterInputs {
   passwordRepeated: string;
 }
 
-const Register = ({
-  setIsAuthenticated,
-}: {
-  setIsAuthenticated: React.Dispatch<SetStateAction<boolean>>;
-}) => {
+const Register = () => {
   const {
     register,
     handleSubmit,
@@ -61,6 +57,7 @@ const Register = ({
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [token, setToken] = useLocalStorage('token');
+  const { setIsAuthenticated } = useAuth();
 
   const [values, setValues] = React.useState<RegisterState>({
     email: '',

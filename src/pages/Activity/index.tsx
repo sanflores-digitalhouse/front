@@ -9,12 +9,12 @@ import {
 } from '../../components';
 import Pagination from '@mui/material/Pagination';
 import { usePagination } from '../../hooks/usePagination';
-import { ROUTES } from '../../constants';
+import { ROUTES, UNAUTHORIZED } from '../../constants';
 import PaginationItem from '@mui/material/PaginationItem';
 import { Link } from 'react-router-dom';
 import { getUserActivities, parseRecordContent, pageQuery } from '../../utils';
 import { Transaction } from '../../types';
-import { useUserInfo, useLocalStorage } from '../../hooks';
+import { useUserInfo, useLocalStorage, useAuth } from '../../hooks';
 
 const recordsPerPage = 10;
 const Activity = () => {
@@ -24,6 +24,7 @@ const Activity = () => {
 
   const { pageNumber, numberOfPages, isRecordsGreeterThanOnePage } =
     usePagination(userActivities as IRecord[], recordsPerPage);
+  const { setIsAuthenticated } = useAuth();
 
   const { user } = useUserInfo();
   const { id } = user;
@@ -32,20 +33,24 @@ const Activity = () => {
     if (token) {
       getUserActivities(id, token)
         .then((activities) => {
-          if ((activities as Response).status === 401) {
-            setToken(null);
-          }
           if ((activities as Transaction[]).length > 0) {
-            const parsedRecords = (activities as Transaction[]).map(
+            const parsedRecords = activities.map(
               (parsedActivity: Transaction) =>
                 parseRecordContent(parsedActivity, RecordVariant.TRANSACTION)
             );
             setUserActivities(parsedRecords);
           }
         })
-        .finally(() => setIsLoading(false));
+        .finally(() => setIsLoading(false))
+        .catch((error) => {
+          if (error.status === UNAUTHORIZED) {
+            setToken(null);
+          }
+        });
+    } else {
+      setIsAuthenticated(false);
     }
-  }, [id, setToken, token]);
+  }, [id, setIsAuthenticated, setToken, token]);
 
   return (
     <div className="tw-w-full">

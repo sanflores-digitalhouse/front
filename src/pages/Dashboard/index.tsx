@@ -18,10 +18,10 @@ import {
   parseRecordContent,
   getAccount,
 } from '../../utils/';
-import { currencies } from '../../constants/';
+import { currencies, UNAUTHORIZED } from '../../constants/';
 import { useUserInfo } from '../../hooks/useUserInfo';
 import { Transaction, UserAccount } from '../../types/';
-import { useLocalStorage } from '../../hooks';
+import { useAuth, useLocalStorage } from '../../hooks';
 
 const numberOfActivities = 5;
 
@@ -39,15 +39,12 @@ const Dashboard = () => {
     balance: 0,
   });
   const [isLoading, setIsLoading] = useState<boolean>(true);
+  const { setIsAuthenticated } = useAuth();
 
   useEffect(() => {
     if (token) {
       getUserActivities(id, token, numberOfActivities)
         .then((activities) => {
-          if ((activities as Response).status === 401) {
-            setToken(null);
-          }
-
           if ((activities as Transaction[]).length > 0) {
             const parsedRecords = (activities as Transaction[]).map(
               (activity: Transaction) =>
@@ -56,22 +53,32 @@ const Dashboard = () => {
             setUserActivities(parsedRecords);
           }
         })
-        .finally(() => setIsLoading(false));
+        .finally(() => setIsLoading(false))
+        .catch((error) => {
+          if (error.status === UNAUTHORIZED) {
+            setToken(null);
+          }
+        });
+    } else {
+      setIsAuthenticated(false);
     }
-  }, [id, navigate, setToken, token]);
+  }, [id, setIsAuthenticated, setToken, token]);
 
   useEffect(() => {
     if (token) {
-      getAccount(id, token).then((account) => {
-        if ((account as Response).status === 401) {
-          setToken(null);
-        }
-        if ((account as UserAccount).balance) {
-          setUserAccount({
-            balance: parseFloat((account as UserAccount).balance) || 0,
-          });
-        }
-      });
+      getAccount(id, token)
+        .then((account) => {
+          if ((account as UserAccount).balance) {
+            setUserAccount({
+              balance: parseFloat((account as UserAccount).balance) || 0,
+            });
+          }
+        })
+        .catch((error) => {
+          if (error.status === UNAUTHORIZED) {
+            setToken(null);
+          }
+        });
     }
   }, [id, setToken, token]);
 

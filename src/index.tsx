@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom/client';
 import App from './App';
 import { ThemeProvider, createTheme } from '@mui/material/styles';
 import UserInfoProvider from './context/User';
+import AuthProvider from './context/Auth';
 const darkTheme = createTheme({
   palette: {
     mode: 'dark',
@@ -14,10 +15,12 @@ const root = ReactDOM.createRoot(
 );
 root.render(
   <React.StrictMode>
-    <UserInfoProvider>
-      <ThemeProvider theme={darkTheme}>
-        <App />
-      </ThemeProvider>
-    </UserInfoProvider>
+    <AuthProvider>
+      <UserInfoProvider>
+        <ThemeProvider theme={darkTheme}>
+          <App />
+        </ThemeProvider>
+      </UserInfoProvider>
+    </AuthProvider>
   </React.StrictMode>
 );

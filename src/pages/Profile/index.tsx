@@ -12,6 +12,7 @@ import {
   SUCCESS_MESSAGES,
   MESSAGE,
   SUCCESS_MESSAGES_KEYS,
+  UNAUTHORIZED,
 } from '../../constants';
 import {
   CardCustom,
@@ -30,8 +31,7 @@ import {
   updateAccount,
   getAccount,
 } from '../../utils';
-import { useLocalStorage, useUserInfo } from '../../hooks';
-import { UserAccount } from '../../types';
+import { useAuth, useLocalStorage, useUserInfo } from '../../hooks';
 
 export interface IProfile {
   alias?: string;
@@ -63,31 +63,32 @@ const Profile = () => {
 
   const isEmpty = isValueEmpty(userAccount.alias);
   const hasErrors = useMemo(() => valuesHaveErrors(errors), [errors]);
+  const { setIsAuthenticated } = useAuth();
 
   useEffect(() => {
     if (token) {
-      getAccount(id, token).then((account) => {
-        if ((account as Response).status === 401) {
-          setToken(null);
-        }
-
-        if (
-          account &&
-          (account as UserAccount).alias &&
-          (account as UserAccount).cvu
-        ) {
-          setUserAccount(account as UserAccount);
-        }
-      });
+      getAccount(id, token)
+        .then((account) => {
+          if (account && account.alias && account.cvu) {
+            setUserAccount(account);
+          }
+        })
+        .catch((error) => {
+          if ((error as Response).status === UNAUTHORIZED) {
+            setToken(null);
+          }
+        });
+    } else {
+      setIsAuthenticated(false);
     }
-  }, [id, setToken, token]);
+  }, [id, setIsAuthenticated, setToken, token]);
 
   const onChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => setUserAccount({ ...userAccount, alias: event.target.value });
 
   const onSubmit: SubmitHandler<IProfile> = (data) => {
-    updateAccount(id, { alias: data.alias })
+    updateAccount(id, { alias: data.alias }, token)
       .then((response) => {
         if (response.status) {
           setIsError(true);
@@ -97,7 +98,12 @@ const Profile = () => {
           );
         }
       })
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        console.log('error', error);
+        if ((error as Response).status === UNAUTHORIZED) {
+          setToken(null);
+        }
+      });
   };
 
   return (

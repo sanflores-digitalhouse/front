@@ -23,6 +23,7 @@ import {
   SUCCESS_MESSAGES,
   SUCCESS_MESSAGES_KEYS,
   MESSAGE,
+  UNAUTHORIZED,
 } from '../../constants';
 import { useSearchParams } from 'react-router-dom';
 import {
@@ -50,7 +51,7 @@ import {
   pageQuery,
 } from '../../utils/';
 import { Card } from '../../types';
-import { useUserInfo, useLocalStorage } from '../../hooks';
+import { useUserInfo, useLocalStorage, useAuth } from '../../hooks';
 
 const recordsPerPage = 10;
 const Cards = () => {
@@ -64,6 +65,8 @@ const Cards = () => {
   const isSuccess = !!searchParams.get('success');
   const message = (searchParams.get('message') as SUCCESS_MESSAGES_KEYS) || '';
   const [token, setToken] = useLocalStorage('token');
+  const { setIsAuthenticated } = useAuth();
+
   const { user } = useUserInfo();
   const { id } = user;
 
@@ -72,9 +75,6 @@ const Cards = () => {
       if (token) {
         getUserCards(id, token)
           .then((cards) => {
-            if ((cards as Response).status === 401) {
-              setToken(null);
-            }
             if ((cards as Card[]).length > 0) {
               const parsedRecords = (cards as Card[]).map((parsedCard: Card) =>
                 parseRecordContent(parsedCard, RecordVariant.CARD)
@@ -84,13 +84,15 @@ const Cards = () => {
           })
           .finally(() => setIsLoading(false))
           .catch((error) => {
-            if (error.status === 401) {
+            if (error.status === UNAUTHORIZED) {
               setToken(null);
             }
           });
+      } else {
+        setIsAuthenticated(false);
       }
     }
-  }, [id, isAdding, setToken, token]);
+  }, [id, isAdding, setIsAuthenticated, setToken, token]);
 
   return (
     <div className="tw-w-full">
@@ -233,8 +235,8 @@ function CardForm() {
       .catch((error) => {
         setIsError(true);
         setErrorMessage(error.statusText as string);
-        if (error.status === 401) {
-          setToken(null);
+        if (error.status === UNAUTHORIZED) {
+          setTimeout(() => setToken(null), 3000);
         }
       });
   };

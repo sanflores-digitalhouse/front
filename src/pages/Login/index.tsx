@@ -18,7 +18,7 @@ import {
   login,
 } from '../../utils/';
 import { ErrorMessage, Errors } from '../../components/ErrorMessage';
-import { useLocalStorage } from '../../hooks';
+import { useAuth, useLocalStorage } from '../../hooks';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '../../constants';
 
@@ -33,11 +33,7 @@ export interface LoginInputs {
   password: string;
 }
 
-const Login = ({
-  setIsAuthenticated,
-}: {
-  setIsAuthenticated: React.Dispatch<SetStateAction<boolean>>;
-}) => {
+const Login = () => {
   const {
     register,
     handleSubmit,
@@ -53,7 +49,7 @@ const Login = ({
     password: '',
     showPassword: false,
   });
-  const navigate = useNavigate();
+  const { setIsAuthenticated } = useAuth();
 
   const isEmpty = isValueEmpty(values);
   const hasErrors = useMemo(() => valuesHaveErrors(errors), [errors]);

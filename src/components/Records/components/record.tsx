@@ -17,10 +17,12 @@ import {
   RECORD_MESSAGES,
   STEP,
   CVU,
+  UNAUTHORIZED
 } from '../../../constants/';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { Icon, IconType } from './../../Icon';
 import { Transaction, Card, Account, ActivityType } from '../../../types';
+import { useLocalStorage, useUserInfo } from '../../../hooks';
 
 export enum RecordVariant {
   TRANSACTION = 'transaction',
@@ -107,14 +109,14 @@ function CardItem({
   number,
   type,
   isSelecting,
-  id,
+  id: cardId,
   setRecords,
 }: Card & {
   setRecords?: React.Dispatch<React.SetStateAction<IRecord[]>>;
   isSelecting: boolean;
 }) {
   const navigate = useNavigate();
-  const lastFourDigits = number.slice(-4);
+  const lastFourDigits = (number && number.slice(-4)) || '';
   const isVisaCard = isVisa(number);
   const isMasterCard = isMastercard(number);
   const cardType = isVisaCard
@@ -122,17 +124,30 @@ function CardItem({
     : isMasterCard
     ? 'mastercard'
     : 'credit-card';
+  const { user } = useUserInfo();
+  const { id: userId } = user;
+  const [token, setToken] = useLocalStorage('token');
 
   const handleDelete = () => {
-    if (setRecords) {
-      setRecords((prev) =>
-        prev.filter((record) => (record.content as Card).id !== id)
-      );
-    }
-    deleteUserCard('1', id);
-    navigate(
-      `${ROUTES.CARDS}?${SUCCESS}&${MESSAGE}${SUCCESS_MESSAGES_KEYS.CARD_DELETED}`
-    );
+    deleteUserCard(userId, cardId, token)
+      .then((response) => {
+        if (response.status === UNAUTHORIZED) {
+          setToken(null);
+        }
+        if (setRecords) {
+          setRecords((prev) =>
+            prev.filter((record) => (record.content as Card).id !== cardId)
+          );
+        }
+        navigate(
+          `${ROUTES.CARDS}?${SUCCESS}&${MESSAGE}${SUCCESS_MESSAGES_KEYS.CARD_DELETED}`
+        );
+      })
+      .catch((error) => {
+        if (error.status === UNAUTHORIZED) {
+          setToken(null);
+        }
+      });
   };
 
   return (
