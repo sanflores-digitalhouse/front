@@ -15,13 +15,12 @@ import {
 import {
   formatCurrency,
   getUserActivities,
-  parseActivities,
   parseRecordContent,
   getAccount,
 } from '../../utils/';
 import { currencies } from '../../constants/';
 import { useUserInfo } from '../../hooks/useUserInfo';
-import { UserAccount } from '../../types/';
+import { Transaction, UserAccount } from '../../types/';
 import { useLocalStorage } from '../../hooks';
 
 const numberOfActivities = 5;
@@ -45,15 +44,16 @@ const Dashboard = () => {
     if (token) {
       getUserActivities(id, token, numberOfActivities)
         .then((activities) => {
-          const parsedActivities = parseActivities(activities);
-          const parsedRecords = parsedActivities.map((parsedActivity: any) =>
-            parseRecordContent(parsedActivity, RecordVariant.TRANSACTION)
-          );
-          setUserActivities(parsedRecords);
-        })
-        .catch((error) => {
-          if (error.status === 401) {
+          if ((activities as Response).status === 401) {
             setToken(null);
+          }
+
+          if ((activities as Transaction[]).length > 0) {
+            const parsedRecords = (activities as Transaction[]).map(
+              (activity: Transaction) =>
+                parseRecordContent(activity, RecordVariant.TRANSACTION)
+            );
+            setUserActivities(parsedRecords);
           }
         })
         .finally(() => setIsLoading(false));
@@ -61,14 +61,19 @@ const Dashboard = () => {
   }, [id, navigate, setToken, token]);
 
   useEffect(() => {
-    if (id) {
-      getAccount(id).then((account: UserAccount) => {
-        setUserAccount({
-          balance: parseFloat(account.balance) || 0,
-        });
+    if (token) {
+      getAccount(id, token).then((account) => {
+        if ((account as Response).status === 401) {
+          setToken(null);
+        }
+        if ((account as UserAccount).balance) {
+          setUserAccount({
+            balance: parseFloat((account as UserAccount).balance) || 0,
+          });
+        }
       });
     }
-  }, [id]);
+  }, [id, setToken, token]);
 
   return (
     <div className="tw-w-full">

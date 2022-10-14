@@ -15,7 +15,6 @@ import {
   aliasValidationConfig,
   formatCurrency,
   getUserActivities,
-  parseActivities,
   parseRecordContent,
   calculateTransacionType,
   getAccounts,
@@ -39,16 +38,21 @@ const SendMoney = () => {
   const [userAccounts, setUserAccounts] = useState<IRecord[]>([]);
   const { user } = useUserInfo();
   const { id } = user;
-  const [token] = useLocalStorage('token');
+  const [token, setToken] = useLocalStorage('token');
 
   useEffect(() => {
     getUserActivities(id, token).then((activities) => {
-      const parsedActivities = parseActivities(activities).filter(
-        (activity) => activity.type === TransactionType.Transfer
-      );
-      setUserActivities(parsedActivities);
+      if ((activities as Response).status === 401) {
+        setToken(null);
+      }
+      if ((activities as Transaction[]).length > 0) {
+        const parsedActivities = (activities as Transaction[]).filter(
+          (activity: Transaction) => activity.type === TransactionType.Transfer
+        );
+        setUserActivities(parsedActivities);
+      }
     });
-  }, []);
+  }, [id, setToken, token]);
 
   useEffect(() => {
     if (userActivities.length > 0) {

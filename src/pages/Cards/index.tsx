@@ -44,14 +44,13 @@ import {
   isValueEmpty,
   transformExpiration,
   valuesHaveErrors,
-  parseCards,
   getUserCards,
   parseRecordContent,
   createUserCard,
   pageQuery,
 } from '../../utils/';
 import { Card } from '../../types';
-import { useUserInfo } from '../../hooks';
+import { useUserInfo, useLocalStorage } from '../../hooks';
 
 const recordsPerPage = 10;
 const Cards = () => {
@@ -64,23 +63,34 @@ const Cards = () => {
   const isAdding = !!searchParams.get('add');
   const isSuccess = !!searchParams.get('success');
   const message = (searchParams.get('message') as SUCCESS_MESSAGES_KEYS) || '';
-
+  const [token, setToken] = useLocalStorage('token');
   const { user } = useUserInfo();
   const { id } = user;
 
   useEffect(() => {
     if (!isAdding) {
-      getUserCards(id)
-        .then((cards) => {
-          const parsedActivities = parseCards(cards);
-          const parsedRecords = parsedActivities.map((parsedCard: Card) =>
-            parseRecordContent(parsedCard, RecordVariant.CARD)
-          );
-          setUserCards(parsedRecords);
-        })
-        .finally(() => setIsLoading(false));
+      if (token) {
+        getUserCards(id, token)
+          .then((cards) => {
+            if ((cards as Response).status === 401) {
+              setToken(null);
+            }
+            if ((cards as Card[]).length > 0) {
+              const parsedRecords = (cards as Card[]).map((parsedCard: Card) =>
+                parseRecordContent(parsedCard, RecordVariant.CARD)
+              );
+              setUserCards(parsedRecords);
+            }
+          })
+          .finally(() => setIsLoading(false))
+          .catch((error) => {
+            if (error.status === 401) {
+              setToken(null);
+            }
+          });
+      }
     }
-  }, [id, isAdding]);
+  }, [id, isAdding, setToken, token]);
 
   return (
     <div className="tw-w-full">
@@ -190,6 +200,7 @@ function CardForm() {
   const navigate = useNavigate();
   const { user } = useUserInfo();
   const { id } = user;
+  const [token, setToken] = useLocalStorage('token');
 
   const onChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -204,24 +215,27 @@ function CardForm() {
     const { expiry, number, name, cvc } = data;
     transformExpiration(expiry as number);
 
-    createUserCard(id, {
-      expiration: expiry,
-      number,
-      name,
-      cvc,
-    })
-      .then((response) => {
-        if (response.status) {
-          setIsError(true);
-          setErrorMessage(response.statusText as string);
-        } else {
-          navigate(
-            `${ROUTES.CARDS}?${SUCCESS}&${MESSAGE}${SUCCESS_MESSAGES_KEYS.CARD_ADDED}`
-          );
-        }
+    createUserCard(
+      id,
+      {
+        expiration: expiry,
+        number,
+        name,
+        cvc,
+      },
+      token
+    )
+      .then(() => {
+        navigate(
+          `${ROUTES.CARDS}?${SUCCESS}&${MESSAGE}${SUCCESS_MESSAGES_KEYS.CARD_ADDED}`
+        );
       })
       .catch((error) => {
-        console.log(error);
+        setIsError(true);
+        setErrorMessage(error.statusText as string);
+        if (error.status === 401) {
+          setToken(null);
+        }
       });
   };
 

@@ -30,7 +30,7 @@ import {
   updateAccount,
   getAccount,
 } from '../../utils';
-import { useUserInfo } from '../../hooks';
+import { useLocalStorage, useUserInfo } from '../../hooks';
 import { UserAccount } from '../../types';
 
 export interface IProfile {
@@ -46,6 +46,7 @@ const Profile = () => {
   const [isError, setIsError] = useState<boolean>(!!searchParams.get('error'));
   const { user } = useUserInfo();
   const { id } = user;
+  const [token, setToken] = useLocalStorage('token');
 
   const [userAccount, setUserAccount] = useState({
     alias: '',
@@ -64,15 +65,22 @@ const Profile = () => {
   const hasErrors = useMemo(() => valuesHaveErrors(errors), [errors]);
 
   useEffect(() => {
-    if (id) {
-      getAccount(id).then((account: UserAccount) => {
-        setUserAccount({
-          alias: account.alias,
-          cvu: account.cvu,
-        });
+    if (token) {
+      getAccount(id, token).then((account) => {
+        if ((account as Response).status === 401) {
+          setToken(null);
+        }
+
+        if (
+          account &&
+          (account as UserAccount).alias &&
+          (account as UserAccount).cvu
+        ) {
+          setUserAccount(account as UserAccount);
+        }
       });
     }
-  }, [id]);
+  }, [id, setToken, token]);
 
   const onChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>

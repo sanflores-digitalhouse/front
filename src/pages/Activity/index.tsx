@@ -12,12 +12,7 @@ import { usePagination } from '../../hooks/usePagination';
 import { ROUTES } from '../../constants';
 import PaginationItem from '@mui/material/PaginationItem';
 import { Link } from 'react-router-dom';
-import {
-  getUserActivities,
-  parseActivities,
-  parseRecordContent,
-  pageQuery,
-} from '../../utils';
+import { getUserActivities, parseRecordContent, pageQuery } from '../../utils';
 import { Transaction } from '../../types';
 import { useUserInfo, useLocalStorage } from '../../hooks';
 
@@ -25,7 +20,7 @@ const recordsPerPage = 10;
 const Activity = () => {
   const [userActivities, setUserActivities] = useState<IRecord[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [token] = useLocalStorage('token');
+  const [token, setToken] = useLocalStorage('token');
 
   const { pageNumber, numberOfPages, isRecordsGreeterThanOnePage } =
     usePagination(userActivities as IRecord[], recordsPerPage);
@@ -34,19 +29,23 @@ const Activity = () => {
   const { id } = user;
 
   useEffect(() => {
-    getUserActivities(id, token)
-      .then((activities) => {
-        const parsedActivities = activities && parseActivities(activities);
-        if (parsedActivities) {
-          const parsedRecords = parsedActivities.map(
-            (parsedActivity: Transaction) =>
-              parseRecordContent(parsedActivity, RecordVariant.TRANSACTION)
-          );
-          setUserActivities(parsedRecords);
-        }
-      })
-      .finally(() => setIsLoading(false));
-  }, [id, token]);
+    if (token) {
+      getUserActivities(id, token)
+        .then((activities) => {
+          if ((activities as Response).status === 401) {
+            setToken(null);
+          }
+          if ((activities as Transaction[]).length > 0) {
+            const parsedRecords = (activities as Transaction[]).map(
+              (parsedActivity: Transaction) =>
+                parseRecordContent(parsedActivity, RecordVariant.TRANSACTION)
+            );
+            setUserActivities(parsedRecords);
+          }
+        })
+        .finally(() => setIsLoading(false));
+    }
+  }, [id, setToken, token]);
 
   return (
     <div className="tw-w-full">

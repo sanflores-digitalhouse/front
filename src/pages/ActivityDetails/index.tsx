@@ -8,11 +8,10 @@ import {
   formatDateFromString,
   getUserActivity,
   printPage,
-  parseActivity,
   calculateTransacionType,
 } from '../../utils';
 import { Transaction, ActivityType } from '../../types';
-import { useUserInfo } from '../../hooks';
+import { useLocalStorage, useUserInfo } from '../../hooks';
 
 const ActivityDetails = () => {
   const [userActivity, setUserActivity] = useState<Transaction>();
@@ -25,21 +24,32 @@ const ActivityDetails = () => {
   const navigate = useNavigate();
   const { Argentina } = currencies;
   const { locales, currency } = Argentina;
-
+  const [token, setToken] = useLocalStorage('token');
   const { user } = useUserInfo();
   const { id } = user;
 
   useEffect(() => {
-    getUserActivity(id, activityId).then((activity) => {
-      if (activity) {
-        const parsedActivity = parseActivity(activity);
-        setUserActivity(parsedActivity);
-        setActivityType(
-          calculateTransacionType(parsedActivity.amount, parsedActivity.type)
-        );
-      }
-    });
-  }, [activityId, id]);
+    if (token) {
+      getUserActivity(id, activityId).then((activity) => {
+        if ((activity as Response).status === 401) {
+          setToken(null);
+        }
+        if (
+          activity &&
+          (activity as Transaction).amount &&
+          (activity as Transaction).type
+        ) {
+          setUserActivity(activity as Transaction);
+          setActivityType(
+            calculateTransacionType(
+              (activity as Transaction).amount,
+              (activity as Transaction).type
+            )
+          );
+        }
+      });
+    }
+  }, [activityId, id, setToken, token]);
 
   return (
     <div>
