@@ -1,4 +1,4 @@
-import { UserAccount, User, Transaction } from '../../types';
+import { UserAccount, User, Transaction, Card } from '../../types';
 
 const myInit = (method = 'GET') => {
   return {
@@ -12,9 +12,10 @@ const myInit = (method = 'GET') => {
 };
 const myRequest = (endpoint: string, method: string) =>
   new Request(endpoint, myInit(method));
+
 const baseUrl = 'http://localhost:3500';
 
-const rejectPromise = (response: Response) =>
+const rejectPromise = (response: Response): Promise<Response> =>
   Promise.reject({
     status: response.status || '00',
     statusText: response.statusText || 'Ocurrió un error',
@@ -58,27 +59,48 @@ export const getUser = (id: string): Promise<User> => {
     .then((response) =>
       response.ok ? response.json() : rejectPromise(response)
     )
-    .catch((err) => err);
+    .catch((err) => {
+      console.log(err);
+      return rejectPromise(err);
+    });
 };
 
-export const updateUser = (id: string, data: any): Promise<Response> => {
+export const updateUser = (
+  id: string,
+  data: any,
+  token: string
+): Promise<Response> => {
   return fetch(myRequest(`${baseUrl}/users/${id}`, 'PATCH'), {
     body: JSON.stringify(data),
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   })
     .then((response) =>
       response.ok ? response.json() : rejectPromise(response)
     )
-    .catch((err) => err);
+    .catch((err) => {
+      console.log(err);
+      return rejectPromise(err);
+    });
 };
 
-export const getAccount = (id: string): Promise<UserAccount> => {
-  return fetch(myRequest(`${baseUrl}/users/${id}/accounts`, 'GET'))
-    .then((response) =>
-      response.ok
-        ? response.json().then((account) => account[0])
-        : rejectPromise(response)
-    )
-    .catch((err) => err);
+export const getAccount = (id: string, token: string): Promise<UserAccount> => {
+  return fetch(myRequest(`${baseUrl}/users/${id}/accounts`, 'GET'), {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((response) => {
+      if (response.ok) {
+        return response.json().then((account) => account[0]);
+      }
+      return rejectPromise(response);
+    })
+    .catch((err) => {
+      console.log(err);
+      return rejectPromise(err);
+    });
 };
 
 export const getAccounts = (): Promise<UserAccount[]> => {
@@ -86,17 +108,30 @@ export const getAccounts = (): Promise<UserAccount[]> => {
     .then((response) =>
       response.ok ? response.json() : rejectPromise(response)
     )
-    .catch((err) => err);
+    .catch((err) => {
+      console.log(err);
+      return rejectPromise(err);
+    });
 };
 
-export const updateAccount = (id: string, data: any): Promise<Response> => {
+export const updateAccount = (
+  id: string,
+  data: any,
+  token: string
+): Promise<Response> => {
   return fetch(myRequest(`${baseUrl}/users/${id}/accounts/1`, 'PATCH'), {
     body: JSON.stringify(data),
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   })
     .then((response) =>
       response.ok ? response.json() : rejectPromise(response)
     )
-    .catch((err) => err);
+    .catch((err) => {
+      console.log(err);
+      return rejectPromise(err);
+    });
 };
 
 export const getUserActivities = (
@@ -127,65 +162,109 @@ export const getUserActivities = (
     });
 };
 
-export const getUserActivity = async (userId: string, activityId: string) => {
-  try {
-    const response = await fetch(
-      myRequest(`${baseUrl}/users/${userId}/activities/${activityId}`, 'GET')
-    );
-    const data = await response.json();
-    return data;
-  } catch (error) {
-    console.error(error);
-  }
+export const getUserActivity = (
+  userId: string,
+  activityId: string,
+  token: string
+): Promise<Transaction> => {
+  return fetch(
+    myRequest(`${baseUrl}/users/${userId}/activities/${activityId}`, 'GET'),
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  )
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+      return rejectPromise(response);
+    })
+    .catch((err) => {
+      console.log(err);
+      return rejectPromise(err);
+    });
 };
 
-export const getUserCards = async (userId: string) => {
-  try {
-    const response = await fetch(
-      myRequest(`${baseUrl}/users/${userId}/cards`, 'GET')
-    );
-    const data = await response.json();
-    return data;
-  } catch (err) {
-    console.error(err);
-  }
+export const getUserCards = (
+  userId: string,
+  token: string
+): Promise<Card[]> => {
+  return fetch(myRequest(`${baseUrl}/users/${userId}/cards`, 'GET'), {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  })
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+      return rejectPromise(response);
+    })
+    .catch((err) => {
+      console.log(err);
+      return rejectPromise(err);
+    });
 };
 
-export const getUserCard = async (userId: string, cardId: string) => {
-  try {
-    const response = await fetch(
-      myRequest(`${baseUrl}/users/${userId}/cards/${cardId}`, 'GET')
-    );
-    const data = await response.json();
-    return data;
-  } catch (err) {
-    console.error(err);
-  }
+export const getUserCard = (userId: string, cardId: string): Promise<Card> => {
+  return fetch(myRequest(`${baseUrl}/users/${userId}/cards/${cardId}`, 'GET'))
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+      return rejectPromise(response);
+    })
+    .catch((err) => {
+      console.log(err);
+      return rejectPromise(err);
+    });
 };
 
-export const deleteUserCard = async (userId: string, cardId: string) => {
-  try {
-    const response = await fetch(
-      myRequest(`${baseUrl}/users/${userId}/cards/${cardId}`, 'DELETE')
-    );
-    const data = await response.json();
-    return data;
-  } catch (err) {
-    console.error(err);
-  }
+export const deleteUserCard = (
+  userId: string,
+  cardId: string,
+  token: string
+): Promise<Response> => {
+  return fetch(
+    myRequest(`${baseUrl}/users/${userId}/cards/${cardId}`, 'DELETE'),
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  )
+    .then((response) => {
+      if (response.ok) {
+        return response.json();
+      }
+      return rejectPromise(response);
+    })
+    .catch((err) => {
+      console.log(err);
+      return rejectPromise(err);
+    });
 };
 
 export const createUserCard = (
   userId: string,
-  card: any
+  card: any,
+  token: string
 ): Promise<Response> => {
   return fetch(myRequest(`${baseUrl}/users/${userId}/cards`, 'POST'), {
     body: JSON.stringify(card),
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
   })
     .then((response) =>
       response.ok ? response.json() : rejectPromise(response)
     )
-    .catch((err) => err);
+    .catch((err) => {
+      console.log(err);
+      return rejectPromise(err);
+    });
 };
 
 export const createTransferActivity = (
@@ -193,8 +272,8 @@ export const createTransferActivity = (
   origin: string,
   destination: string,
   amount: number
-) => {
-  fetch(myRequest(`${baseUrl}/users/${userId}/activities`, 'POST'), {
+): Promise<Response> => {
+  return fetch(myRequest(`${baseUrl}/users/${userId}/activities`, 'POST'), {
     body: JSON.stringify({
       type: 'Transfer',
       amount: amount,
@@ -205,5 +284,8 @@ export const createTransferActivity = (
     .then((response) =>
       response.ok ? response.json() : rejectPromise(response)
     )
-    .catch((err) => err);
+    .catch((err) => {
+      console.log(err);
+      return rejectPromise(err);
+    });
 };
