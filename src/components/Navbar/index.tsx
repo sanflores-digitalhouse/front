@@ -6,6 +6,7 @@ import Avatar from '@mui/material/Avatar';
 import { Icon } from '../Icon';
 import { Link, useLocation } from 'react-router-dom';
 import { ROUTES } from '../../constants';
+import { useUserInfo } from '../../hooks';
 
 const stringAvatar = (name: string) => {
   return {
@@ -14,8 +15,9 @@ const stringAvatar = (name: string) => {
 };
 
 export const Navbar = ({ isAuthenticated = false }) => {
-  // TODO: replace with true user data
-  const name = 'Mauricio Brito';
+  const { user } = useUserInfo();
+  const { firstName, lastName } = user;
+  const fullName = `${firstName} ${lastName}`;
   const location = useLocation();
   const isLogin = location.pathname === ROUTES.LOGIN && !isAuthenticated;
 
@@ -39,9 +41,9 @@ export const Navbar = ({ isAuthenticated = false }) => {
             <div className="tw-flex tw-items-center tw-gap-x-2">
               <Avatar
                 className="tw-bg-primary tw-rounded-xl"
-                {...stringAvatar(name)}
+                {...stringAvatar(fullName)}
               />
-              Hola, {name}
+              Hola, {fullName}
             </div>
           )}
         </Toolbar>
