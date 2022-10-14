@@ -1,10 +1,11 @@
 {
   "/api/*": "/$1",
-  "/users/:userId/accounts/": "/users/:userId/accounts",
-  "/users/:userId/accounts/:accountId": "/accounts/:accountId",
-  "/users/:userId/activities": "/users/:userId/activities",
-  "/users/:userId/activities/:activityId": "/activities/:activityId",
-  "/users/:userId/cards/": "/users/:userId/cards",
-  "/users/:userId/cards/:cardId": "/cards/:cardId",
+  "/users/:userId/accounts/": "/660/users/:userId/accounts",
+  "/users/:userId/accounts/:accountId": "/660/accounts/:accountId",
+  "/users/:userId/activities": "/660/users/:userId/activities",
+  "/users/:userId/activities?*": "/660/users/:userId/activities",
+  "/users/:userId/activities/:activityId": "/660/activities/:activityId",
+  "/users/:userId/cards/": "/660/users/:userId/cards",
+  "/users/:userId/cards/:cardId": "/660/cards/:cardId",
   "/users/:userId/balances/:balanceId": "/balances/:balanceId"
 }

@@ -5,12 +5,13 @@ import { ROUTES } from './constants';
 import { Layout } from './components/Layout';
 import './tailwind/styles.css';
 import CircularProgress from '@mui/material/CircularProgress';
-import { getUser } from './utils';
-import { useUserInfo } from './hooks';
+import { getUser, parseJwt } from './utils';
+import { useUserInfo, useLocalStorage } from './hooks';
+import Dashboard from './pages/Dashboard';
+import { useAuth } from './hooks';
 
 // pages
 const Login = React.lazy(() => import('./pages/Login'));
-const Dashboard = React.lazy(() => import('./pages/Dashboard'));
 const Register = React.lazy(() => import('./pages/Register'));
 const Activity = React.lazy(() => import('./pages/Activity'));
 const ActivityDetails = React.lazy(() => import('./pages/ActivityDetails'));
@@ -20,17 +21,39 @@ const LoadMoney = React.lazy(() => import('./pages/LoadMoney'));
 const Profile = React.lazy(() => import('./pages/Profile'));
 const PageNotFound = React.lazy(() => import('./pages/PageNotFound'));
 
-const auth = { token: true };
 function App() {
   const { dispatch } = useUserInfo();
+  const [token, setToken] = useLocalStorage('token');
+  const { isAuthenticated, setIsAuthenticated } = useAuth();
 
   useEffect(() => {
-    getUser('1').then((user) => dispatch({ type: 'SET_USER', payload: user }));
-  }, [dispatch]);
+    if (isAuthenticated) {
+      const token = window.localStorage.getItem('token');
+      if (token) {
+        setIsAuthenticated(true);
+        const info = parseJwt(token);
+        const userId = info && info.sub;
+        userId &&
+          getUser(userId)
+            .then((res) => dispatch({ type: 'SET_USER', payload: res }))
+            .catch((error) => {
+              if (error.status === 401) {
+                setToken(null);
+                setIsAuthenticated(false);
+              }
+              // eslint-disable-next-line no-console
+              console.log(error);
+            });
+      } else {
+        setIsAuthenticated(false);
+      }
+    }
+  }, [dispatch, isAuthenticated, setIsAuthenticated, setToken, token]);
+
   return (
     <>
       <BrowserRouter>
-        <Layout isAuthenticated={auth.token}>
+        <Layout isAuthenticated={isAuthenticated}>
           <Suspense
             fallback={
               <div className="tw-w-full tw-h-full tw-flex tw-flex-col tw-items-center tw-justify-center">
@@ -40,10 +63,7 @@ function App() {
           >
             <Routes>
               <React.Fragment></React.Fragment>
-              <Route
-                path={ROUTES.HOME}
-                element={<PrivateRoutes isAuthenticated={auth.token} />}
-              >
+              <Route path={ROUTES.HOME} element={<PrivateRoutes />}>
                 <Route element={<Dashboard />} path={ROUTES.HOME} />
                 <Route element={<Activity />} path={`${ROUTES.ACTIVITY}`} />
                 <Route element={<Cards />} path={ROUTES.CARDS} />
@@ -57,13 +77,17 @@ function App() {
               </Route>
               <Route
                 element={
-                  auth.token ? <Navigate replace to={ROUTES.HOME} /> : <Login />
+                  isAuthenticated ? (
+                    <Navigate replace to={ROUTES.HOME} />
+                  ) : (
+                    <Login />
+                  )
                 }
                 path={ROUTES.LOGIN}
               />
               <Route
                 element={
-                  auth.token ? (
+                  isAuthenticated ? (
                     <Navigate replace to={ROUTES.HOME} />
                   ) : (
                     <Register />

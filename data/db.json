@@ -1,48 +1,22 @@
 {
   "users": [
     {
-      "id": "1",
+      "email": "maub@gmail.com",
+      "password": "$2a$10$p00z.4hbstv6MadwBACsluBO24qtvhaFsBcIftK6FrPdpR/ZeF5Ue",
       "firstName": "Mauricio",
       "lastName": "Brito",
-      "email": "mauricio@gmail.com",
-      "password": "bestPassw0rd"
-    },
-    {
-      "id": "2",
-      "firstName": "Aitana",
-      "lastName": "Doe",
-      "email": "doe@gmail.com",
-      "password": "bestPassw0rd2"
-    },
-    {
-      "id": "3",
-      "firstName": "Brendys",
-      "lastName": "Doe",
-      "email": "doe@gmail.com",
-      "password": "bestPassw0rd3"
+      "phone": "1178978927",
+      "dni": "90324324",
+      "id": "mkJf2Lz"
     }
   ],
   "accounts": [
     {
       "id": "1",
-      "userId": "1",
+      "userId": "mkJf2Lz",
       "balance": "13450",
       "cvu": "1234567890123456",
-      "alias": "mi.alias.sideberia"
-    },
-    {
-      "id": "2",
-      "userId": "2",
-      "balance": "1000",
-      "cvu": "1234567890123777",
-      "alias": "mi.alias.sideberia2"
-    },
-    {
-      "id": "3",
-      "userId": "3",
-      "balance": "1000",
-      "cvu": "1234567890123888",
-      "alias": "mi.alias.sideberia3"
+      "alias": "mi.alias.sidberia"
     }
   ],
   "activities": [
@@ -51,7 +25,7 @@
       "name": "Aitana",
       "amount": 3500.64,
       "dated": "2022-09-17T20:57:38+00:00",
-      "userId": "1",
+      "userId": "mkJf2Lz",
       "origin": "1234567890123777",
       "destination": "1234567890123456",
       "type": "Transfer"
@@ -61,7 +35,7 @@
       "name": "Brendys",
       "amount": -1895,
       "dated": "2022-09-17T20:57:38+00:00",
-      "userId": "1",
+      "userId": "mkJf2Lz",
       "origin": "1234567890123999",
       "destination": "1234567890123456",
       "type": "Transfer"
@@ -71,7 +45,7 @@
       "name": "Brendys",
       "amount": -1895,
       "dated": "2022-09-17T20:57:38+00:00",
-      "userId": "1",
+      "userId": "mkJf2Lz",
       "origin": "1234567890123999",
       "destination": "1234567890123456",
       "type": "Transfer"
@@ -81,7 +55,7 @@
       "name": "Brendys",
       "amount": -1895,
       "dated": "2022-09-17T20:57:38+00:00",
-      "userId": "1",
+      "userId": "mkJf2Lz",
       "origin": "1234567890123999",
       "destination": "1234567890123456",
       "type": "Transfer"
@@ -91,7 +65,7 @@
       "name": "Brendys",
       "amount": -1895,
       "dated": "2022-09-17T20:57:38+00:00",
-      "userId": "1",
+      "userId": "mkJf2Lz",
       "origin": "1234567890123999",
       "destination": "1234567890123456",
       "type": "Transfer"
@@ -101,7 +75,7 @@
       "name": "Brendys",
       "amount": -1895,
       "dated": "2022-09-17T20:57:38+00:00",
-      "userId": "1",
+      "userId": "mkJf2Lz",
       "origin": "1234567890123999",
       "destination": "1234567890123456",
       "type": "Transfer"
@@ -111,7 +85,7 @@
       "name": "Brendys",
       "amount": -1895,
       "dated": "2022-09-17T20:57:38+00:00",
-      "userId": "1",
+      "userId": "mkJf2Lz",
       "origin": "1234567890123999",
       "destination": "1234567890123456",
       "type": "Transfer"
@@ -121,7 +95,7 @@
       "name": "Brendys",
       "amount": -1895,
       "dated": "2022-09-17T20:57:38+00:00",
-      "userId": "1",
+      "userId": "mkJf2Lz",
       "origin": "1234567890123999",
       "destination": "1234567890123456",
       "type": "Transfer"
@@ -131,7 +105,7 @@
       "name": "Brendys",
       "amount": -1895,
       "dated": "2022-09-17T20:57:38+00:00",
-      "userId": "1",
+      "userId": "mkJf2Lz",
       "origin": "1234567890123999",
       "destination": "1234567890123456",
       "type": "Transfer"
@@ -141,7 +115,7 @@
       "name": "Brendys",
       "amount": -1895,
       "dated": "2022-09-17T20:57:38+00:00",
-      "userId": "1",
+      "userId": "mkJf2Lz",
       "origin": "1234567890123999",
       "destination": "1234567890123456",
       "type": "Transfer"
@@ -149,36 +123,12 @@
   ],
   "cards": [
     {
-      "number": "5547302659359356",
-      "name": "Carla Maria",
-      "expiration": "2022-09-17T20:57:38+00:00",
-      "cvc": "123",
-      "userId": "1",
-      "id": "LT7brr-223222233"
-    },
-    {
-      "expiration": "1123",
-      "number": "4111972333333333",
-      "name": "Jose Leon",
-      "cvc": "111",
-      "userId": "1",
-      "id": "igorrIM"
-    },
-    {
       "expiration": "1024",
       "number": "4111972644444444",
       "name": "Jesus Rodriguez",
       "cvc": "222",
-      "userId": "1",
+      "userId": "mkJf2Lz",
       "id": "0SaS7ga"
-    },
-    {
-      "expiration": "1224",
-      "number": "4111555555555555",
-      "name": "Anibal Sifontes",
-      "cvc": "000",
-      "userId": "1",
-      "id": "dhrM6ST"
     }
   ],
   "balances": [

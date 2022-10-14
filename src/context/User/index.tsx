@@ -2,7 +2,7 @@ import React, { createContext, useReducer } from 'react';
 import userReducer from './userReducer';
 import { User } from '../../types';
 export interface UserInfoState {
-  user: any;
+  user: User;
   loading: boolean;
 }
 

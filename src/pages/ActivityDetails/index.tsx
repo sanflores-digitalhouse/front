@@ -1,18 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { CardCustom, Icon } from '../../components/';
-import { currencies, RECORD_MESSAGES, ROUTES } from '../../constants';
+import {
+  currencies,
+  RECORD_MESSAGES,
+  ROUTES,
+  UNAUTHORIZED,
+} from '../../constants';
 import { Button } from '@mui/material';
 import {
   formatCurrency,
   formatDateFromString,
   getUserActivity,
   printPage,
-  parseActivity,
   calculateTransacionType,
 } from '../../utils';
 import { Transaction, ActivityType } from '../../types';
-import { useUserInfo } from '../../hooks';
+import { useAuth, useLocalStorage, useUserInfo } from '../../hooks';
 
 const ActivityDetails = () => {
   const [userActivity, setUserActivity] = useState<Transaction>();
@@ -25,19 +29,31 @@ const ActivityDetails = () => {
   const navigate = useNavigate();
   const { Argentina } = currencies;
   const { locales, currency } = Argentina;
-
+  const [token, setToken] = useLocalStorage('token');
+  const { setIsAuthenticated } = useAuth();
   const { user } = useUserInfo();
   const { id } = user;
 
   useEffect(() => {
-    getUserActivity(id, activityId).then((activity: any) => {
-      const parsedActivity = parseActivity(activity);
-      setUserActivity(parsedActivity);
-      setActivityType(
-        calculateTransacionType(parsedActivity.amount, parsedActivity.type)
-      );
-    });
-  }, [activityId, id]);
+    if (token) {
+      getUserActivity(id, activityId, token)
+        .then((activity) => {
+          if (activity && activity.amount && activity.type) {
+            setUserActivity(activity);
+            setActivityType(
+              calculateTransacionType(activity.amount, activity.type)
+            );
+          }
+        })
+        .catch((error) => {
+          if (error.status === UNAUTHORIZED) {
+            setToken(null);
+          }
+        });
+    } else {
+      setIsAuthenticated(false);
+    }
+  }, [activityId, id, setIsAuthenticated, setToken, token]);
 
   return (
     <div>

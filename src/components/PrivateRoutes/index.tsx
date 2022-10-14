@@ -1,9 +1,20 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Outlet, Navigate } from 'react-router-dom';
+import { useLocalStorage } from '../../hooks';
+import { useAuth } from '../../hooks/useAuth';
 
-interface PrivateRoutesProps {
-  isAuthenticated: boolean;
-}
-export const PrivateRoutes = ({ isAuthenticated }: PrivateRoutesProps) => {
+export const PrivateRoutes = () => {
+  const [token] = useLocalStorage('token');
+  const { isAuthenticated, setIsAuthenticated } = useAuth();
+  useEffect(() => {
+    if (isAuthenticated) {
+      if (token) {
+        setIsAuthenticated(true);
+      } else {
+        setIsAuthenticated(false);
+      }
+    }
+  }, [isAuthenticated, setIsAuthenticated, token]);
+
   return isAuthenticated ? <Outlet /> : <Navigate to="/login" />;
 };

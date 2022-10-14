@@ -12,6 +12,7 @@ import {
   SUCCESS_MESSAGES,
   MESSAGE,
   SUCCESS_MESSAGES_KEYS,
+  UNAUTHORIZED,
 } from '../../constants';
 import {
   CardCustom,
@@ -30,8 +31,7 @@ import {
   updateAccount,
   getAccount,
 } from '../../utils';
-import { useUserInfo } from '../../hooks';
-import { UserAccount } from '../../types';
+import { useAuth, useLocalStorage, useUserInfo } from '../../hooks';
 
 export interface IProfile {
   alias?: string;
@@ -46,6 +46,7 @@ const Profile = () => {
   const [isError, setIsError] = useState<boolean>(!!searchParams.get('error'));
   const { user } = useUserInfo();
   const { id } = user;
+  const [token, setToken] = useLocalStorage('token');
 
   const [userAccount, setUserAccount] = useState({
     alias: '',
@@ -62,24 +63,32 @@ const Profile = () => {
 
   const isEmpty = isValueEmpty(userAccount.alias);
   const hasErrors = useMemo(() => valuesHaveErrors(errors), [errors]);
+  const { setIsAuthenticated } = useAuth();
 
   useEffect(() => {
-    if (id) {
-      getAccount(id).then((account: UserAccount) => {
-        setUserAccount({
-          alias: account.alias,
-          cvu: account.cvu,
+    if (token) {
+      getAccount(id, token)
+        .then((account) => {
+          if (account && account.alias && account.cvu) {
+            setUserAccount(account);
+          }
+        })
+        .catch((error) => {
+          if ((error as Response).status === UNAUTHORIZED) {
+            setToken(null);
+          }
         });
-      });
+    } else {
+      setIsAuthenticated(false);
     }
-  }, [id]);
+  }, [id, setIsAuthenticated, setToken, token]);
 
   const onChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => setUserAccount({ ...userAccount, alias: event.target.value });
 
   const onSubmit: SubmitHandler<IProfile> = (data) => {
-    updateAccount(id, { alias: data.alias })
+    updateAccount(id, { alias: data.alias }, token)
       .then((response) => {
         if (response.status) {
           setIsError(true);
@@ -89,7 +98,12 @@ const Profile = () => {
           );
         }
       })
-      .catch((error) => console.error(error));
+      .catch((error) => {
+        console.log('error', error);
+        if ((error as Response).status === UNAUTHORIZED) {
+          setToken(null);
+        }
+      });
   };
 
   return (

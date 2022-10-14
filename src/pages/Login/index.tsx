@@ -1,4 +1,5 @@
-import React, { useState, useMemo } from 'react';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import React, { useState, useMemo, SetStateAction } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
@@ -14,8 +15,13 @@ import {
   emailValidationConfig,
   passwordValidationConfig,
   handleChange,
+  login,
 } from '../../utils/';
 import { ErrorMessage, Errors } from '../../components/ErrorMessage';
+import { useAuth, useLocalStorage } from '../../hooks';
+import { useNavigate } from 'react-router-dom';
+import { ROUTES } from '../../constants';
+
 interface LoginState {
   email: string;
   password: string;
@@ -36,11 +42,14 @@ const Login = () => {
     criteriaMode: 'all',
   });
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [token, setToken] = useLocalStorage('token');
   const [values, setValues] = useState<LoginState>({
     email: '',
     password: '',
     showPassword: false,
   });
+  const { setIsAuthenticated } = useAuth();
 
   const isEmpty = isValueEmpty(values);
   const hasErrors = useMemo(() => valuesHaveErrors(errors), [errors]);
@@ -63,7 +72,17 @@ const Login = () => {
     maxLength?: number
   ) => handleChange<LoginState>(event, setValues, maxLength);
 
-  const onSubmit: SubmitHandler<LoginInputs> = (data) => console.log(data);
+  const onSubmit: SubmitHandler<LoginInputs> = ({ email, password }) => {
+    login(email, password)
+      .then((response) => {
+        setToken(response.accessToken);
+        setTimeout(() => setIsAuthenticated(true));
+      })
+      .catch((error) => {
+        // eslint-disable-next-line no-console
+        console.log(error);
+      });
+  };
 
   return (
     <div
