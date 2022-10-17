@@ -30,7 +30,7 @@ const Activity = () => {
   const { id } = user;
 
   useEffect(() => {
-    if (token) {
+    if (token && user) {
       getUserActivities(id, token)
         .then((activities) => {
           if ((activities as Transaction[]).length > 0) {
@@ -50,7 +50,7 @@ const Activity = () => {
     } else {
       setIsAuthenticated(false);
     }
-  }, [id, setIsAuthenticated, setToken, token]);
+  }, [id, setIsAuthenticated, setToken, token, user]);
 
   return (
     <div className="tw-w-full">

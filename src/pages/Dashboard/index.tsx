@@ -42,7 +42,7 @@ const Dashboard = () => {
   const { setIsAuthenticated } = useAuth();
 
   useEffect(() => {
-    if (token) {
+    if (token && user) {
       getUserActivities(id, token, numberOfActivities)
         .then((activities) => {
           if ((activities as Transaction[]).length > 0) {
@@ -62,10 +62,10 @@ const Dashboard = () => {
     } else {
       setIsAuthenticated(false);
     }
-  }, [id, setIsAuthenticated, setToken, token]);
+  }, [id, setIsAuthenticated, setToken, token, user]);
 
   useEffect(() => {
-    if (token) {
+    if (token && user) {
       getAccount(id, token)
         .then((account) => {
           if ((account as UserAccount).balance) {
@@ -80,7 +80,7 @@ const Dashboard = () => {
           }
         });
     }
-  }, [id, setToken, token]);
+  }, [id, setToken, token, user]);
 
   return (
     <div className="tw-w-full">
