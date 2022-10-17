@@ -1,12 +1,10 @@
-import React, { Suspense, useEffect } from 'react';
+import React, { Suspense } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { PrivateRoutes } from './components';
 import { ROUTES } from './constants';
 import { Layout } from './components/Layout';
 import './tailwind/styles.css';
 import CircularProgress from '@mui/material/CircularProgress';
-import { getUser, parseJwt } from './utils';
-import { useUserInfo, useLocalStorage } from './hooks';
 import Dashboard from './pages/Dashboard';
 import { useAuth } from './hooks';
 
@@ -22,33 +20,7 @@ const Profile = React.lazy(() => import('./pages/Profile'));
 const PageNotFound = React.lazy(() => import('./pages/PageNotFound'));
 
 function App() {
-  const { dispatch } = useUserInfo();
-  const [token, setToken] = useLocalStorage('token');
-  const { isAuthenticated, setIsAuthenticated } = useAuth();
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      const token = window.localStorage.getItem('token');
-      if (token) {
-        setIsAuthenticated(true);
-        const info = parseJwt(token);
-        const userId = info && info.sub;
-        userId &&
-          getUser(userId)
-            .then((res) => dispatch({ type: 'SET_USER', payload: res }))
-            .catch((error) => {
-              if (error.status === 401) {
-                setToken(null);
-                setIsAuthenticated(false);
-              }
-              // eslint-disable-next-line no-console
-              console.log(error);
-            });
-      } else {
-        setIsAuthenticated(false);
-      }
-    }
-  }, [dispatch, isAuthenticated, setIsAuthenticated, setToken, token]);
+  const { isAuthenticated } = useAuth();
 
   return (
     <>
