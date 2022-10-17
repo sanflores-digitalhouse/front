@@ -7,6 +7,11 @@ import { Icon } from '../Icon';
 import { Link, useLocation } from 'react-router-dom';
 import { ROUTES } from '../../constants';
 import { useUserInfo } from '../../hooks';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import Fade from '@mui/material/Fade';
+import { useAuth } from '../../hooks/useAuth';
+import { Skeleton, SkeletonVariant } from '../Skeleton';
 
 const stringAvatar = (name: string) => {
   return {
@@ -15,11 +20,23 @@ const stringAvatar = (name: string) => {
 };
 
 export const Navbar = ({ isAuthenticated = false }) => {
-  const { user } = useUserInfo();
+  const { user, loading } = useUserInfo();
   const { firstName, lastName } = user;
   const fullName = `${firstName} ${lastName}`;
   const location = useLocation();
   const isLogin = location.pathname === ROUTES.LOGIN && !isAuthenticated;
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const { logout } = useAuth();
+
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
 
   return (
     <div className="tw-w-full tw-fixed tw-z-50 print:tw-hidden">
@@ -38,12 +55,39 @@ export const Navbar = ({ isAuthenticated = false }) => {
               </Button>
             </Link>
           ) : (
-            <div className="tw-flex tw-items-center tw-gap-x-2">
-              <Avatar
-                className="tw-bg-primary tw-rounded-xl"
-                {...stringAvatar(fullName)}
-              />
-              Hola, {fullName}
+            <div>
+              {loading ? (
+                <Skeleton variant={SkeletonVariant.SQUARE} />
+              ) : (
+                <>
+                  <Button
+                    className="tw-flex tw-items-center tw-gap-x-2"
+                    id="fade-button"
+                    aria-controls={open ? 'fade-menu' : undefined}
+                    aria-haspopup="true"
+                    aria-expanded={open ? 'true' : undefined}
+                    onClick={handleClick}
+                  >
+                    <Avatar
+                      className="tw-bg-primary tw-rounded-xl"
+                      {...stringAvatar(fullName)}
+                    />
+                    Hola, {fullName}
+                  </Button>
+                  <Menu
+                    id="fade-menu"
+                    MenuListProps={{
+                      'aria-labelledby': 'fade-button',
+                    }}
+                    anchorEl={anchorEl}
+                    open={open}
+                    onClose={handleClose}
+                    TransitionComponent={Fade}
+                  >
+                    <MenuItem onClick={logout}>Cerrar Sesión</MenuItem>
+                  </Menu>
+                </>
+              )}
             </div>
           )}
         </Toolbar>

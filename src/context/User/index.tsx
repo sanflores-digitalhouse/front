@@ -11,7 +11,7 @@ export interface UserInfoState {
 
 const initialState = {
   user: {} as User,
-  loading: false,
+  loading: true,
 };
 
 export const userInfoContext = createContext<{
@@ -38,9 +38,13 @@ const UserInfoProvider = ({ children }: { children: React.ReactNode }) => {
         const userId = info && info.sub;
         userId &&
           getUser(userId)
-            .then((res) =>
-              dispatch({ type: userActionTypes.SET_USER, payload: res })
-            )
+            .then((res) => {
+              dispatch({ type: userActionTypes.SET_USER, payload: res });
+              dispatch({
+                type: userActionTypes.SET_USER_LOADING,
+                payload: false,
+              });
+            })
             .catch((error) => {
               if (error.status === 401) {
                 setToken(null);
