@@ -8,6 +8,15 @@
       "phone": "1178978927",
       "dni": "90324324",
       "id": "mkJf2Lz"
+    },
+    {
+      "email": "maubrito@gmail.com",
+      "password": "$2a$10$xLHzvO5eZo9pqw62piadAu3Y8JQWaJtY7.w66GqI9U16d6euGcUhK",
+      "firstName": "Mauricio",
+      "lastName": "Brito",
+      "phone": "1178978927",
+      "dni": "90636666",
+      "id": "s0ElmHR"
     }
   ],
   "accounts": [
@@ -17,6 +26,13 @@
       "balance": "13450",
       "cvu": "1234567890123456",
       "alias": "mi.alias.sidberia"
+    },
+    {
+      "alias": "Pay.House.Cartera",
+      "cvu": "1459306167136215290557",
+      "balance": 0,
+      "userId": "s0ElmHR",
+      "id": "TLRHPCv"
     }
   ],
   "activities": [

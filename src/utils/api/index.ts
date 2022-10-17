@@ -1,17 +1,19 @@
 import { UserAccount, User, Transaction, Card } from '../../types';
 
-const myInit = (method = 'GET') => {
+const myInit = (method = 'GET', token?: string) => {
   return {
     method,
     headers: {
       'Content-Type': 'application/json',
+      Authorization: token ? `Bearer ${token}` : '',
     },
     mode: 'cors' as RequestMode,
     cache: 'default' as RequestCache,
   };
 };
-const myRequest = (endpoint: string, method: string) =>
-  new Request(endpoint, myInit(method));
+
+const myRequest = (endpoint: string, method: string, token?: string) =>
+  new Request(endpoint, myInit(method, token));
 
 const baseUrl = 'http://localhost:3500';
 
@@ -22,9 +24,9 @@ const rejectPromise = (response: Response): Promise<Response> =>
     err: true,
   });
 
-export const createAnUser = (user: User) => {
-  return fetch(myRequest(`${baseUrl}/register`, 'POST'), {
-    body: JSON.stringify(user),
+export const login = (email: string, password: string) => {
+  return fetch(myRequest(`${baseUrl}/login`, 'POST'), {
+    body: JSON.stringify({ email, password }),
   })
     .then((response) => {
       if (response.ok) {
@@ -38,15 +40,19 @@ export const createAnUser = (user: User) => {
     });
 };
 
-export const login = (email: string, password: string) => {
-  return fetch(myRequest(`${baseUrl}/login`, 'POST'), {
-    body: JSON.stringify({ email, password }),
+export const createAnUser = (user: User) => {
+  return fetch(myRequest(`${baseUrl}/register`, 'POST'), {
+    body: JSON.stringify(user),
   })
     .then((response) => {
       if (response.ok) {
         return response.json();
       }
       return rejectPromise(response);
+    })
+    .then((data) => {
+      createAnAccount(data);
+      return data;
     })
     .catch((err) => {
       console.log(err);
@@ -70,11 +76,8 @@ export const updateUser = (
   data: any,
   token: string
 ): Promise<Response> => {
-  return fetch(myRequest(`${baseUrl}/users/${id}`, 'PATCH'), {
+  return fetch(myRequest(`${baseUrl}/users/${id}`, 'PATCH', token), {
     body: JSON.stringify(data),
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
   })
     .then((response) =>
       response.ok ? response.json() : rejectPromise(response)
@@ -85,12 +88,69 @@ export const updateUser = (
     });
 };
 
+// TODO: remove this functionality once backend is ready
+const generateCvu = (): string => {
+  let cvu = '';
+  for (let i = 0; i < 22; i++) {
+    cvu += Math.floor(Math.random() * 10);
+  }
+  return cvu;
+};
+
+// TODO: remove this functionality once backend is ready
+const generateAlias = (): string => {
+  const words = [
+    'Cuenta',
+    'Personal',
+    'Banco',
+    'Argentina',
+    'Digital',
+    'Money',
+    'House',
+    'Bank',
+    'Account',
+    'Cartera',
+    'Wallet',
+    'Pago',
+    'Pay',
+    'Rapido',
+    'Seguro',
+  ];
+  const length = 3;
+  let alias = '';
+  for (let i = 0; i < length; i++) {
+    alias += words[Math.floor(Math.random() * words.length)];
+    if (i < length - 1) {
+      alias += '.';
+    }
+  }
+  return alias;
+};
+
+// TODO: remove this functionality once backend is ready
+export const createAnAccount = (data: any): Promise<Response> => {
+  const { user, accessToken } = data;
+
+  const alias = generateAlias();
+  const cvu = generateCvu();
+  const account = {
+    alias,
+    cvu,
+    balance: 0,
+  };
+
+  return fetch(
+    myRequest(`${baseUrl}/users/${user.id}/accounts`, 'POST', accessToken),
+    {
+      body: JSON.stringify(account),
+    }
+  ).then((response) =>
+    response.ok ? response.json() : rejectPromise(response)
+  );
+};
+
 export const getAccount = (id: string, token: string): Promise<UserAccount> => {
-  return fetch(myRequest(`${baseUrl}/users/${id}/accounts`, 'GET'), {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  })
+  return fetch(myRequest(`${baseUrl}/users/${id}/accounts`, 'GET', token), {})
     .then((response) => {
       if (response.ok) {
         return response.json().then((account) => account[0]);
@@ -119,11 +179,8 @@ export const updateAccount = (
   data: any,
   token: string
 ): Promise<Response> => {
-  return fetch(myRequest(`${baseUrl}/users/${id}/accounts/1`, 'PATCH'), {
+  return fetch(myRequest(`${baseUrl}/users/${id}/accounts/1`, 'PATCH', token), {
     body: JSON.stringify(data),
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
   })
     .then((response) =>
       response.ok ? response.json() : rejectPromise(response)
@@ -142,13 +199,9 @@ export const getUserActivities = (
   return fetch(
     myRequest(
       `${baseUrl}/users/${userId}/activities${limit ? `?_limit=${limit}` : ''}`,
-      'GET'
-    ),
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
+      'GET',
+      token
+    )
   )
     .then((response) => {
       if (response.ok) {
@@ -168,12 +221,11 @@ export const getUserActivity = (
   token: string
 ): Promise<Transaction> => {
   return fetch(
-    myRequest(`${baseUrl}/users/${userId}/activities/${activityId}`, 'GET'),
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
+    myRequest(
+      `${baseUrl}/users/${userId}/activities/${activityId}`,
+      'GET',
+      token
+    )
   )
     .then((response) => {
       if (response.ok) {
@@ -191,11 +243,7 @@ export const getUserCards = (
   userId: string,
   token: string
 ): Promise<Card[]> => {
-  return fetch(myRequest(`${baseUrl}/users/${userId}/cards`, 'GET'), {
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
-  })
+  return fetch(myRequest(`${baseUrl}/users/${userId}/cards`, 'GET', token))
     .then((response) => {
       if (response.ok) {
         return response.json();
@@ -228,12 +276,7 @@ export const deleteUserCard = (
   token: string
 ): Promise<Response> => {
   return fetch(
-    myRequest(`${baseUrl}/users/${userId}/cards/${cardId}`, 'DELETE'),
-    {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    }
+    myRequest(`${baseUrl}/users/${userId}/cards/${cardId}`, 'DELETE', token)
   )
     .then((response) => {
       if (response.ok) {
@@ -252,11 +295,8 @@ export const createUserCard = (
   card: any,
   token: string
 ): Promise<Response> => {
-  return fetch(myRequest(`${baseUrl}/users/${userId}/cards`, 'POST'), {
+  return fetch(myRequest(`${baseUrl}/users/${userId}/cards`, 'POST', token), {
     body: JSON.stringify(card),
-    headers: {
-      Authorization: `Bearer ${token}`,
-    },
   })
     .then((response) =>
       response.ok ? response.json() : rejectPromise(response)

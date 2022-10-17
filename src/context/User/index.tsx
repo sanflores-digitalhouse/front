@@ -1,6 +1,9 @@
-import React, { createContext, useReducer } from 'react';
+import React, { createContext, useEffect, useReducer } from 'react';
 import userReducer from './userReducer';
 import { User } from '../../types';
+import { useAuth, useLocalStorage } from '../../hooks';
+import { getUser, parseJwt } from '../../utils';
+import { userActionTypes } from './types';
 export interface UserInfoState {
   user: User;
   loading: boolean;
@@ -22,6 +25,35 @@ export const userInfoContext = createContext<{
 
 const UserInfoProvider = ({ children }: { children: React.ReactNode }) => {
   const [state, dispatch] = useReducer(userReducer, initialState);
+  const [token, setToken] = useLocalStorage('token');
+
+  const { isAuthenticated, setIsAuthenticated } = useAuth();
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      const token = window.localStorage.getItem('token');
+      if (token) {
+        setIsAuthenticated(true);
+        const info = parseJwt(token);
+        const userId = info && info.sub;
+        userId &&
+          getUser(userId)
+            .then((res) =>
+              dispatch({ type: userActionTypes.SET_USER, payload: res })
+            )
+            .catch((error) => {
+              if (error.status === 401) {
+                setToken(null);
+                setIsAuthenticated(false);
+              }
+              // eslint-disable-next-line no-console
+              console.log(error);
+            });
+      } else {
+        setIsAuthenticated(false);
+      }
+    }
+  }, [dispatch, isAuthenticated, setIsAuthenticated, setToken, token]);
 
   return (
     <userInfoContext.Provider
