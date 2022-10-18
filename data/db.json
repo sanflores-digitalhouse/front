@@ -23,9 +23,9 @@
     {
       "id": "1",
       "userId": "mkJf2Lz",
-      "balance": 47350,
+      "balance": 52900,
       "cvu": "1234567890123456",
-      "alias": "mi.alias.new"
+      "alias": "mi.alias.n"
     },
     {
       "alias": "Pay.House.Cartera",
@@ -263,6 +263,62 @@
       "dated": "2022-10-18T19:22:38.855Z",
       "userId": "mkJf2Lz",
       "id": "QB760VB"
+    },
+    {
+      "amount": 2000,
+      "type": "Deposit",
+      "description": "Depósito con tarjeta",
+      "dated": "2022-10-18T21:22:52.255Z",
+      "userId": "mkJf2Lz",
+      "id": "BofCXF4"
+    },
+    {
+      "amount": 2000,
+      "type": "Deposit",
+      "description": "Depósito con tarjeta",
+      "dated": "2022-10-18T21:51:14.548Z",
+      "userId": "mkJf2Lz",
+      "id": "DFi7Vn5"
+    },
+    {
+      "amount": 2000,
+      "type": "Deposit",
+      "description": "Depósito con tarjeta",
+      "dated": "2022-10-18T21:51:37.015Z",
+      "userId": "s0ElmHR",
+      "id": "a4qj7nu"
+    },
+    {
+      "amount": 2000,
+      "type": "Deposit",
+      "description": "Depósito con tarjeta",
+      "dated": "2022-10-18T22:02:03.844Z",
+      "userId": "mkJf2Lz",
+      "id": "muZp3Um"
+    },
+    {
+      "amount": 1000,
+      "type": "Deposit",
+      "description": "Depósito con tarjeta",
+      "dated": "2022-10-18T22:02:14.535Z",
+      "userId": "mkJf2Lz",
+      "id": "_Km3ypc"
+    },
+    {
+      "amount": 350,
+      "type": "Deposit",
+      "description": "Depósito con tarjeta",
+      "dated": "2022-10-18T22:13:47.615Z",
+      "userId": "mkJf2Lz",
+      "id": "Njivl2c"
+    },
+    {
+      "amount": 200,
+      "type": "Deposit",
+      "description": "Depósito con tarjeta",
+      "dated": "2022-10-18T22:14:29.035Z",
+      "userId": "mkJf2Lz",
+      "id": "CGQ87EH"
     }
   ],
   "cards": [
@@ -273,6 +329,14 @@
       "cvc": "222",
       "userId": "mkJf2Lz",
       "id": "0SaS7ga"
+    },
+    {
+      "expiration": "1133",
+      "number": "4111912121212121",
+      "name": "Juan Carlos",
+      "cvc": "888",
+      "userId": "mkJf2Lz",
+      "id": "skYBjy8"
     }
   ]
 }
