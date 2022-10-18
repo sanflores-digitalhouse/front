@@ -21,15 +21,17 @@ import {
 } from '../../utils';
 import { useLocalStorage, useUserInfo } from '../../hooks';
 
+const duration = 3000;
+
 const LoadMoney = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const cardType = !!searchParams.get('type');
   const card = !!searchParams.get('card');
-  const isError = !!searchParams.get('error');
   const { user } = useUserInfo();
   const { id } = user;
   const [token] = useLocalStorage('token');
+  const [isError, setIsError] = useState<boolean>(false);
+  const [isSubmiting, setIsSubmiting] = useState<boolean>(false);
 
   const {
     register,
@@ -59,18 +61,22 @@ const LoadMoney = () => {
   ) => handleChange(event, setFormState);
 
   const onSubmit: SubmitHandler<any> = (data) => {
+    setIsSubmiting(true);
     createDepositActivity(id, parseFloat(data.money), token)
       .then(() => {
+        setIsSubmiting(false);
         navigate(`${ROUTES.HOME}?${SUCCESS}`);
       })
       .catch(() => {
-        navigate(
-          `${ROUTES.LOAD_MONEY}?type=${cardType}&card=${card}&error=true`
-        );
+        setIsError(true);
+        setTimeout(() => {
+          setIsError(false);
+          setIsSubmiting(false);
+        }, duration);
       });
   };
 
-  if (cardType && card) {
+  if (card) {
     return (
       <div className="tw-w-full">
         <CardCustom
@@ -104,12 +110,12 @@ const LoadMoney = () => {
                     <Button
                       type="submit"
                       className={`tw-h-12 tw-w-64 ${
-                        hasErrors || !isDirty || isEmpty
+                        hasErrors || !isDirty || isEmpty || isSubmiting
                           ? 'tw-text-neutral-gray-300 tw-border-neutral-gray-300 tw-cursor-not-allowed'
                           : ''
                       }`}
                       variant="outlined"
-                      disabled={hasErrors || !isDirty || isEmpty}
+                      disabled={hasErrors || !isDirty || isEmpty || isSubmiting}
                     >
                       Confirmar
                     </Button>
@@ -119,6 +125,13 @@ const LoadMoney = () => {
             </>
           }
         />
+        {isError && (
+          <SnackBar
+            duration={duration}
+            message="Ha ocurrido un error, por favor intente nuevamente"
+            type="error"
+          />
+        )}
       </div>
     );
   }

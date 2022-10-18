@@ -67,7 +67,7 @@ const Dashboard = () => {
   }, [id, setIsAuthenticated, setToken, token, user]);
 
   useEffect(() => {
-    if (token && user) {
+    if (token && user && isSuccess) {
       getAccount(id, token)
         .then((account) => {
           if ((account as UserAccount).balance) {
@@ -82,7 +82,7 @@ const Dashboard = () => {
           }
         });
     }
-  }, [id, setToken, token, user]);
+  }, [id, isSuccess, setToken, token, user]);
 
   return (
     <div className="tw-w-full">

@@ -17,10 +17,10 @@ const myRequest = (endpoint: string, method: string, token?: string) =>
 
 const baseUrl = 'http://localhost:3500';
 
-const rejectPromise = (response: Response): Promise<Response> =>
+const rejectPromise = (response?: Response): Promise<Response> =>
   Promise.reject({
-    status: response.status || '00',
-    statusText: response.statusText || 'Ocurrió un error',
+    status: (response && response.status) || '00',
+    statusText: (response && response.statusText) || 'Ocurrió un error',
     err: true,
   });
 
@@ -313,6 +313,9 @@ export const createDepositActivity = (
   amount: number,
   token: string
 ) => {
+  const maxAmount = 30000;
+  if (amount > maxAmount) return rejectPromise();
+
   const activity = {
     amount,
     type: 'Deposit',
@@ -332,7 +335,10 @@ export const createDepositActivity = (
     .then((data) => {
       depositMoney(data.amount, userId, token);
     })
-    .catch((err) => rejectPromise(err));
+    .catch((err) => {
+      console.log(err);
+      return rejectPromise(err);
+    });
 };
 
 // TODO: remove when backend is ready
@@ -341,7 +347,6 @@ export const depositMoney = (amount: number, userId: string, token: string) => {
     .then((account) => {
       const newBalance = account.balance + amount;
       const accountId = account.id;
-      console.log(newBalance);
       return {
         newBalance,
         accountId,

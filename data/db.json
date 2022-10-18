@@ -23,9 +23,9 @@
     {
       "id": "1",
       "userId": "mkJf2Lz",
-      "balance": 16550,
+      "balance": 47350,
       "cvu": "1234567890123456",
-      "alias": "mi.alias.sidberia"
+      "alias": "mi.alias.new"
     },
     {
       "alias": "Pay.House.Cartera",
@@ -207,6 +207,62 @@
       "dated": "2022-10-18T14:13:28.489Z",
       "userId": "mkJf2Lz",
       "id": "VT1tysS"
+    },
+    {
+      "amount": 31000,
+      "type": "Deposit",
+      "description": "Depósito con tarjeta",
+      "dated": "2022-10-18T18:45:55.304Z",
+      "userId": "mkJf2Lz",
+      "id": "YFqtPT3"
+    },
+    {
+      "amount": 3000,
+      "type": "Deposit",
+      "description": "Depósito con tarjeta",
+      "dated": "2022-10-18T19:10:51.299Z",
+      "userId": "mkJf2Lz",
+      "id": "Rk74x1_"
+    },
+    {
+      "amount": 25000,
+      "type": "Deposit",
+      "description": "Depósito con tarjeta",
+      "dated": "2022-10-18T19:15:54.290Z",
+      "userId": "mkJf2Lz",
+      "id": "NMqhIEL"
+    },
+    {
+      "amount": 500,
+      "type": "Deposit",
+      "description": "Depósito con tarjeta",
+      "dated": "2022-10-18T19:16:14.787Z",
+      "userId": "mkJf2Lz",
+      "id": "BqD4mgW"
+    },
+    {
+      "amount": 100,
+      "type": "Deposit",
+      "description": "Depósito con tarjeta",
+      "dated": "2022-10-18T19:16:40.316Z",
+      "userId": "mkJf2Lz",
+      "id": "4buK5MU"
+    },
+    {
+      "amount": 2100,
+      "type": "Deposit",
+      "description": "Depósito con tarjeta",
+      "dated": "2022-10-18T19:21:14.029Z",
+      "userId": "mkJf2Lz",
+      "id": "KCZzpdq"
+    },
+    {
+      "amount": 100,
+      "type": "Deposit",
+      "description": "Depósito con tarjeta",
+      "dated": "2022-10-18T19:22:38.855Z",
+      "userId": "mkJf2Lz",
+      "id": "QB760VB"
     }
   ],
   "cards": [
