@@ -19,7 +19,8 @@ export const ERROR_MESSAGES: Record<string, string> = {
   MIN_LENGHT_NAME: 'Debe tener al menos 2 caracteres',
   MIN_LENGHT_ALIAS: 'Debe tener al menos 10 caracteres',
   MIN_LENGHT_MONEY: 'El mínimo para ingresar a la cuenta es de $100',
-  INVALID_USER: 'El usuario ya existe'
+  INVALID_USER: 'El usuario ya existe',
+  NOT_FOUND_USER: 'Usuario no encontrado',
 };
 
 export enum SUCCESS_MESSAGES_KEYS {

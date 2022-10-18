@@ -25,6 +25,7 @@ import {
   ERROR_MESSAGES,
   SUCCESS_MESSAGES_KEYS,
   SUCCESS_MESSAGES,
+  BAD_REQUEST,
 } from '../../constants/';
 import { useAuth, useLocalStorage } from '../../hooks';
 
@@ -132,7 +133,7 @@ const Register = () => {
         setIsError(true);
         setMessage(ERROR_MESSAGES.INVALID_USER);
         setIsSubmiting(false);
-        if (error.status === 400) {
+        if (error.status === BAD_REQUEST) {
           setIsError(true);
         }
       });
@@ -301,7 +302,7 @@ const Register = () => {
           <div className="tw-w-full tw-flex tw-justify-center">
             <Button
               className={`tw-h-14 tw-w-80 ${
-                hasErrors || !isDirty || isEmpty
+                hasErrors || !isDirty || isEmpty || isSubmiting
                   ? 'tw-text-neutral-gray-300 tw-border-neutral-gray-300 tw-cursor-not-allowed'
                   : ''
               }`}
