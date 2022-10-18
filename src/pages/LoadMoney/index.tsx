@@ -11,13 +11,15 @@ import {
   Errors,
   SnackBar,
 } from '../../components';
-import { ROUTES, SELECT } from '../../constants';
+import { ROUTES, SELECT, SUCCESS } from '../../constants';
 import {
   handleChange,
   moneyValidationConfig,
   isValueEmpty,
   valuesHaveErrors,
+  createDepositActivity,
 } from '../../utils';
+import { useLocalStorage, useUserInfo } from '../../hooks';
 
 const LoadMoney = () => {
   const navigate = useNavigate();
@@ -25,6 +27,9 @@ const LoadMoney = () => {
   const cardType = !!searchParams.get('type');
   const card = !!searchParams.get('card');
   const isError = !!searchParams.get('error');
+  const { user } = useUserInfo();
+  const { id } = user;
+  const [token] = useLocalStorage('token');
 
   const {
     register,
@@ -54,15 +59,15 @@ const LoadMoney = () => {
   ) => handleChange(event, setFormState);
 
   const onSubmit: SubmitHandler<any> = (data) => {
-    const fakeCondition = false;
-
-    if (fakeCondition) {
-      navigate('/?success=true');
-      return data;
-    }
-
-    navigate(`${ROUTES.LOAD_MONEY}?type=${cardType}&card=${card}&error=true`);
-    return data;
+    createDepositActivity(id, parseFloat(data.money), token)
+      .then(() => {
+        navigate(`${ROUTES.HOME}?${SUCCESS}`);
+      })
+      .catch(() => {
+        navigate(
+          `${ROUTES.LOAD_MONEY}?type=${cardType}&card=${card}&error=true`
+        );
+      });
   };
 
   if (cardType && card) {

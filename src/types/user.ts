@@ -9,8 +9,9 @@ export interface User {
 }
 
 export interface UserAccount {
-  balance: string;
+  balance: number;
   cvu: string;
   alias: string;
   userId: string;
+  id: string;
 }

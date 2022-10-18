@@ -307,6 +307,67 @@ export const createUserCard = (
     });
 };
 
+// TODO: edit when backend is ready
+export const createDepositActivity = (
+  userId: string,
+  amount: number,
+  token: string
+) => {
+  const activity = {
+    amount,
+    type: 'Deposit',
+    description: 'Depósito con tarjeta',
+    dated: new Date(), // date must be genarated in backend
+  };
+
+  return fetch(
+    myRequest(`${baseUrl}/users/${userId}/activities`, 'POST', token),
+    {
+      body: JSON.stringify(activity),
+    }
+  )
+    .then((response) =>
+      response.ok ? response.json() : rejectPromise(response)
+    )
+    .then((data) => {
+      depositMoney(data.amount, userId, token);
+    })
+    .catch((err) => rejectPromise(err));
+};
+
+// TODO: remove when backend is ready
+export const depositMoney = (amount: number, userId: string, token: string) => {
+  return getAccount(userId, token)
+    .then((account) => {
+      const newBalance = account.balance + amount;
+      const accountId = account.id;
+      console.log(newBalance);
+      return {
+        newBalance,
+        accountId,
+      };
+    })
+    .then(({ newBalance, accountId }) => {
+      fetch(
+        myRequest(
+          `${baseUrl}/users/${userId}/accounts/${accountId}`,
+          'PATCH',
+          token
+        ),
+        {
+          body: JSON.stringify({ balance: newBalance }),
+        }
+      )
+        .then((response) =>
+          response.ok ? response.json() : rejectPromise(response)
+        )
+        .catch((err) => {
+          console.log(err);
+          return rejectPromise(err);
+        });
+    });
+};
+
 export const createTransferActivity = (
   userId: string,
   origin: string,

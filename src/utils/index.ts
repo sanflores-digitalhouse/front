@@ -8,3 +8,4 @@ export * from './api';
 export * from './parseData';
 export * from './pagination';
 export * from './transaction';
+export * from './sort';
