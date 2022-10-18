@@ -17,12 +17,12 @@ import {
   RECORD_MESSAGES,
   STEP,
   CVU,
-  UNAUTHORIZED
+  UNAUTHORIZED,
 } from '../../../constants/';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { Icon, IconType } from './../../Icon';
 import { Transaction, Card, Account, ActivityType } from '../../../types';
-import { useLocalStorage, useUserInfo } from '../../../hooks';
+import { useAuth, useLocalStorage, useUserInfo } from '../../../hooks';
 
 export enum RecordVariant {
   TRANSACTION = 'transaction',
@@ -125,29 +125,31 @@ function CardItem({
     ? 'mastercard'
     : 'credit-card';
   const { user } = useUserInfo();
-  const { id: userId } = user;
-  const [token, setToken] = useLocalStorage('token');
+  const { logout } = useAuth();
+  const [token] = useLocalStorage('token');
 
   const handleDelete = () => {
-    deleteUserCard(userId, cardId, token)
-      .then((response) => {
-        if (response.status === UNAUTHORIZED) {
-          setToken(null);
-        }
-        if (setRecords) {
-          setRecords((prev) =>
-            prev.filter((record) => (record.content as Card).id !== cardId)
+    if (user && user.id) {
+      deleteUserCard(user.id, cardId, token)
+        .then((response) => {
+          if (response.status === UNAUTHORIZED) {
+            logout();
+          }
+          if (setRecords) {
+            setRecords((prev) =>
+              prev.filter((record) => (record.content as Card).id !== cardId)
+            );
+          }
+          navigate(
+            `${ROUTES.CARDS}?${SUCCESS}&${MESSAGE}${SUCCESS_MESSAGES_KEYS.CARD_DELETED}`
           );
-        }
-        navigate(
-          `${ROUTES.CARDS}?${SUCCESS}&${MESSAGE}${SUCCESS_MESSAGES_KEYS.CARD_DELETED}`
-        );
-      })
-      .catch((error) => {
-        if (error.status === UNAUTHORIZED) {
-          setToken(null);
-        }
-      });
+        })
+        .catch((error) => {
+          if (error.status === UNAUTHORIZED) {
+            logout();
+          }
+        });
+    }
   };
 
   return (

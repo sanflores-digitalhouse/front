@@ -36,14 +36,13 @@ const SendMoney = () => {
   const step = searchParams.get('step');
   const [userActivities, setUserActivities] = useState<Transaction[]>([]);
   const [userAccounts, setUserAccounts] = useState<IRecord[]>([]);
-  const { setIsAuthenticated } = useAuth();
+  const { logout } = useAuth();
   const { user } = useUserInfo();
-  const { id } = user;
-  const [token, setToken] = useLocalStorage('token');
+  const [token] = useLocalStorage('token');
 
   useEffect(() => {
-    if (token) {
-      getUserActivities(id, token)
+    if (user && user.id) {
+      getUserActivities(user.id, token)
         .then((activities) => {
           if ((activities as Transaction[]).length > 0) {
             const parsedActivities = activities.filter(
@@ -55,13 +54,11 @@ const SendMoney = () => {
         })
         .catch((error) => {
           if (error.status === UNAUTHORIZED) {
-            setToken(null);
+            logout();
           }
         });
-    } else {
-      setIsAuthenticated(false);
     }
-  }, [id, setIsAuthenticated, setToken, token]);
+  }, [logout, token, user]);
 
   useEffect(() => {
     if (userActivities.length > 0) {
@@ -152,7 +149,6 @@ function SendMoneyForm() {
   const [userOriginAccount, setUserOriginAccount] = useState<UserAccount>();
   const navigate = useNavigate();
   const { user } = useUserInfo();
-  const { id } = user;
 
   useEffect(() => {
     getAccounts().then((accounts) => {
@@ -173,15 +169,17 @@ function SendMoneyForm() {
   }, [userDestinationAccount]);
 
   useEffect(() => {
-    if (id) {
+    if (user && user.id) {
       getAccounts().then((accounts) => {
-        const userAccount = accounts.find((account) => account.userId === id);
+        const userAccount = accounts.find(
+          (account) => account.userId === user.id
+        );
         if (userAccount) {
           setUserOriginAccount(userAccount);
         }
       });
     }
-  }, [id]);
+  }, [user]);
 
   const onNavigate = useCallback(
     (step: number) => {
@@ -209,12 +207,13 @@ function SendMoneyForm() {
     const { locales, currency } = Argentina;
 
     const handleClick = (
-      userId: string,
       origin: string,
       destination: string,
       amount: number
     ) => {
-      createTransferActivity(userId, origin, destination, amount);
+      if (user && user.id) {
+        createTransferActivity(user.id, origin, destination, amount);
+      }
     };
 
     switch (step) {
@@ -292,7 +291,6 @@ function SendMoneyForm() {
                     variant="outlined"
                     onClick={() =>
                       handleClick(
-                        id,
                         userOriginAccount?.cvu || '',
                         userDestinationAccount?.cvu || '',
                         parseFloat(amount)

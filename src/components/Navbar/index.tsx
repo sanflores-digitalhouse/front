@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import AppBar from '@mui/material/AppBar';
 import Toolbar from '@mui/material/Toolbar';
 import Button from '@mui/material/Button';
@@ -14,6 +14,7 @@ import { useAuth } from '../../hooks/useAuth';
 import { Skeleton, SkeletonVariant } from '../Skeleton';
 
 const stringAvatar = (name: string) => {
+  if (name.length === 0) return { children: name };
   return {
     children: `${name.split(' ')[0][0]}${name.split(' ')[1][0]}`,
   };
@@ -21,8 +22,7 @@ const stringAvatar = (name: string) => {
 
 export const Navbar = ({ isAuthenticated = false }) => {
   const { user, loading } = useUserInfo();
-  const { firstName, lastName } = user;
-  const fullName = `${firstName} ${lastName}`;
+  const [fullName, setFullName] = React.useState('');
   const location = useLocation();
   const isLogin = location.pathname === ROUTES.LOGIN && !isAuthenticated;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -37,6 +37,12 @@ export const Navbar = ({ isAuthenticated = false }) => {
   };
 
   const open = Boolean(anchorEl);
+
+  useEffect(() => {
+    if (user) {
+      setFullName(`${user.firstName} ${user.lastName}`);
+    }
+  }, [user]);
 
   return (
     <div className="tw-w-full tw-fixed tw-z-50 print:tw-hidden">

@@ -36,7 +36,7 @@ import { useAuth, useLocalStorage, useUserInfo } from '../../hooks';
 export interface IProfile {
   alias?: string;
 }
-
+const duration = 2000;
 const Profile = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
@@ -45,7 +45,6 @@ const Profile = () => {
   const message = (searchParams.get('message') as SUCCESS_MESSAGES_KEYS) || '';
   const [isError, setIsError] = useState<boolean>(!!searchParams.get('error'));
   const { user } = useUserInfo();
-  const { id } = user;
   const [token, setToken] = useLocalStorage('token');
 
   const [userAccount, setUserAccount] = useState({
@@ -66,11 +65,14 @@ const Profile = () => {
   const { setIsAuthenticated } = useAuth();
 
   useEffect(() => {
-    if (token) {
-      getAccount(id, token)
+    if (user && user.id) {
+      getAccount(user.id, token)
         .then((account) => {
           if (account && account.alias && account.cvu) {
             setUserAccount(account);
+          }
+          if (isSuccess) {
+            setTimeout(() => navigate(ROUTES.PROFILE), duration);
           }
         })
         .catch((error) => {
@@ -81,29 +83,30 @@ const Profile = () => {
     } else {
       setIsAuthenticated(false);
     }
-  }, [id, setIsAuthenticated, setToken, token]);
+  }, [isSuccess, navigate, setIsAuthenticated, setToken, token, user]);
 
   const onChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => setUserAccount({ ...userAccount, alias: event.target.value });
 
   const onSubmit: SubmitHandler<IProfile> = (data) => {
-    updateAccount(id, { alias: data.alias }, token)
-      .then((response) => {
-        if (response.status) {
-          setIsError(true);
-        } else {
-          navigate(
-            `${ROUTES.PROFILE}?${SUCCESS}&${MESSAGE}${SUCCESS_MESSAGES_KEYS.ALIAS_EDITED}`
-          );
-        }
-      })
-      .catch((error) => {
-        console.log('error', error);
-        if ((error as Response).status === UNAUTHORIZED) {
-          setToken(null);
-        }
-      });
+    if (user && user.id) {
+      updateAccount(user.id, { alias: data.alias }, token)
+        .then((response) => {
+          if (response.status) {
+            setIsError(true);
+          } else {
+            navigate(
+              `${ROUTES.PROFILE}?${SUCCESS}&${MESSAGE}${SUCCESS_MESSAGES_KEYS.ALIAS_EDITED}`
+            );
+          }
+        })
+        .catch((error) => {
+          if ((error as Response).status === UNAUTHORIZED) {
+            setToken(null);
+          }
+        });
+    }
   };
 
   return (
@@ -207,7 +210,7 @@ const Profile = () => {
       )}
       {isSuccess && (
         <SnackBar
-          duration={3000}
+          duration={duration}
           message={SUCCESS_MESSAGES[message] ? SUCCESS_MESSAGES[message] : ''}
           type="success"
         />

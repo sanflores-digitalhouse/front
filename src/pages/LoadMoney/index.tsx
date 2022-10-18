@@ -11,20 +11,26 @@ import {
   Errors,
   SnackBar,
 } from '../../components';
-import { ROUTES, SELECT } from '../../constants';
+import { ROUTES, SELECT, SUCCESS } from '../../constants';
 import {
   handleChange,
   moneyValidationConfig,
   isValueEmpty,
   valuesHaveErrors,
+  createDepositActivity,
 } from '../../utils';
+import { useLocalStorage, useUserInfo } from '../../hooks';
+
+const duration = 3000;
 
 const LoadMoney = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const cardType = !!searchParams.get('type');
   const card = !!searchParams.get('card');
-  const isError = !!searchParams.get('error');
+  const { user } = useUserInfo();
+  const [token] = useLocalStorage('token');
+  const [isError, setIsError] = useState<boolean>(false);
+  const [isSubmiting, setIsSubmiting] = useState<boolean>(false);
 
   const {
     register,
@@ -35,10 +41,10 @@ const LoadMoney = () => {
   });
 
   const [formState, setFormState] = useState<{
-    money: string | undefined;
+    money: string;
     focused: undefined | string;
   }>({
-    money: undefined,
+    money: '',
     focused: undefined,
   });
 
@@ -54,18 +60,24 @@ const LoadMoney = () => {
   ) => handleChange(event, setFormState);
 
   const onSubmit: SubmitHandler<any> = (data) => {
-    const fakeCondition = false;
-
-    if (fakeCondition) {
-      navigate('/?success=true');
-      return data;
+    if (user && user.id) {
+      setIsSubmiting(true);
+      createDepositActivity(user.id, parseFloat(data.money), token)
+        .then(() => {
+          setIsSubmiting(false);
+          navigate(`${ROUTES.HOME}?${SUCCESS}`);
+        })
+        .catch(() => {
+          setIsError(true);
+          setTimeout(() => {
+            setIsError(false);
+            setIsSubmiting(false);
+          }, duration);
+        });
     }
-
-    navigate(`${ROUTES.LOAD_MONEY}?type=${cardType}&card=${card}&error=true`);
-    return data;
   };
 
-  if (cardType && card) {
+  if (card) {
     return (
       <div className="tw-w-full">
         <CardCustom
@@ -82,7 +94,7 @@ const LoadMoney = () => {
                   <FormControl variant="outlined">
                     <OutlinedInput
                       id="outlined-adornment-money"
-                      type="text"
+                      type="number"
                       value={formState.money}
                       {...register('money', moneyValidationConfig)}
                       onChange={onChange}
@@ -99,12 +111,12 @@ const LoadMoney = () => {
                     <Button
                       type="submit"
                       className={`tw-h-12 tw-w-64 ${
-                        hasErrors || !isDirty || isEmpty
+                        hasErrors || !isDirty || isEmpty || isSubmiting
                           ? 'tw-text-neutral-gray-300 tw-border-neutral-gray-300 tw-cursor-not-allowed'
                           : ''
                       }`}
                       variant="outlined"
-                      disabled={hasErrors || !isDirty || isEmpty}
+                      disabled={hasErrors || !isDirty || isEmpty || isSubmiting}
                     >
                       Confirmar
                     </Button>
@@ -114,6 +126,13 @@ const LoadMoney = () => {
             </>
           }
         />
+        {isError && (
+          <SnackBar
+            duration={duration}
+            message="Ha ocurrido un error, por favor intente nuevamente"
+            type="error"
+          />
+        )}
       </div>
     );
   }

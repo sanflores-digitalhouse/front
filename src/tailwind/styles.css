@@ -860,10 +860,6 @@ label {
   background-color: var(--primary);
 }
 
-#root .\!tw-bg-background {
-  background-color: var(--background) !important;
-}
-
 #root .tw-bg-success {
   background-color: var(--success);
 }

@@ -4,18 +4,19 @@ import { User } from '../../types';
 import { useAuth, useLocalStorage } from '../../hooks';
 import { getUser, parseJwt } from '../../utils';
 import { userActionTypes } from './types';
+import { UNAUTHORIZED } from '../../constants/status';
 export interface UserInfoState {
-  user: User;
+  user: User | null;
   loading: boolean;
 }
 
-const initialState = {
-  user: {} as User,
+const initialState : UserInfoState = {
+  user: null,
   loading: true,
 };
 
 export const userInfoContext = createContext<{
-  user: any;
+  user: User | null;
   loading: boolean;
   dispatch: React.Dispatch<any>;
 }>({
@@ -33,7 +34,6 @@ const UserInfoProvider = ({ children }: { children: React.ReactNode }) => {
     if (isAuthenticated) {
       const token = window.localStorage.getItem('token');
       if (token) {
-        setIsAuthenticated(true);
         const info = parseJwt(token);
         const userId = info && info.sub;
         userId &&
@@ -46,7 +46,7 @@ const UserInfoProvider = ({ children }: { children: React.ReactNode }) => {
               });
             })
             .catch((error) => {
-              if (error.status === 401) {
+              if (error.status === UNAUTHORIZED) {
                 setToken(null);
                 setIsAuthenticated(false);
               }

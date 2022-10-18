@@ -17,10 +17,10 @@ const myRequest = (endpoint: string, method: string, token?: string) =>
 
 const baseUrl = 'http://localhost:3500';
 
-const rejectPromise = (response: Response): Promise<Response> =>
+const rejectPromise = (response?: Response): Promise<Response> =>
   Promise.reject({
-    status: response.status || '00',
-    statusText: response.statusText || 'Ocurrió un error',
+    status: (response && response.status) || '00',
+    statusText: (response && response.statusText) || 'Ocurrió un error',
     err: true,
   });
 
@@ -304,6 +304,72 @@ export const createUserCard = (
     .catch((err) => {
       console.log(err);
       return rejectPromise(err);
+    });
+};
+
+// TODO: edit when backend is ready
+export const createDepositActivity = (
+  userId: string,
+  amount: number,
+  token: string
+) => {
+  const maxAmount = 30000;
+  if (amount > maxAmount) return rejectPromise();
+
+  const activity = {
+    amount,
+    type: 'Deposit',
+    description: 'Depósito con tarjeta',
+    dated: new Date(), // date must be genarated in backend
+  };
+
+  return fetch(
+    myRequest(`${baseUrl}/users/${userId}/activities`, 'POST', token),
+    {
+      body: JSON.stringify(activity),
+    }
+  )
+    .then((response) =>
+      response.ok ? response.json() : rejectPromise(response)
+    )
+    .then((data) => {
+      depositMoney(data.amount, userId, token);
+    })
+    .catch((err) => {
+      console.log(err);
+      return rejectPromise(err);
+    });
+};
+
+// TODO: remove when backend is ready
+export const depositMoney = (amount: number, userId: string, token: string) => {
+  return getAccount(userId, token)
+    .then((account) => {
+      const newBalance = account.balance + amount;
+      const accountId = account.id;
+      return {
+        newBalance,
+        accountId,
+      };
+    })
+    .then(({ newBalance, accountId }) => {
+      fetch(
+        myRequest(
+          `${baseUrl}/users/${userId}/accounts/${accountId}`,
+          'PATCH',
+          token
+        ),
+        {
+          body: JSON.stringify({ balance: newBalance }),
+        }
+      )
+        .then((response) =>
+          response.ok ? response.json() : rejectPromise(response)
+        )
+        .catch((err) => {
+          console.log(err);
+          return rejectPromise(err);
+        });
     });
 };
 

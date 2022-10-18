@@ -12,7 +12,12 @@ import { usePagination } from '../../hooks/usePagination';
 import { ROUTES, UNAUTHORIZED } from '../../constants';
 import PaginationItem from '@mui/material/PaginationItem';
 import { Link } from 'react-router-dom';
-import { getUserActivities, parseRecordContent, pageQuery } from '../../utils';
+import {
+  getUserActivities,
+  parseRecordContent,
+  pageQuery,
+  sortByDate,
+} from '../../utils';
 import { Transaction } from '../../types';
 import { useUserInfo, useLocalStorage, useAuth } from '../../hooks';
 
@@ -20,21 +25,21 @@ const recordsPerPage = 10;
 const Activity = () => {
   const [userActivities, setUserActivities] = useState<IRecord[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [token, setToken] = useLocalStorage('token');
+  const [token] = useLocalStorage('token');
 
   const { pageNumber, numberOfPages, isRecordsGreeterThanOnePage } =
     usePagination(userActivities as IRecord[], recordsPerPage);
-  const { setIsAuthenticated } = useAuth();
+  const { logout } = useAuth();
 
   const { user } = useUserInfo();
-  const { id } = user;
 
   useEffect(() => {
-    if (token && user) {
-      getUserActivities(id, token)
+    if (user && user.id) {
+      getUserActivities(user.id, token)
         .then((activities) => {
           if ((activities as Transaction[]).length > 0) {
-            const parsedRecords = activities.map(
+            const orderedActivities = sortByDate(activities);
+            const parsedRecords = orderedActivities.map(
               (parsedActivity: Transaction) =>
                 parseRecordContent(parsedActivity, RecordVariant.TRANSACTION)
             );
@@ -44,13 +49,11 @@ const Activity = () => {
         .finally(() => setIsLoading(false))
         .catch((error) => {
           if (error.status === UNAUTHORIZED) {
-            setToken(null);
+            logout();
           }
         });
-    } else {
-      setIsAuthenticated(false);
     }
-  }, [id, setIsAuthenticated, setToken, token, user]);
+  }, [logout, token, user]);
 
   return (
     <div className="tw-w-full">
@@ -65,6 +68,7 @@ const Activity = () => {
               <Records
                 records={userActivities}
                 initialRecord={pageNumber * recordsPerPage - recordsPerPage}
+                maxRecords={recordsPerPage * pageNumber}
               />
             )}
             {userActivities.length === 0 && !isLoading && (
