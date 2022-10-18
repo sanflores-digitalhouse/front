@@ -1,18 +1,30 @@
-import React, { createContext, useState, useEffect, SetStateAction } from 'react';
+/* eslint-disable @typescript-eslint/no-empty-function */
+import React, {
+  createContext,
+  useState,
+  useEffect,
+  SetStateAction,
+} from 'react';
 import { useLocalStorage } from '../../hooks';
 
 export const AuthContext = createContext<{
   isAuthenticated: boolean;
   setIsAuthenticated: React.Dispatch<SetStateAction<boolean>>;
+  logout: () => void;
 }>({
   isAuthenticated: false,
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
   setIsAuthenticated: () => {},
+  logout: () => {},
 });
 
 const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [token] = useLocalStorage('token');
+  const [token, setToken] = useLocalStorage('token');
+
+  const logout = () => {
+    setIsAuthenticated(false);
+    setToken(null);
+  };
 
   useEffect(() => {
     if (token) {
@@ -23,7 +35,7 @@ const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, [token]);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated }}>
+    <AuthContext.Provider value={{ isAuthenticated, setIsAuthenticated, logout }}>
       {children}
     </AuthContext.Provider>
   );

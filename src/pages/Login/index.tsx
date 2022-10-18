@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
-import React, { useState, useMemo, SetStateAction } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
@@ -19,8 +18,8 @@ import {
 } from '../../utils/';
 import { ErrorMessage, Errors } from '../../components/ErrorMessage';
 import { useAuth, useLocalStorage } from '../../hooks';
-import { useNavigate } from 'react-router-dom';
-import { ROUTES } from '../../constants';
+import { SnackBar } from '../../components';
+import { BAD_REQUEST, ERROR_MESSAGES } from '../../constants';
 
 interface LoginState {
   email: string;
@@ -32,6 +31,8 @@ export interface LoginInputs {
   email: string;
   password: string;
 }
+
+const messageDuration = 2000;
 
 const Login = () => {
   const {
@@ -50,6 +51,9 @@ const Login = () => {
     showPassword: false,
   });
   const { setIsAuthenticated } = useAuth();
+  const [isError, setIsError] = useState<boolean>(false);
+  const [isSubmiting, setIsSubmiting] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>('');
 
   const isEmpty = isValueEmpty(values);
   const hasErrors = useMemo(() => valuesHaveErrors(errors), [errors]);
@@ -73,14 +77,23 @@ const Login = () => {
   ) => handleChange<LoginState>(event, setValues, maxLength);
 
   const onSubmit: SubmitHandler<LoginInputs> = ({ email, password }) => {
+    setIsSubmiting(true);
     login(email, password)
       .then((response) => {
         setToken(response.accessToken);
-        setTimeout(() => setIsAuthenticated(true));
+        setTimeout(() => {
+          setIsSubmiting(false);
+          setIsAuthenticated(true);
+        });
       })
       .catch((error) => {
         // eslint-disable-next-line no-console
         console.log(error);
+        setIsSubmiting(false);
+        setMessage(ERROR_MESSAGES.NOT_FOUND_USER);
+        if (error.status === BAD_REQUEST) {
+          setIsError(true);
+        }
       });
   };
 
@@ -147,17 +160,24 @@ const Login = () => {
         </div>
         <Button
           className={`tw-h-14 ${
-            hasErrors || !isDirty || isEmpty
+            hasErrors || !isDirty || isEmpty || isSubmiting
               ? 'tw-text-neutral-gray-300 tw-border-neutral-gray-300 tw-cursor-not-allowed'
               : ''
           }`}
           type="submit"
           variant="outlined"
-          disabled={hasErrors || !isDirty || isEmpty}
+          disabled={hasErrors || !isDirty || isEmpty || isSubmiting}
         >
           Ingresar
         </Button>
       </form>
+      {message.length > 0 && (
+        <SnackBar
+          duration={messageDuration}
+          message={message}
+          type={isError ? 'error' : 'primary'}
+        />
+      )}
     </div>
   );
 };

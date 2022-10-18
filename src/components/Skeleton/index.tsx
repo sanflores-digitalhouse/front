@@ -3,6 +3,7 @@ import { default as CustomSkeleton } from '@mui/material/Skeleton';
 
 export enum SkeletonVariant {
   RECORD_LIST = 'record-list',
+  SQUARE = 'square',
 }
 
 export interface SkeletonProps {
@@ -28,6 +29,11 @@ export const Skeleton = ({
               <CustomSkeleton variant="rectangular" height={48} width="100%" />
             </div>
           ))}
+        </div>
+      )}
+      {variant === SkeletonVariant.SQUARE && (
+        <div className={`tw-w-full ${className}`}>
+          <CustomSkeleton variant="rectangular" height={48} width={128} />
         </div>
       )}
     </>

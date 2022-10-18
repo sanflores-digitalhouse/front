@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import Button from '@mui/material/Button';
 import FormControl from '@mui/material/FormControl';
@@ -21,7 +21,12 @@ import {
 } from '../../utils/';
 import { ErrorMessage, Errors } from '../../components/ErrorMessage';
 import { SnackBar } from '../../components';
-import { ERROR_MESSAGES } from '../../constants/';
+import {
+  ERROR_MESSAGES,
+  SUCCESS_MESSAGES_KEYS,
+  SUCCESS_MESSAGES,
+  BAD_REQUEST,
+} from '../../constants/';
 import { useAuth, useLocalStorage } from '../../hooks';
 
 interface RegisterState {
@@ -44,6 +49,8 @@ interface RegisterInputs {
   password: string;
   passwordRepeated: string;
 }
+
+const messageDuration = 2000;
 
 const Register = () => {
   const {
@@ -69,7 +76,10 @@ const Register = () => {
     passwordRepeated: '',
     showPassword: false,
   });
-  const [isSuccess, setIsSuccess] = React.useState<boolean>(false);
+  const [isSuccess, setIsSuccess] = useState<boolean>(false);
+  const [isError, setIsError] = useState<boolean>(false);
+  const [isSubmiting, setIsSubmiting] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>('');
 
   const isEmpty = isValueEmpty(values);
   const hasErrors = useMemo(() => valuesHaveErrors(errors), [errors]);
@@ -100,6 +110,7 @@ const Register = () => {
     dni,
     email,
   }) => {
+    setIsSubmiting(true);
     createAnUser({
       firstName: name,
       lastName,
@@ -111,10 +122,20 @@ const Register = () => {
       .then((response) => {
         setIsSuccess(true);
         setToken(response.accessToken);
-        setTimeout(() => setIsAuthenticated(true), 3000);
+        setMessage(SUCCESS_MESSAGES[SUCCESS_MESSAGES_KEYS.USER_REGISTER]);
+        setTimeout(() => {
+          setIsSubmiting(false);
+          setIsAuthenticated(true);
+        }, messageDuration);
       })
       .catch((error) => {
         console.log(error);
+        setIsError(true);
+        setMessage(ERROR_MESSAGES.INVALID_USER);
+        setIsSubmiting(false);
+        if (error.status === BAD_REQUEST) {
+          setIsError(true);
+        }
       });
   };
 
@@ -281,21 +302,25 @@ const Register = () => {
           <div className="tw-w-full tw-flex tw-justify-center">
             <Button
               className={`tw-h-14 tw-w-80 ${
-                hasErrors || !isDirty || isEmpty
+                hasErrors || !isDirty || isEmpty || isSubmiting
                   ? 'tw-text-neutral-gray-300 tw-border-neutral-gray-300 tw-cursor-not-allowed'
                   : ''
               }`}
               type="submit"
               variant="outlined"
-              disabled={hasErrors || !isDirty || isEmpty}
+              disabled={hasErrors || !isDirty || isEmpty || isSubmiting}
             >
               Ingresar
             </Button>
           </div>
         </form>
       </div>
-      {isSuccess && (
-        <SnackBar duration={3000} message="Usuario Creado" type="success" />
+      {message.length > 0 && (
+        <SnackBar
+          duration={messageDuration}
+          message={message}
+          type={isSuccess ? 'success' : isError ? 'error' : 'primary'}
+        />
       )}
     </div>
   );
