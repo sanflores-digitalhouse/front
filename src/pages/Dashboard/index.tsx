@@ -17,6 +17,7 @@ import {
   getUserActivities,
   parseRecordContent,
   getAccount,
+  sortByDate,
 } from '../../utils/';
 import { currencies, UNAUTHORIZED } from '../../constants/';
 import { useUserInfo } from '../../hooks/useUserInfo';
@@ -43,10 +44,11 @@ const Dashboard = () => {
 
   useEffect(() => {
     if (token && user) {
-      getUserActivities(id, token, numberOfActivities)
+      getUserActivities(id, token)
         .then((activities) => {
           if ((activities as Transaction[]).length > 0) {
-            const parsedRecords = (activities as Transaction[]).map(
+            const orderedActivities = sortByDate(activities);
+            const parsedRecords = orderedActivities.map(
               (activity: Transaction) =>
                 parseRecordContent(activity, RecordVariant.TRANSACTION)
             );
@@ -70,7 +72,7 @@ const Dashboard = () => {
         .then((account) => {
           if ((account as UserAccount).balance) {
             setUserAccount({
-              balance: parseFloat((account as UserAccount).balance) || 0,
+              balance: account.balance || 0,
             });
           }
         })

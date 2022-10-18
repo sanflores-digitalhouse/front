@@ -12,7 +12,12 @@ import { usePagination } from '../../hooks/usePagination';
 import { ROUTES, UNAUTHORIZED } from '../../constants';
 import PaginationItem from '@mui/material/PaginationItem';
 import { Link } from 'react-router-dom';
-import { getUserActivities, parseRecordContent, pageQuery } from '../../utils';
+import {
+  getUserActivities,
+  parseRecordContent,
+  pageQuery,
+  sortByDate,
+} from '../../utils';
 import { Transaction } from '../../types';
 import { useUserInfo, useLocalStorage, useAuth } from '../../hooks';
 
@@ -34,7 +39,8 @@ const Activity = () => {
       getUserActivities(id, token)
         .then((activities) => {
           if ((activities as Transaction[]).length > 0) {
-            const parsedRecords = activities.map(
+            const orderedActivities = sortByDate(activities);
+            const parsedRecords = orderedActivities.map(
               (parsedActivity: Transaction) =>
                 parseRecordContent(parsedActivity, RecordVariant.TRANSACTION)
             );
@@ -65,6 +71,7 @@ const Activity = () => {
               <Records
                 records={userActivities}
                 initialRecord={pageNumber * recordsPerPage - recordsPerPage}
+                maxRecords={recordsPerPage * pageNumber}
               />
             )}
             {userActivities.length === 0 && !isLoading && (
