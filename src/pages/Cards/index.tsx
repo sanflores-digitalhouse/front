@@ -54,6 +54,7 @@ import { Card } from '../../types';
 import { useUserInfo, useLocalStorage, useAuth } from '../../hooks';
 
 const recordsPerPage = 10;
+const duration = 2000;
 const Cards = () => {
   const [userCards, setUserCards] = useState<IRecord[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -64,16 +65,15 @@ const Cards = () => {
   const isAdding = !!searchParams.get('add');
   const isSuccess = !!searchParams.get('success');
   const message = (searchParams.get('message') as SUCCESS_MESSAGES_KEYS) || '';
-  const [token, setToken] = useLocalStorage('token');
-  const { setIsAuthenticated } = useAuth();
-
+  const [token] = useLocalStorage('token');
+  const { logout } = useAuth();
+  const navigate = useNavigate();
   const { user } = useUserInfo();
-  const { id } = user;
 
   useEffect(() => {
     if (!isAdding) {
-      if (token) {
-        getUserCards(id, token)
+      if (user && user.id) {
+        getUserCards(user.id, token)
           .then((cards) => {
             if ((cards as Card[]).length > 0) {
               const parsedRecords = (cards as Card[]).map((parsedCard: Card) =>
@@ -81,18 +81,19 @@ const Cards = () => {
               );
               setUserCards(parsedRecords);
             }
+            if (isSuccess) {
+              setTimeout(() => navigate(ROUTES.CARDS), duration);
+            }
           })
           .finally(() => setIsLoading(false))
           .catch((error) => {
             if (error.status === UNAUTHORIZED) {
-              setToken(null);
+              logout();
             }
           });
-      } else {
-        setIsAuthenticated(false);
       }
     }
-  }, [id, isAdding, setIsAuthenticated, setToken, token]);
+  }, [isAdding, isSuccess, logout, navigate, token, user]);
 
   return (
     <div className="tw-w-full">
@@ -201,8 +202,8 @@ function CardForm() {
   const hasErrors = useMemo(() => valuesHaveErrors(errors), [errors]);
   const navigate = useNavigate();
   const { user } = useUserInfo();
-  const { id } = user;
-  const [token, setToken] = useLocalStorage('token');
+  const [token] = useLocalStorage('token');
+  const { logout } = useAuth();
 
   const onChange = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
@@ -216,29 +217,30 @@ function CardForm() {
   const onSubmit: SubmitHandler<ReactCreditCardProps> = (data) => {
     const { expiry, number, name, cvc } = data;
     transformExpiration(expiry as number);
-
-    createUserCard(
-      id,
-      {
-        expiration: expiry,
-        number,
-        name,
-        cvc,
-      },
-      token
-    )
-      .then(() => {
-        navigate(
-          `${ROUTES.CARDS}?${SUCCESS}&${MESSAGE}${SUCCESS_MESSAGES_KEYS.CARD_ADDED}`
-        );
-      })
-      .catch((error) => {
-        setIsError(true);
-        setErrorMessage(error.statusText as string);
-        if (error.status === UNAUTHORIZED) {
-          setTimeout(() => setToken(null), 3000);
-        }
-      });
+    if (user && user.id) {
+      createUserCard(
+        user.id,
+        {
+          expiration: expiry,
+          number,
+          name,
+          cvc,
+        },
+        token
+      )
+        .then(() => {
+          navigate(
+            `${ROUTES.CARDS}?${SUCCESS}&${MESSAGE}${SUCCESS_MESSAGES_KEYS.CARD_ADDED}`
+          );
+        })
+        .catch((error) => {
+          setIsError(true);
+          setErrorMessage(error.statusText as string);
+          if (error.status === UNAUTHORIZED) {
+            setTimeout(() => logout(), duration);
+          }
+        });
+    }
   };
 
   return (
@@ -361,7 +363,7 @@ function CardForm() {
         }
       />
       {isError && (
-        <SnackBar duration={3000} message={errorMessage} type="error" />
+        <SnackBar duration={duration} message={errorMessage} type="error" />
       )}
     </>
   );

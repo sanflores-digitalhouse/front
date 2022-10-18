@@ -29,14 +29,13 @@ const ActivityDetails = () => {
   const navigate = useNavigate();
   const { Argentina } = currencies;
   const { locales, currency } = Argentina;
-  const [token, setToken] = useLocalStorage('token');
-  const { setIsAuthenticated } = useAuth();
+  const [token] = useLocalStorage('token');
+  const { logout } = useAuth();
   const { user } = useUserInfo();
-  const { id } = user;
 
   useEffect(() => {
-    if (token) {
-      getUserActivity(id, activityId, token)
+    if (user && user.id) {
+      getUserActivity(user.id, activityId, token)
         .then((activity) => {
           if (activity && activity.amount && activity.type) {
             setUserActivity(activity);
@@ -47,13 +46,11 @@ const ActivityDetails = () => {
         })
         .catch((error) => {
           if (error.status === UNAUTHORIZED) {
-            setToken(null);
+            logout();
           }
         });
-    } else {
-      setIsAuthenticated(false);
     }
-  }, [activityId, id, setIsAuthenticated, setToken, token]);
+  }, [activityId, logout, token, user]);
 
   return (
     <div>

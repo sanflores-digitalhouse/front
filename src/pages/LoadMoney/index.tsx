@@ -28,7 +28,6 @@ const LoadMoney = () => {
   const [searchParams] = useSearchParams();
   const card = !!searchParams.get('card');
   const { user } = useUserInfo();
-  const { id } = user;
   const [token] = useLocalStorage('token');
   const [isError, setIsError] = useState<boolean>(false);
   const [isSubmiting, setIsSubmiting] = useState<boolean>(false);
@@ -42,10 +41,10 @@ const LoadMoney = () => {
   });
 
   const [formState, setFormState] = useState<{
-    money: string | undefined;
+    money: string;
     focused: undefined | string;
   }>({
-    money: undefined,
+    money: '',
     focused: undefined,
   });
 
@@ -61,19 +60,21 @@ const LoadMoney = () => {
   ) => handleChange(event, setFormState);
 
   const onSubmit: SubmitHandler<any> = (data) => {
-    setIsSubmiting(true);
-    createDepositActivity(id, parseFloat(data.money), token)
-      .then(() => {
-        setIsSubmiting(false);
-        navigate(`${ROUTES.HOME}?${SUCCESS}`);
-      })
-      .catch(() => {
-        setIsError(true);
-        setTimeout(() => {
-          setIsError(false);
+    if (user && user.id) {
+      setIsSubmiting(true);
+      createDepositActivity(user.id, parseFloat(data.money), token)
+        .then(() => {
           setIsSubmiting(false);
-        }, duration);
-      });
+          navigate(`${ROUTES.HOME}?${SUCCESS}`);
+        })
+        .catch(() => {
+          setIsError(true);
+          setTimeout(() => {
+            setIsError(false);
+            setIsSubmiting(false);
+          }, duration);
+        });
+    }
   };
 
   if (card) {
@@ -93,7 +94,7 @@ const LoadMoney = () => {
                   <FormControl variant="outlined">
                     <OutlinedInput
                       id="outlined-adornment-money"
-                      type="text"
+                      type="number"
                       value={formState.money}
                       {...register('money', moneyValidationConfig)}
                       onChange={onChange}

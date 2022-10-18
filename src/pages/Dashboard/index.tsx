@@ -25,14 +25,14 @@ import { Transaction, UserAccount } from '../../types/';
 import { useAuth, useLocalStorage } from '../../hooks';
 
 const numberOfActivities = 5;
+const duration = 2000;
 
 const Dashboard = () => {
   const { Argentina } = currencies;
   const { locales, currency } = Argentina;
   const navigate = useNavigate();
   const { user } = useUserInfo();
-  const [token, setToken] = useLocalStorage('token');
-  const { id } = user;
+  const [token] = useLocalStorage('token');
   const [searchParams] = useSearchParams();
   const isSuccess = !!searchParams.get('success');
   const [userActivities, setUserActivities] = useState<IRecord[]>([]);
@@ -40,11 +40,11 @@ const Dashboard = () => {
     balance: 0,
   });
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const { setIsAuthenticated } = useAuth();
+  const { logout } = useAuth();
 
   useEffect(() => {
-    if (token && user) {
-      getUserActivities(id, token)
+    if (user && user.id) {
+      getUserActivities(user.id, token)
         .then((activities) => {
           if ((activities as Transaction[]).length > 0) {
             const orderedActivities = sortByDate(activities);
@@ -58,31 +58,32 @@ const Dashboard = () => {
         .finally(() => setIsLoading(false))
         .catch((error) => {
           if (error.status === UNAUTHORIZED) {
-            setToken(null);
+            logout();
           }
         });
-    } else {
-      setIsAuthenticated(false);
     }
-  }, [id, setIsAuthenticated, setToken, token, user]);
+  }, [logout, token, user]);
 
   useEffect(() => {
-    if (token && user && isSuccess) {
-      getAccount(id, token)
+    if ((user && user.id) || (user && user.id && isSuccess)) {
+      getAccount(user.id, token)
         .then((account) => {
           if ((account as UserAccount).balance) {
             setUserAccount({
               balance: account.balance || 0,
             });
           }
+          if (isSuccess) {
+            setTimeout(() => navigate(ROUTES.HOME), duration);
+          }
         })
         .catch((error) => {
           if (error.status === UNAUTHORIZED) {
-            setToken(null);
+            logout();
           }
         });
     }
-  }, [id, isSuccess, setToken, token, user]);
+  }, [isSuccess, logout, navigate, token, user]);
 
   return (
     <div className="tw-w-full">
@@ -166,7 +167,7 @@ const Dashboard = () => {
       />
       {isSuccess && (
         <SnackBar
-          duration={3000}
+          duration={duration}
           message="El dinero fue ingresado correctamente"
           type="success"
         />
