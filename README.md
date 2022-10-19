@@ -33,14 +33,14 @@ Temática: Billetera Digital (Digital Money House  )
 
 ### Instalación
 
-`npm install`
+`npm install`  ó  `yarn install`
 
 ### Correr Backend fake para ver datos mock
-`npm run fake-api` ó `yarn run fake-api`
+`npm run fake-api`  ó  `yarn run fake-api`
 
-### Correr Proyecto
+### Correr Proyecto Frontend
 
-`npm run start` ó `yarn run fake-api`
+`npm run start`  ó  `yarn run start`
 
 ### Debe tener un JWT válido para iniciar sesión
 
