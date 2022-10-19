@@ -6,8 +6,9 @@ import {
   FormSingle,
   IRecord,
   RecordVariant,
+  SnackBar,
 } from '../../components';
-import { currencies, ROUTES, STEP, UNAUTHORIZED } from '../../constants';
+import { currencies, ERROR, ROUTES, STEP, UNAUTHORIZED } from '../../constants';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import {
   handleChange,
@@ -134,6 +135,8 @@ const SendMoney = () => {
 
 export default SendMoney;
 
+const duration = 2000;
+
 function SendMoneyForm() {
   const [searchParams] = useSearchParams();
   const [destination, setDestination] = useState(
@@ -164,7 +167,7 @@ function SendMoneyForm() {
           setUserDestinationAccount(userAccount);
         } else {
           setDestination(null);
-          navigate(`${ROUTES.SEND_MONEY}?${STEP}1`);
+          navigate(`${ROUTES.SEND_MONEY}?${STEP}1&${ERROR}`);
         }
       });
     }
@@ -216,6 +219,7 @@ function SendMoneyForm() {
     const { amount } = formState;
     const { Argentina } = currencies;
     const { locales, currency } = Argentina;
+    const isError = !!searchParams.get('error');
 
     const handleClick = (
       origin: string,
@@ -237,23 +241,32 @@ function SendMoneyForm() {
     switch (step) {
       case '1':
         return (
-          <FormSingle
-            name="destination"
-            title="Agregá una nueva cuenta"
-            label="CVU ó Alias"
-            type="text"
-            actionLabel="Continuar"
-            formState={formState}
-            handleChange={(
-              event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-            ) => onChange(event)}
-            submit={() => {
-              if (formState.destination) {
-                setDestination(formState.destination);
-                onNavigate(2);
-              }
-            }}
-          />
+          <>
+            <FormSingle
+              name="destination"
+              title="Agregá una nueva cuenta"
+              label="CVU ó Alias"
+              type="text"
+              actionLabel="Continuar"
+              formState={formState}
+              handleChange={(
+                event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+              ) => onChange(event)}
+              submit={() => {
+                if (formState.destination) {
+                  setDestination(formState.destination);
+                  onNavigate(2);
+                }
+              }}
+            />
+            {isError && (
+              <SnackBar
+                duration={duration}
+                message="Cuenta no encontrada"
+                type="error"
+              />
+            )}
+          </>
         );
       case '2':
         return (

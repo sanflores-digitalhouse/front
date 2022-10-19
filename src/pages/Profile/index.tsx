@@ -217,8 +217,8 @@ const Profile = () => {
       )}
       {isError && (
         <SnackBar
-          duration={3000}
-          message="El alias seleccionado ya existe. Debe ingresar uno nuevo."
+          duration={duration}
+          message="El alias seleccionado ya existe. Debe ingresar uno nuevo"
           type="error"
         />
       )}
