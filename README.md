@@ -62,12 +62,3 @@ Temática: Billetera Digital (Digital Money House  )
 `La aplicacion le enviará a la sesión de inicio de sesión al momento de que expire el actual`
 
 [Volver arriba](#digital-money-house-frontend)
-
----
-
-## Autor
-
-- LinkedIn - [Mauricio Brito](https://www.linkedin.com/in/mauricio-brito-62b0a6140/)
-- Github - [@mauriciobrito7](https://github.com/mauriciobrito7)
-
-[Volver arriba](#digital-money-house-frontend)
