@@ -78,7 +78,7 @@ export const Record = ({
   );
 };
 
-function TransactionItem({ amount, destination, dated, id, type }: Transaction) {
+function TransactionItem({ amount, name, dated, id, type }: Transaction) {
   const calculatedType = calculateTransacionType(amount, type);
   return (
     <Link
@@ -94,7 +94,7 @@ function TransactionItem({ amount, destination, dated, id, type }: Transaction) 
         )}
         <p>
           {RECORD_MESSAGES[calculatedType] && RECORD_MESSAGES[calculatedType]}{' '}
-          {destination}
+          {name}
         </p>
       </div>
       <div className="tw-flex tw-text-left tw-flex-col tw-items-end">

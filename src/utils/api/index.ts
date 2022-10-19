@@ -137,6 +137,7 @@ export const createAnAccount = (data: any): Promise<Response> => {
     alias,
     cvu,
     balance: 0,
+    name: `${user.firstName} ${user.lastName}`,
   };
 
   return fetch(
@@ -381,7 +382,7 @@ export const createTransferActivity = (
   destination: string,
   amount: number,
   name?: string
-): Promise<Response> => {
+) => {
   return fetch(
     myRequest(`${baseUrl}/users/${userId}/activities`, 'POST', token),
     {
