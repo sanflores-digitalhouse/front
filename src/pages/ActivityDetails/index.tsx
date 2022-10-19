@@ -80,7 +80,7 @@ const ActivityDetails = () => {
                     RECORD_MESSAGES[activityType]}{' '}
                 </p>
                 <p className="tw-text-xl tw-font-bold">
-                  {userActivity && userActivity.name}
+                  {userActivity && userActivity.destination && userActivity.destination}
                 </p>
                 <i>
                   {userActivity && formatDateFromString(userActivity.dated)}

@@ -16,7 +16,7 @@ import {
   SUCCESS_MESSAGES_KEYS,
   RECORD_MESSAGES,
   STEP,
-  CVU,
+  DESTINATION,
   UNAUTHORIZED,
 } from '../../../constants/';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
@@ -78,7 +78,7 @@ export const Record = ({
   );
 };
 
-function TransactionItem({ amount, name, dated, id, type }: Transaction) {
+function TransactionItem({ amount, destination, dated, id, type }: Transaction) {
   const calculatedType = calculateTransacionType(amount, type);
   return (
     <Link
@@ -94,7 +94,7 @@ function TransactionItem({ amount, name, dated, id, type }: Transaction) {
         )}
         <p>
           {RECORD_MESSAGES[calculatedType] && RECORD_MESSAGES[calculatedType]}{' '}
-          {name}
+          {destination}
         </p>
       </div>
       <div className="tw-flex tw-text-left tw-flex-col tw-items-end">
@@ -169,11 +169,12 @@ function CardItem({
                 `${ROUTES.LOAD_MONEY}?type=${cardType}&card=${lastFourDigits}`
               )
             }
+            className="tw-text-primary"
           >
             Seleccionar
           </button>
         ) : (
-          <button onClick={handleDelete}>Eliminar</button>
+          <button className="tw-text-error" onClick={handleDelete}>Eliminar</button>
         )}
       </div>
     </>
@@ -189,10 +190,10 @@ function AccountItem({ name, origin }: Account) {
         <Icon type="user" />
         <p>{name}</p>
       </div>
-      <div className="tw-flex tw-text-left tw-gap-x-4 tw-items-center">
+      <div className="tw-flex tw-text-primary tw-text-left tw-gap-x-4 tw-items-center">
         <button
           onClick={() =>
-            navigate(`${ROUTES.SEND_MONEY}?${STEP}2&${CVU}${origin}`)
+            navigate(`${ROUTES.SEND_MONEY}?${STEP}2&${DESTINATION}${origin}`)
           }
         >
           Seleccionar

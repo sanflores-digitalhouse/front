@@ -9,6 +9,7 @@ export interface Transaction {
   id: string;
   type: TransactionType;
   origin?: string;
+  destination?: string;
 }
 
 export interface Card {

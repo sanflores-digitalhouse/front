@@ -342,7 +342,7 @@ export const createDepositActivity = (
 };
 
 // TODO: remove when backend is ready
-export const depositMoney = (amount: number, userId: string, token: string) => {
+const depositMoney = (amount: number, userId: string, token: string) => {
   return getAccount(userId, token)
     .then((account) => {
       const newBalance = account.balance + amount;
@@ -373,25 +373,70 @@ export const depositMoney = (amount: number, userId: string, token: string) => {
     });
 };
 
+// TODO: edit when backend is ready
 export const createTransferActivity = (
   userId: string,
+  token: string,
   origin: string,
   destination: string,
-  amount: number
+  amount: number,
+  name?: string
 ): Promise<Response> => {
-  return fetch(myRequest(`${baseUrl}/users/${userId}/activities`, 'POST'), {
-    body: JSON.stringify({
-      type: 'Transfer',
-      amount: amount,
-      origin,
-      destination,
-    }),
-  })
+  return fetch(
+    myRequest(`${baseUrl}/users/${userId}/activities`, 'POST', token),
+    {
+      body: JSON.stringify({
+        type: 'Transfer',
+        amount: amount * -1,
+        origin,
+        destination,
+        name,
+        dated: new Date(), // date must be genarated in backend
+      }),
+    }
+  )
     .then((response) =>
       response.ok ? response.json() : rejectPromise(response)
     )
+    .then((response) => {
+      discountMoney(response.amount, userId, token);
+      return response;
+    })
     .catch((err) => {
       console.log(err);
       return rejectPromise(err);
+    });
+};
+
+// TODO: remove when backend is ready
+const discountMoney = (amount: number, userId: string, token: string) => {
+  return getAccount(userId, token)
+    .then((account) => {
+      // amount is negavite
+      const newBalance = account.balance + amount;
+      const accountId = account.id;
+      return {
+        newBalance,
+        accountId,
+      };
+    })
+    .then(({ newBalance, accountId }) => {
+      fetch(
+        myRequest(
+          `${baseUrl}/users/${userId}/accounts/${accountId}`,
+          'PATCH',
+          token
+        ),
+        {
+          body: JSON.stringify({ balance: newBalance }),
+        }
+      )
+        .then((response) =>
+          response.ok ? response.json() : rejectPromise(response)
+        )
+        .catch((err) => {
+          console.log(err);
+          return rejectPromise(err);
+        });
     });
 };

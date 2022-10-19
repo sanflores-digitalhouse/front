@@ -6,13 +6,13 @@ import {
   FormSingle,
   IRecord,
   RecordVariant,
+  SnackBar,
 } from '../../components';
-import { currencies, ROUTES, STEP, UNAUTHORIZED } from '../../constants';
+import { currencies, ERROR, ROUTES, STEP, UNAUTHORIZED } from '../../constants';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import {
   handleChange,
   moneyValidationConfig,
-  aliasValidationConfig,
   formatCurrency,
   getUserActivities,
   parseRecordContent,
@@ -41,7 +41,7 @@ const SendMoney = () => {
   const [token] = useLocalStorage('token');
 
   useEffect(() => {
-    if (user && user.id) {
+    if (user && user.id && !step) {
       getUserActivities(user.id, token)
         .then((activities) => {
           if ((activities as Transaction[]).length > 0) {
@@ -58,7 +58,7 @@ const SendMoney = () => {
           }
         });
     }
-  }, [logout, token, user]);
+  }, [logout, step, token, user]);
 
   useEffect(() => {
     if (userActivities.length > 0) {
@@ -135,12 +135,16 @@ const SendMoney = () => {
 
 export default SendMoney;
 
+const duration = 2000;
+
 function SendMoneyForm() {
   const [searchParams] = useSearchParams();
-  const cvu = searchParams.get('cvu');
+  const [destination, setDestination] = useState(
+    searchParams.get('destination')
+  );
   const step = searchParams.get('step');
   const [formState, setFormState] = useState({
-    alias: cvu || '',
+    destination: destination || '',
     amount: '',
   });
   const [userDestinationAccount, setUserDestinationAccount] =
@@ -149,15 +153,25 @@ function SendMoneyForm() {
   const [userOriginAccount, setUserOriginAccount] = useState<UserAccount>();
   const navigate = useNavigate();
   const { user } = useUserInfo();
+  const [token] = useLocalStorage('token');
 
   useEffect(() => {
-    getAccounts().then((accounts) => {
-      const userAccount = accounts.find((account) => account.cvu === cvu);
-      if (userAccount) {
-        setUserDestinationAccount(userAccount);
-      }
-    });
-  }, [cvu]);
+    if (destination) {
+      // TODO: implement a service to get user account by alias or cvu
+      getAccounts().then((accounts) => {
+        const userAccount = accounts.find(
+          (account) =>
+            account.cvu === destination || account.alias === destination
+        );
+        if (userAccount) {
+          setUserDestinationAccount(userAccount);
+        } else {
+          setDestination(null);
+          navigate(`${ROUTES.SEND_MONEY}?${STEP}1&${ERROR}`);
+        }
+      });
+    }
+  }, [destination, navigate]);
 
   useEffect(() => {
     if (userDestinationAccount) {
@@ -166,7 +180,7 @@ function SendMoneyForm() {
         setUserDestination(user);
       });
     }
-  }, [userDestinationAccount]);
+  }, [navigate, userDestinationAccount]);
 
   useEffect(() => {
     if (user && user.id) {
@@ -189,7 +203,7 @@ function SendMoneyForm() {
   );
 
   useEffect(() => {
-    if (step !== '1' && formState.alias === '') {
+    if (step !== '1' && formState.destination === '') {
       setTimeout(() => onNavigate(1));
     }
   }, [step, formState, navigate, onNavigate]);
@@ -201,10 +215,11 @@ function SendMoneyForm() {
 
   return <>{renderStep(formState)}</>;
 
-  function renderStep(formState: { alias: string; amount: string }) {
+  function renderStep(formState: { destination: string; amount: string }) {
     const { amount } = formState;
     const { Argentina } = currencies;
     const { locales, currency } = Argentina;
+    const isError = !!searchParams.get('error');
 
     const handleClick = (
       origin: string,
@@ -212,26 +227,46 @@ function SendMoneyForm() {
       amount: number
     ) => {
       if (user && user.id) {
-        createTransferActivity(user.id, origin, destination, amount);
+        createTransferActivity(
+          user.id,
+          token,
+          origin,
+          destination,
+          amount,
+          user.firstName
+        );
       }
     };
 
     switch (step) {
       case '1':
         return (
-          <FormSingle
-            name="alias"
-            title="Agregá una nueva cuenta"
-            label="CVU ó Alias"
-            type="text"
-            actionLabel="Continuar"
-            validation={aliasValidationConfig}
-            formState={formState}
-            handleChange={(
-              event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-            ) => onChange(event)}
-            submit={() => onNavigate(2)}
-          />
+          <>
+            <FormSingle
+              name="destination"
+              title="Agregá una nueva cuenta"
+              label="CVU ó Alias"
+              type="text"
+              actionLabel="Continuar"
+              formState={formState}
+              handleChange={(
+                event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+              ) => onChange(event)}
+              submit={() => {
+                if (formState.destination) {
+                  setDestination(formState.destination);
+                  onNavigate(2);
+                }
+              }}
+            />
+            {isError && (
+              <SnackBar
+                duration={duration}
+                message="Cuenta no encontrada"
+                type="error"
+              />
+            )}
+          </>
         );
       case '2':
         return (
@@ -279,7 +314,7 @@ function SendMoneyForm() {
                     </p>
                   </div>
                   <div className="tw-flex tw-flex-col tw-mb-4">
-                    <p className="tw-font-bold">CVU: {formState.alias}</p>
+                    <p className="tw-font-bold">CVU: {formState.destination}</p>
                   </div>
                 </div>
               }

@@ -12,8 +12,8 @@
     {
       "email": "maubrito@gmail.com",
       "password": "$2a$10$xLHzvO5eZo9pqw62piadAu3Y8JQWaJtY7.w66GqI9U16d6euGcUhK",
-      "firstName": "Mauricio",
-      "lastName": "Brito",
+      "firstName": "Aitana",
+      "lastName": "Torres",
       "phone": "1178978927",
       "dni": "90636666",
       "id": "s0ElmHR"
@@ -23,13 +23,13 @@
     {
       "id": "1",
       "userId": "mkJf2Lz",
-      "balance": 52900,
+      "balance": 6900,
       "cvu": "1234567890123456",
       "alias": "mi.alias.n"
     },
     {
       "alias": "Pay.House.Cartera",
-      "cvu": "1459306167136215290557",
+      "cvu": "1234567890123777",
       "balance": 0,
       "userId": "s0ElmHR",
       "id": "TLRHPCv"
@@ -319,6 +319,56 @@
       "dated": "2022-10-18T22:14:29.035Z",
       "userId": "mkJf2Lz",
       "id": "CGQ87EH"
+    },
+    {
+      "type": "Transfer",
+      "amount": -2000,
+      "origin": "1234567890123456",
+      "destination": "1234567890123777",
+      "name": "Mauricio",
+      "dated": "2022-10-19T05:00:26.177Z",
+      "userId": "mkJf2Lz",
+      "id": "KW-OI6X"
+    },
+    {
+      "type": "Transfer",
+      "amount": -2000,
+      "origin": "1234567890123456",
+      "destination": "1234567890123777",
+      "name": "Mauricio",
+      "dated": "2022-10-19T05:01:52.852Z",
+      "userId": "mkJf2Lz",
+      "id": "5e8tzIT"
+    },
+    {
+      "type": "Transfer",
+      "amount": -2000,
+      "origin": "1234567890123456",
+      "destination": "1234567890123777",
+      "name": "Mauricio",
+      "dated": "2022-10-19T05:02:38.583Z",
+      "userId": "mkJf2Lz",
+      "id": "_ZFD-ha"
+    },
+    {
+      "type": "Transfer",
+      "amount": -2000,
+      "origin": "1234567890123456",
+      "destination": "1234567890123777",
+      "name": "Mauricio",
+      "dated": "2022-10-19T05:03:38.092Z",
+      "userId": "mkJf2Lz",
+      "id": "top8R7V"
+    },
+    {
+      "type": "Transfer",
+      "amount": -50000,
+      "origin": "1234567890123456",
+      "destination": "1234567890123777",
+      "name": "Mauricio",
+      "dated": "2022-10-19T05:03:53.019Z",
+      "userId": "mkJf2Lz",
+      "id": "q3UItfQ"
     }
   ],
   "cards": [
