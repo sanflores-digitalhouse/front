@@ -1,9 +1,11 @@
 import React from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { LINK_LIST } from '../../constants';
+import { LINK_LIST, ROUTES } from '../../constants';
+import { useAuth } from '../../hooks';
 
 export const Sidebar = () => {
   const { pathname } = useLocation();
+  const { logout } = useAuth();
 
   return (
     <nav
@@ -13,18 +15,32 @@ export const Sidebar = () => {
       }}
     >
       <ul className="tw-mt-8 tw-flex tw-flex-col tw-gap-y-4">
-        {LINK_LIST.map((link) => (
-          <li className="tw-pl-8" key={link.name}>
-            <Link
-              to={link.href}
-              className={`tw-flex tw-items-center tw-gap-x-2 tw-text-neutral-gray-100 hover:tw-text-primary ${
-                pathname === link.href ? '!tw-text-primary tw-font-bold' : ''
-              }`}
-            >
-              {link.name}
-            </Link>
-          </li>
-        ))}
+        {LINK_LIST.map((link) => {
+          if (link.href === ROUTES.LOGIN) {
+            return (
+              <li className="tw-pl-8" key={link.href}>
+                <button
+                  onClick={logout}
+                  className="tw-flex tw-items-center tw-gap-x-2 tw-text-neutral-gray-100 hover:tw-text-primary"
+                >
+                  {link.name}
+                </button>
+              </li>
+            );
+          }
+          return (
+            <li className="tw-pl-8" key={link.name}>
+              <Link
+                to={link.href}
+                className={`tw-flex tw-items-center tw-gap-x-2 tw-text-neutral-gray-100 hover:tw-text-primary ${
+                  pathname === link.href ? '!tw-text-primary tw-font-bold' : ''
+                }`}
+              >
+                {link.name}
+              </Link>
+            </li>
+          );
+        })}
       </ul>
     </nav>
   );
