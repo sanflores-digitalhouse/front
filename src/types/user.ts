@@ -14,4 +14,5 @@ export interface UserAccount {
   alias: string;
   userId: string;
   id: string;
+  name: string;
 }

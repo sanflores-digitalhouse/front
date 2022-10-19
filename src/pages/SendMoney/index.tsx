@@ -226,6 +226,9 @@ function SendMoneyForm() {
       destination: string,
       amount: number
     ) => {
+      const destinationName = userDestinationAccount
+        ? userDestinationAccount.name
+        : '';
       if (user && user.id) {
         createTransferActivity(
           user.id,
@@ -233,8 +236,10 @@ function SendMoneyForm() {
           origin,
           destination,
           amount,
-          user.firstName
-        );
+          destinationName
+        ).then((response) => {
+          navigate(`${ROUTES.ACTIVITY_DETAILS}?${STEP}${response.id}`);
+        });
       }
     };
 
