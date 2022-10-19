@@ -131,7 +131,7 @@ const Profile = () => {
                   position={TooltipPosition.top}
                 >
                   <button
-                    onClick={() => copyToClipboard('0000002100075320000000')}
+                    onClick={() => copyToClipboard(userAccount.cvu || '')}
                   >
                     <Icon type="copy" />
                   </button>
@@ -144,7 +144,7 @@ const Profile = () => {
                 </div>
                 <div className="tw-flex">
                   <Link to={`${ROUTES.PROFILE}?${EDIT}`}>
-                    <Icon type="edit" />
+                    <Icon className="tw-text-primary" type="edit" />
                   </Link>
                   <Tooltip
                     className="tw-cursor-pointer tw-ml-4"

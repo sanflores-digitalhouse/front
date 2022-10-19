@@ -10,7 +10,7 @@ interface SendMoneyInputProps {
   name: string;
   title: string;
   actionLabel: string;
-  validation: any;
+  validation?: any;
   submit: () => void;
   handleChange: (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
