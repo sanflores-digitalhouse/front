@@ -3,7 +3,7 @@
 
 ### Tabla de contenido
 
-- [Descripción](#descripcion)
+- [Descripción](#descripción)
 - [Como instalar](#como-instalar)
 - [Autor](#autor)
 
@@ -31,16 +31,16 @@ Temática: Billetera Digital (Digital Money House  )
 
 ## Como Instalar
 
-### Instalacion
+### Instalación
 
 `npm install`
 
 ### Correr Backend fake para ver datos mock
-`npm run fake-api`
+`npm run fake-api` ó `yarn run fake-api`
 
 ### Correr Proyecto
 
-`npm run start`
+`npm run start` ó `yarn run fake-api`
 
 ### Debe tener un JWT válido para iniciar sesión
 
