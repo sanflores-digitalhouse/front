@@ -38,14 +38,14 @@ Temática: Billetera Digital (Digital Money House  )
 
 `npm install`  
 
-#ó  
+ó  
 
 `yarn install`
 
 ### Correr Backend fake para ver datos mock
 `npm run fake-api` 
 
-#ó
+ó
 
 `yarn run fake-api`
 
@@ -53,7 +53,7 @@ Temática: Billetera Digital (Digital Money House  )
 
 `npm run start` 
 
-#ó  
+ó  
 
 `yarn run start`
 
