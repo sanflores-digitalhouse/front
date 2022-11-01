@@ -17,6 +17,24 @@
       "phone": "1178978927",
       "dni": "90636666",
       "id": "s0ElmHR"
+    },
+    {
+      "email": "maub2@gmail.com",
+      "password": "$2a$10$v.L5eU84RA4orxmd492XoOs3P9BTAVn/.s0qhUXZzKS17D3BeVn4q",
+      "firstName": "Mauricio",
+      "lastName": "Brito",
+      "phone": "1121321327",
+      "dni": 23434454,
+      "id": "wQXxAAj"
+    },
+    {
+      "email": "maub3@gmail.com",
+      "password": "$2a$10$Ty3z7Fes0f1abDiyEyocuuhE5dslSDhlnZp8kkTzmgTBW0CGg9BW2",
+      "firstName": "Mauricio",
+      "lastName": "Brito",
+      "phone": "1179979928",
+      "dni": 12312321,
+      "id": "g0Ks-GR"
     }
   ],
   "accounts": [
@@ -35,6 +53,22 @@
       "userId": "s0ElmHR",
       "id": "TLRHPCv",
       "name": "Aitana Torres"
+    },
+    {
+      "alias": "Money.House.House",
+      "cvu": "4492350379455671312506",
+      "balance": 0,
+      "name": "Mauricio Brito",
+      "userId": "wQXxAAj",
+      "id": "XSRaNwU"
+    },
+    {
+      "alias": "Digital.Bank.House",
+      "cvu": "7563215523626309152249",
+      "balance": 0,
+      "name": "Mauricio Brito",
+      "userId": "g0Ks-GR",
+      "id": "amcfpE5"
     }
   ],
   "activities": [

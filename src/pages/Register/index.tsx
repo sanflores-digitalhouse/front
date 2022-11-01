@@ -26,8 +26,10 @@ import {
   SUCCESS_MESSAGES_KEYS,
   SUCCESS_MESSAGES,
   BAD_REQUEST,
+  ROUTES,
 } from '../../constants/';
-import { useAuth, useLocalStorage } from '../../hooks';
+import { useLocalStorage } from '../../hooks';
+import { useNavigate } from 'react-router-dom';
 
 interface RegisterState {
   name: string;
@@ -64,7 +66,7 @@ const Register = () => {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [token, setToken] = useLocalStorage('token');
-  const { setIsAuthenticated } = useAuth();
+  // const { setIsAuthenticated } = useAuth();
 
   const [values, setValues] = React.useState<RegisterState>({
     email: '',
@@ -83,6 +85,7 @@ const Register = () => {
 
   const isEmpty = isValueEmpty(values);
   const hasErrors = useMemo(() => valuesHaveErrors(errors), [errors]);
+  const navigate = useNavigate();
 
   const handleClickShowPassword = () => {
     setValues({
@@ -111,12 +114,14 @@ const Register = () => {
     email,
   }) => {
     setIsSubmiting(true);
+    const parsedDni = parseInt(String(dni));
+
     createAnUser({
       firstName: name,
       lastName,
       password,
       phone,
-      dni,
+      dni: parsedDni,
       email,
     })
       .then((response) => {
@@ -125,11 +130,11 @@ const Register = () => {
         setMessage(SUCCESS_MESSAGES[SUCCESS_MESSAGES_KEYS.USER_REGISTER]);
         setTimeout(() => {
           setIsSubmiting(false);
-          setIsAuthenticated(true);
+          // setIsAuthenticated(true);
+          navigate(ROUTES.LOGIN);
         }, messageDuration);
       })
       .catch((error) => {
-        console.log(error);
         setIsError(true);
         setMessage(ERROR_MESSAGES.INVALID_USER);
         setIsSubmiting(false);

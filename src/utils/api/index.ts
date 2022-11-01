@@ -15,6 +15,11 @@ const myInit = (method = 'GET', token?: string) => {
 const myRequest = (endpoint: string, method: string, token?: string) =>
   new Request(endpoint, myInit(method, token));
 
+// create and .env file and add the following line:
+// REACT_APP_API_URL='your api url'
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const API_BASE_URL = process.env.REACT_APP_API_URL;
+// remove this one when backend is ready
 const baseUrl = 'http://localhost:3500';
 
 const rejectPromise = (response?: Response): Promise<Response> =>
