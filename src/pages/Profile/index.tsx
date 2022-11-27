@@ -29,9 +29,9 @@ import {
   valuesHaveErrors,
   copyToClipboard,
   updateAccount,
-  getAccount,
 } from '../../utils';
 import { useAuth, useLocalStorage, useUserInfo } from '../../hooks';
+import { User } from '../../types';
 
 export interface IProfile {
   alias?: string;
@@ -65,23 +65,13 @@ const Profile = () => {
   const { setIsAuthenticated } = useAuth();
 
   useEffect(() => {
-    if (user && user.id) {
-      getAccount(user.id, token)
-        .then((account) => {
-          if (account && account.alias && account.cvu) {
-            setUserAccount(account);
-          }
-          if (isSuccess) {
-            setTimeout(() => navigate(ROUTES.PROFILE), duration);
-          }
-        })
-        .catch((error) => {
-          if ((error as Response).status === UNAUTHORIZED) {
-            setToken(null);
-          }
-        });
-    } else {
-      setIsAuthenticated(false);
+    if (user) {
+      const { account } = user as User;
+      setUserAccount(account);
+
+      if (isSuccess) {
+        setTimeout(() => navigate(ROUTES.PROFILE), duration);
+      }
     }
   }, [isSuccess, navigate, setIsAuthenticated, setToken, token, user]);
 
@@ -90,8 +80,9 @@ const Profile = () => {
   ) => setUserAccount({ ...userAccount, alias: event.target.value });
 
   const onSubmit: SubmitHandler<IProfile> = (data) => {
-    if (user && user.id) {
-      updateAccount(user.id, { alias: data.alias }, token)
+    if (user) {
+      const { account } = user as User;
+      updateAccount(account.id, { alias: data.alias }, token)
         .then((response) => {
           if (response.status) {
             setIsError(true);

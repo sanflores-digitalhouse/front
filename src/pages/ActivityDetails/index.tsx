@@ -15,7 +15,7 @@ import {
   printPage,
   calculateTransacionType,
 } from '../../utils';
-import { Transaction, ActivityType } from '../../types';
+import { Transaction, ActivityType, User } from '../../types';
 import { useAuth, useLocalStorage, useUserInfo } from '../../hooks';
 
 const ActivityDetails = () => {
@@ -34,8 +34,9 @@ const ActivityDetails = () => {
   const { user } = useUserInfo();
 
   useEffect(() => {
-    if (user && user.id) {
-      getUserActivity(user.id, activityId, token)
+    if (user) {
+      const { account } = user as User;
+      getUserActivity(account.id, activityId, token)
         .then((activity) => {
           if (activity && activity.amount && activity.type) {
             setUserActivity(activity);

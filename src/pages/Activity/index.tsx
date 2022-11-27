@@ -18,7 +18,7 @@ import {
   pageQuery,
   sortByDate,
 } from '../../utils';
-import { Transaction } from '../../types';
+import { Transaction, User } from '../../types';
 import { useUserInfo, useLocalStorage, useAuth } from '../../hooks';
 
 const recordsPerPage = 10;
@@ -34,8 +34,9 @@ const Activity = () => {
   const { user } = useUserInfo();
 
   useEffect(() => {
-    if (user && user.id) {
-      getUserActivities(user.id, token)
+    if (user) {
+      const { account } = user as User;
+      getUserActivities(account.id, token)
         .then((activities) => {
           if ((activities as Transaction[]).length > 0) {
             const orderedActivities = sortByDate(activities);

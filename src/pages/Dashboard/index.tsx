@@ -16,12 +16,11 @@ import {
   formatCurrency,
   getUserActivities,
   parseRecordContent,
-  getAccount,
   sortByDate,
 } from '../../utils/';
 import { currencies, UNAUTHORIZED } from '../../constants/';
 import { useUserInfo } from '../../hooks/useUserInfo';
-import { Transaction, UserAccount } from '../../types/';
+import { Transaction, User } from '../../types/';
 import { useAuth, useLocalStorage } from '../../hooks';
 
 const numberOfActivities = 5;
@@ -43,8 +42,10 @@ const Dashboard = () => {
   const { logout } = useAuth();
 
   useEffect(() => {
-    if (user && user.id) {
-      getUserActivities(user.id, token)
+    if (user) {
+      const { account } = user as User;
+
+      getUserActivities(account.id, token)
         .then((activities) => {
           if ((activities as Transaction[]).length > 0) {
             const orderedActivities = sortByDate(activities);
@@ -65,23 +66,16 @@ const Dashboard = () => {
   }, [logout, token, user]);
 
   useEffect(() => {
-    if ((user && user.id) || (user && user.id && isSuccess)) {
-      getAccount(user.id, token)
-        .then((account) => {
-          if ((account as UserAccount).balance) {
-            setUserAccount({
-              balance: account.balance || 0,
-            });
-          }
-          if (isSuccess) {
-            setTimeout(() => navigate(ROUTES.HOME), duration);
-          }
-        })
-        .catch((error) => {
-          if (error.status === UNAUTHORIZED) {
-            logout();
-          }
-        });
+    if (user || (user && isSuccess)) {
+      const { account } = user as User;
+
+      setUserAccount({
+        balance: account.available_amount || 0,
+      });
+
+      if (isSuccess) {
+        setTimeout(() => navigate(ROUTES.HOME), duration);
+      }
     }
   }, [isSuccess, logout, navigate, token, user]);
 
