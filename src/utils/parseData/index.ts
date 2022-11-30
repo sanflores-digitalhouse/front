@@ -14,25 +14,6 @@ export const parseRecordContent = (record: any, variant: any): IRecord => {
   };
 };
 
-export function parseJwt(token: string) {
-  if (!token) {
-    return null;
-  }
-  const base64Url = token.split('.')[1];
-  const base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
-  const jsonPayload = decodeURIComponent(
-    window
-      .atob(base64)
-      .split('')
-      .map(function (c) {
-        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
-      })
-      .join('')
-  );
-
-  return JSON.parse(jsonPayload);
-}
-
 export const parseUserResponseInfo = (user: UserReponse): UserInfo => {
   return {
     firstName: user.firstname,
@@ -52,6 +33,16 @@ export const parseAccountResponseInfo = (
     cvu: account.cvu,
     alias: account.alias,
     userId: account.user_id,
+    id: account.id,
+  };
+};
+
+export const parseAccountInfo = (account: UserAccount): AccountResponse => {
+  return {
+    available_amount: account.balance,
+    cvu: account.cvu,
+    alias: account.alias,
+    user_id: account.userId,
     id: account.id,
   };
 };
@@ -77,6 +68,7 @@ export const parseCardResponseInfo = (card: CardResponse): Card => {
     name: card.first_last_name,
     expiration: card.expiration_date,
     cvc: card.cod.toString(),
+    id: card.id,
   };
 };
 

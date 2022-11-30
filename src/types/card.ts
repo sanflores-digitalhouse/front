@@ -3,6 +3,7 @@ export interface Card {
   expiration: string;
   name: string;
   cvc: string;
+  id?: number;
 };
 
 export interface Transaction {

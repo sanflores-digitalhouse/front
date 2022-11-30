@@ -147,13 +147,14 @@ function CardItem({
     ? 'mastercard'
     : 'credit-card';
   const { user } = useUserInfo();
-  const { info } = user as User;
   const { logout } = useAuth();
   const [token] = useLocalStorage('token');
 
   const handleDelete = () => {
-    if (user && info.id) {
-      deleteUserCard(info.id, cardId, token)
+    if (user) {
+      const { account } = user as User;
+
+      deleteUserCard(account.id, cardId, token)
         .then((response) => {
           if (response.status === UNAUTHORIZED) {
             logout();

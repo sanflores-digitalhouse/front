@@ -5,8 +5,9 @@ export const phoneRegExp =
 export const emailRegExp = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/g;
 export const dniRegExp = /^\d{8}$/;
 export const cardRegExp = /^\d{16}$/;
-export const aliasRegExp = /[a-z]+\.[a-z]+\.[a-z]+$/ig;
-export const moneyRegExp = /^([0]{1}\.{1}[0-9]+|[1-9]{1}[0-9]*\.{1}[0-9]+|[0-9]+|0)$/g;
+export const aliasRegExp = /[a-z]+\.[a-z]+\.[a-z]+$/gi;
+export const moneyRegExp =
+  /^([0]{1}\.{1}[0-9]+|[1-9]{1}[0-9]*\.{1}[0-9]+|[0-9]+|0)$/g;
 
 export const validExpiration = (expiration: string): boolean => {
   const currentYear = new Date().getFullYear();
@@ -26,8 +27,9 @@ export const transformExpiration = (expiration: number): string => {
   const expiryMonth = expiryString.slice(0, 2);
   const expiryYear = expiryString.slice(2, 4);
   const date = new Date();
-  date.setFullYear(+expiryYear, +expiryMonth - 1, 1);
-  return date.toISOString();
+  const currentYear = date.getFullYear();
+  const thisFullYear = currentYear.toString().slice(0, 2);
+  return `${expiryMonth}/${thisFullYear}${expiryYear}`;
 };
 
 export const isValueEmpty = (values: any): boolean =>

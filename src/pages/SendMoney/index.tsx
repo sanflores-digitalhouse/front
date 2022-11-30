@@ -21,6 +21,7 @@ import {
   getAccounts,
   getUser,
   parseTransactionResponseInfo,
+  parseAccountResponseInfo,
 } from '../../utils';
 import { Button } from '@mui/material';
 import {
@@ -167,7 +168,7 @@ function SendMoneyForm() {
             account.cvu === destination || account.alias === destination
         );
         if (userAccount) {
-          setUserDestinationAccount(userAccount);
+          setUserDestinationAccount(parseAccountResponseInfo(userAccount));
         } else {
           setDestination(null);
           navigate(`${ROUTES.SEND_MONEY}?${STEP}1&${ERROR}`);
@@ -188,7 +189,10 @@ function SendMoneyForm() {
   useEffect(() => {
     if (user && account) {
       getAccounts().then((accounts) => {
-        const userAccount = accounts.find(
+        const parseAccounts = accounts.map((account) =>
+          parseAccountResponseInfo(account)
+        );
+        const userAccount = parseAccounts.find(
           (account) => account.userId === account.id
         );
         if (userAccount) {

@@ -29,9 +29,13 @@ import {
   valuesHaveErrors,
   copyToClipboard,
   updateAccount,
+  getUser,
+  parseUserResponseInfo,
+  parseAccountResponseInfo,
 } from '../../utils';
 import { useAuth, useLocalStorage, useUserInfo } from '../../hooks';
 import { User } from '../../types';
+import { userActionTypes } from '../../context';
 
 export interface IProfile {
   alias?: string;
@@ -44,7 +48,7 @@ const Profile = () => {
   const isSuccess = !!searchParams.get('success');
   const message = (searchParams.get('message') as SUCCESS_MESSAGES_KEYS) || '';
   const [isError, setIsError] = useState<boolean>(!!searchParams.get('error'));
-  const { user } = useUserInfo();
+  const { user, dispatch } = useUserInfo();
   const [token, setToken] = useLocalStorage('token');
 
   const [userAccount, setUserAccount] = useState({
@@ -84,15 +88,23 @@ const Profile = () => {
       const { account } = user as User;
       updateAccount(account.id, { alias: data.alias }, token)
         .then((response) => {
-          if (response.status) {
-            setIsError(true);
-          } else {
+          const { userId } = parseAccountResponseInfo(response);
+          getUser(userId, token).then((user) => {
+            const parsedUserInfo = parseUserResponseInfo(user);
+            dispatch({
+              type: userActionTypes.SET_USER,
+              payload: {
+                info: { ...parsedUserInfo },
+                account: { ...response },
+              },
+            });
             navigate(
               `${ROUTES.PROFILE}?${SUCCESS}&${MESSAGE}${SUCCESS_MESSAGES_KEYS.ALIAS_EDITED}`
             );
-          }
+          });
         })
         .catch((error) => {
+          setIsError(true);
           if ((error as Response).status === UNAUTHORIZED) {
             setToken(null);
           }

@@ -80,7 +80,7 @@ const Login = () => {
     setIsSubmiting(true);
     login(email, password)
       .then((response) => {
-        setToken(response.accessToken);
+        setToken(response.token);
         setTimeout(() => {
           setIsSubmiting(false);
           setIsAuthenticated(true);
