@@ -7,6 +7,7 @@ import {
   IRecord,
   RecordVariant,
   SnackBar,
+  TransactionRecord,
 } from '../../components';
 import { currencies, ERROR, ROUTES, STEP, UNAUTHORIZED } from '../../constants';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
@@ -19,7 +20,7 @@ import {
   calculateTransacionType,
   getAccounts,
   getUser,
-  createTransferActivity,
+  parseTransactionResponseInfo,
 } from '../../utils';
 import { Button } from '@mui/material';
 import {
@@ -38,18 +39,22 @@ const SendMoney = () => {
   const [userAccounts, setUserAccounts] = useState<IRecord[]>([]);
   const { logout } = useAuth();
   const { user } = useUserInfo();
+  const { account } = user as User;
   const [token] = useLocalStorage('token');
 
   useEffect(() => {
-    if (user && user.id && !step) {
-      getUserActivities(user.id, token)
+    if (user && account && !step) {
+      getUserActivities(account.id, token)
         .then((activities) => {
-          if ((activities as Transaction[]).length > 0) {
-            const parsedActivities = activities.filter(
+          const parsedActivities = activities.map((activity) =>
+            parseTransactionResponseInfo(activity)
+          );
+          if ((parsedActivities as Transaction[]).length > 0) {
+            const transferActivities = parsedActivities.filter(
               (activity: Transaction) =>
                 activity.type === TransactionType.Transfer
             );
-            setUserActivities(parsedActivities);
+            setUserActivities(transferActivities);
           }
         })
         .catch((error) => {
@@ -58,7 +63,7 @@ const SendMoney = () => {
           }
         });
     }
-  }, [logout, step, token, user]);
+  }, [account, logout, step, token, user]);
 
   useEffect(() => {
     if (userActivities.length > 0) {
@@ -69,10 +74,7 @@ const SendMoney = () => {
             ActivityType.TRANSFER_IN
         )
         .map((activity: Transaction) =>
-          parseRecordContent(
-            { name: activity.name, origin: activity.origin },
-            RecordVariant.ACCOUNT
-          )
+          parseRecordContent({ origin: activity.origin }, RecordVariant.ACCOUNT)
         );
 
       const uniqueRecords = parsedRecords.filter(
@@ -80,8 +82,8 @@ const SendMoney = () => {
           index ===
           self.findIndex(
             (t) =>
-              (t.content as Transaction).origin ===
-              (record.content as Transaction).origin
+              (t.content as TransactionRecord).origin ===
+              (record.content as TransactionRecord).origin
           )
       );
 
@@ -149,11 +151,12 @@ function SendMoneyForm() {
   });
   const [userDestinationAccount, setUserDestinationAccount] =
     useState<UserAccount>();
-  const [userDestination, setUserDestination] = useState<User>();
+  const [userDestination, setUserDestination] = useState<any>();
   const [userOriginAccount, setUserOriginAccount] = useState<UserAccount>();
   const navigate = useNavigate();
   const { user } = useUserInfo();
-  const [token] = useLocalStorage('token');
+  const { account } = user as User;
+  // const [token] = useLocalStorage('token');
 
   useEffect(() => {
     if (destination) {
@@ -183,17 +186,17 @@ function SendMoneyForm() {
   }, [navigate, userDestinationAccount]);
 
   useEffect(() => {
-    if (user && user.id) {
+    if (user && account) {
       getAccounts().then((accounts) => {
         const userAccount = accounts.find(
-          (account) => account.userId === user.id
+          (account) => account.userId === account.id
         );
         if (userAccount) {
           setUserOriginAccount(userAccount);
         }
       });
     }
-  }, [user]);
+  }, [account, user]);
 
   const onNavigate = useCallback(
     (step: number) => {
@@ -226,21 +229,23 @@ function SendMoneyForm() {
       destination: string,
       amount: number
     ) => {
-      const destinationName = userDestinationAccount
-        ? userDestinationAccount.name
-        : '';
-      if (user && user.id) {
-        createTransferActivity(
-          user.id,
-          token,
-          origin,
-          destination,
-          amount,
-          destinationName
-        ).then((response) => {
-          navigate(`${ROUTES.ACTIVITY_DETAILS}?${STEP}${response.id}`);
-        });
-      }
+      // TODO: implement a service to create a transaction
+      // const destinationName = userDestinationAccount
+      //   ? userDestinationAccount.name
+      //   : '';
+      // if (user && account) {
+      //   createTransferActivity(
+      //     account.id,
+      //     token,
+      //     origin,
+      //     destination,
+      //     amount,
+      //     destinationName
+      //   ).then((response) => {
+      //     navigate(`${ROUTES.ACTIVITY_DETAILS}?${STEP}${response.id}`);
+      //   });
+      // }
+      console.log(origin, destination, amount);
     };
 
     switch (step) {

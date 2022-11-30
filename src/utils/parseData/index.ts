@@ -1,9 +1,10 @@
 import { IRecord } from '../../components';
-import { UserAccount, UserInfo } from '../../types';
+import { UserAccount, UserInfo, Card, Transaction } from '../../types';
 import {
   UserReponse,
   AccountResponse,
   CardResponse,
+  TransactionResponse,
 } from '../../utils/api/types';
 
 export const parseRecordContent = (record: any, variant: any): IRecord => {
@@ -32,13 +33,6 @@ export function parseJwt(token: string) {
   return JSON.parse(jsonPayload);
 }
 
-type Card = {
-  number: string;
-  expiration: string;
-  name: string;
-  cvc: string;
-};
-
 export const parseUserResponseInfo = (user: UserReponse): UserInfo => {
   return {
     firstName: user.firstname,
@@ -59,6 +53,21 @@ export const parseAccountResponseInfo = (
     alias: account.alias,
     userId: account.user_id,
     id: account.id,
+  };
+};
+
+export const parseTransactionResponseInfo = (
+  transaction: TransactionResponse
+): Transaction => {
+  return {
+    id: transaction.id,
+    amount: transaction.amount,
+    type: transaction.type,
+    description: transaction.description,
+    dated: transaction.dated,
+    origin: transaction.origin,
+    destination: transaction.destination,
+    accountId: transaction.account_id,
   };
 };
 

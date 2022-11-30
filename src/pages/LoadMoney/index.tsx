@@ -20,6 +20,7 @@ import {
   createDepositActivity,
 } from '../../utils';
 import { useLocalStorage, useUserInfo } from '../../hooks';
+import { User } from '../../types';
 
 const duration = 3000;
 
@@ -28,6 +29,7 @@ const LoadMoney = () => {
   const [searchParams] = useSearchParams();
   const card = !!searchParams.get('card');
   const { user } = useUserInfo();
+  const { account } = user as User;
   const [token] = useLocalStorage('token');
   const [isError, setIsError] = useState<boolean>(false);
   const [isSubmiting, setIsSubmiting] = useState<boolean>(false);
@@ -60,9 +62,9 @@ const LoadMoney = () => {
   ) => handleChange(event, setFormState);
 
   const onSubmit: SubmitHandler<any> = (data) => {
-    if (user && user.id) {
+    if (user && account) {
       setIsSubmiting(true);
-      createDepositActivity(user.id, parseFloat(data.money), token)
+      createDepositActivity(account.id, parseFloat(data.money), token)
         .then(() => {
           setIsSubmiting(false);
           navigate(`${ROUTES.HOME}?${SUCCESS}`);

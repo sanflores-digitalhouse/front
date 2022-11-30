@@ -16,6 +16,7 @@ import {
   formatCurrency,
   getUserActivities,
   parseRecordContent,
+  parseTransactionResponseInfo,
   sortByDate,
 } from '../../utils/';
 import { currencies, UNAUTHORIZED } from '../../constants/';
@@ -47,8 +48,11 @@ const Dashboard = () => {
 
       getUserActivities(account.id, token)
         .then((activities) => {
-          if ((activities as Transaction[]).length > 0) {
-            const orderedActivities = sortByDate(activities);
+          const parsedActivities = activities.map((activity) =>
+            parseTransactionResponseInfo(activity)
+          );
+          if ((parsedActivities as Transaction[]).length > 0) {
+            const orderedActivities = sortByDate(parsedActivities);
             const parsedRecords = orderedActivities.map(
               (activity: Transaction) =>
                 parseRecordContent(activity, RecordVariant.TRANSACTION)

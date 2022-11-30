@@ -50,6 +50,7 @@ import {
   createUserCard,
   pageQuery,
   parseCardInfo,
+  parseCardResponseInfo,
 } from '../../utils/';
 import { Card, User } from '../../types';
 import { useUserInfo, useLocalStorage, useAuth } from '../../hooks';
@@ -78,9 +79,13 @@ const Cards = () => {
 
         getUserCards(account.id, token)
           .then((cards) => {
-            if ((cards as Card[]).length > 0) {
-              const parsedRecords = (cards as Card[]).map((parsedCard: Card) =>
-                parseRecordContent(parsedCard, RecordVariant.CARD)
+            const parsedCards = cards.map((card) =>
+              parseCardResponseInfo(card)
+            );
+            if ((parsedCards as Card[]).length > 0) {
+              const parsedRecords = (parsedCards as Card[]).map(
+                (parsedCard: Card) =>
+                  parseRecordContent(parsedCard, RecordVariant.CARD)
               );
               setUserCards(parsedRecords);
             }

@@ -17,7 +17,7 @@ import {
   phoneValidationConfig,
   dniValidationConfig,
   handleChange,
-  createAnUser,
+  createUser,
 } from '../../utils/';
 import { ErrorMessage, Errors } from '../../components/ErrorMessage';
 import { SnackBar } from '../../components';
@@ -66,7 +66,6 @@ const Register = () => {
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [token, setToken] = useLocalStorage('token');
-  // const { setIsAuthenticated } = useAuth();
 
   const [values, setValues] = React.useState<RegisterState>({
     email: '',
@@ -116,7 +115,7 @@ const Register = () => {
     setIsSubmiting(true);
     const parsedDni = parseInt(String(dni));
 
-    createAnUser({
+    createUser({
       firstName: name,
       lastName,
       password,
@@ -124,13 +123,11 @@ const Register = () => {
       dni: parsedDni,
       email,
     })
-      .then((response) => {
+      .then(() => {
         setIsSuccess(true);
-        setToken(response.accessToken);
         setMessage(SUCCESS_MESSAGES[SUCCESS_MESSAGES_KEYS.USER_REGISTER]);
         setTimeout(() => {
           setIsSubmiting(false);
-          // setIsAuthenticated(true);
           navigate(ROUTES.LOGIN);
         }, messageDuration);
       })

@@ -17,6 +17,7 @@ import {
   parseRecordContent,
   pageQuery,
   sortByDate,
+  parseTransactionResponseInfo,
 } from '../../utils';
 import { Transaction, User } from '../../types';
 import { useUserInfo, useLocalStorage, useAuth } from '../../hooks';
@@ -38,8 +39,11 @@ const Activity = () => {
       const { account } = user as User;
       getUserActivities(account.id, token)
         .then((activities) => {
-          if ((activities as Transaction[]).length > 0) {
-            const orderedActivities = sortByDate(activities);
+          const parsedActivities = activities.map((activity) =>
+            parseTransactionResponseInfo(activity)
+          );
+          if ((parsedActivities as Transaction[]).length > 0) {
+            const orderedActivities = sortByDate(parsedActivities);
             const parsedRecords = orderedActivities.map(
               (parsedActivity: Transaction) =>
                 parseRecordContent(parsedActivity, RecordVariant.TRANSACTION)
