@@ -70,7 +70,7 @@ const Dashboard = () => {
       const { account } = user as User;
 
       setUserAccount({
-        balance: account.available_amount || 0,
+        balance: account.balance || 0,
       });
 
       if (isSuccess) {

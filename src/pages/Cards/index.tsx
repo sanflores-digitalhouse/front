@@ -49,8 +49,9 @@ import {
   parseRecordContent,
   createUserCard,
   pageQuery,
+  parseCardInfo,
 } from '../../utils/';
-import { Card } from '../../types';
+import { Card, User } from '../../types';
 import { useUserInfo, useLocalStorage, useAuth } from '../../hooks';
 
 const recordsPerPage = 10;
@@ -72,8 +73,10 @@ const Cards = () => {
 
   useEffect(() => {
     if (!isAdding) {
-      if (user && user.id) {
-        getUserCards(user.id, token)
+      if (user) {
+        const { account } = user as User;
+
+        getUserCards(account.id, token)
           .then((cards) => {
             if ((cards as Card[]).length > 0) {
               const parsedRecords = (cards as Card[]).map((parsedCard: Card) =>
@@ -215,19 +218,18 @@ function CardForm() {
   };
 
   const onSubmit: SubmitHandler<ReactCreditCardProps> = (data) => {
-    const { expiry, number, name, cvc } = data;
-    transformExpiration(expiry as number);
-    if (user && user.id) {
-      createUserCard(
-        user.id,
-        {
-          expiration: expiry,
-          number,
-          name,
-          cvc,
-        },
-        token
-      )
+    if (user) {
+      const { expiry, number, name, cvc } = data;
+      const expiration = transformExpiration(expiry as number);
+      const cardInfo = parseCardInfo({
+        number: number as string,
+        name,
+        expiration,
+        cvc: cvc as string,
+      });
+      const { account } = user as User;
+
+      createUserCard(account.id, cardInfo, token)
         .then(() => {
           navigate(
             `${ROUTES.CARDS}?${SUCCESS}&${MESSAGE}${SUCCESS_MESSAGES_KEYS.CARD_ADDED}`

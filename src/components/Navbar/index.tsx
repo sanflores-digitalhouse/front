@@ -43,7 +43,7 @@ export const Navbar = ({ isAuthenticated = false }) => {
     if (user) {
       const { info } = user as User;
 
-      setFullName(`${info.firstname} ${info.lastname}`);
+      setFullName(`${info.firstName} ${info.lastName}`);
     }
   }, [fullName, loading, user]);
 
