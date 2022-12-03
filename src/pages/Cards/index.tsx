@@ -101,7 +101,13 @@ const Cards = () => {
           });
       }
     }
-  }, [isAdding, isSuccess, logout, navigate, token, user, userCards]);
+  }, [isAdding, isSuccess, logout, navigate, token, user]);
+
+  useEffect(() => {
+    if (isAdding) {
+      setIsLoading(false);
+    }
+  }, [isAdding, userCards]);
 
   return (
     <div className="tw-w-full">
@@ -230,7 +236,7 @@ function CardForm() {
         number: number as string,
         name,
         expiration,
-        cvc: cvc as string
+        cvc: cvc as string,
       });
       const { account } = user as User;
 

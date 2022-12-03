@@ -153,21 +153,20 @@ function CardItem({
   const handleDelete = () => {
     if (user) {
       const { account } = user as User;
-
       deleteUserCard(account.id, cardId, token)
-        .then((response) => {
-          if (response.status === UNAUTHORIZED) {
-            logout();
-          }
-          if (setRecords) {
+        .then(() => {
+          setRecords &&
             setRecords((prev) =>
               prev.filter(
                 (record) => (record.content as CardRecord).id !== cardId
               )
             );
-          }
-          navigate(
-            `${ROUTES.CARDS}?${SUCCESS}&${MESSAGE}${SUCCESS_MESSAGES_KEYS.CARD_DELETED}`
+          setTimeout(
+            () =>
+              navigate(
+                `${ROUTES.CARDS}?${SUCCESS}&${MESSAGE}${SUCCESS_MESSAGES_KEYS.CARD_DELETED}`
+              ),
+            1000
           );
         })
         .catch((error) => {
