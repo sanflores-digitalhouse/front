@@ -190,9 +190,7 @@ function CardItem({
         {isSelecting ? (
           <button
             onClick={() =>
-              navigate(
-                `${ROUTES.LOAD_MONEY}?type=${cardType}&card=${lastFourDigits}`
-              )
+              navigate(`${ROUTES.LOAD_MONEY}?type=${cardType}&card=${cardId}`)
             }
             className="tw-text-primary"
           >

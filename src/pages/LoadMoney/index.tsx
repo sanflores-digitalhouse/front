@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Link, useSearchParams, useNavigate } from 'react-router-dom';
 import { Button } from '@mui/material';
 import FormControl from '@mui/material/FormControl';
@@ -18,6 +18,8 @@ import {
   isValueEmpty,
   valuesHaveErrors,
   createDepositActivity,
+  getUserCard,
+  parseCardResponseInfo,
 } from '../../utils';
 import { useLocalStorage, useUserInfo } from '../../hooks';
 import { User } from '../../types';
@@ -27,12 +29,28 @@ const duration = 3000;
 const LoadMoney = () => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const card = !!searchParams.get('card');
+  const cardId = searchParams.get('card') || '';
+  const isCardId = !!cardId;
   const { user } = useUserInfo();
-  const { account } = user as User;
   const [token] = useLocalStorage('token');
   const [isError, setIsError] = useState<boolean>(false);
   const [isSubmiting, setIsSubmiting] = useState<boolean>(false);
+  const [userCard, setUserCard] = useState<any>(null);
+  const [userAccount, setUserAccount] = useState<any>(null);
+
+  useEffect(() => {
+    if (user) {
+      const { account } = user as User;
+      setUserAccount(account);
+      getUserCard(account.id, cardId, token).then((card) => {
+        if (!card) {
+          navigate(ROUTES.HOME);
+        }
+        const parsedCard = parseCardResponseInfo(card);
+        setUserCard(parsedCard);
+      });
+    }
+  }, [cardId, navigate, token, user]);
 
   const {
     register,
@@ -62,9 +80,15 @@ const LoadMoney = () => {
   ) => handleChange(event, setFormState);
 
   const onSubmit: SubmitHandler<any> = (data) => {
-    if (user && account) {
+    if (user && userAccount) {
       setIsSubmiting(true);
-      createDepositActivity(account.id, parseFloat(data.money), token)
+      createDepositActivity(
+        userAccount.id,
+        parseFloat(data.money),
+        token,
+        userAccount.cvu,
+        userCard.number
+      )
         .then(() => {
           setIsSubmiting(false);
           navigate(`${ROUTES.HOME}?${SUCCESS}`);
@@ -79,7 +103,7 @@ const LoadMoney = () => {
     }
   };
 
-  if (card) {
+  if (isCardId) {
     return (
       <div className="tw-w-full">
         <CardCustom

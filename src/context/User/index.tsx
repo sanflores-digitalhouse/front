@@ -36,14 +36,16 @@ const UserInfoProvider = ({ children }: { children: React.ReactNode }) => {
       if (token) {
         getAccount(token)
           .then((account) => {
-            const { userId } = parseAccountResponseInfo(account);
+            const parseAccount  = parseAccountResponseInfo(account);
+            const userId = parseAccount.userId;
             getUser(userId, token).then((user) => {
               const parsedUserInfo = parseUserResponseInfo(user);
+
               dispatch({
                 type: userActionTypes.SET_USER,
                 payload: {
                   info: { ...parsedUserInfo },
-                  account: { ...account },
+                  account: { ...parseAccount },
                 },
               });
               dispatch({

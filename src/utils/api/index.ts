@@ -202,11 +202,12 @@ export const getUserCards = (
 };
 
 export const getUserCard = (
-  accountId: string,
-  cardId: string
+  accountId: number,
+  cardId: string,
+  token: string
 ): Promise<CardResponse> => {
   return fetch(
-    myRequest(`${API_BASE_URL}/accounts/${accountId}/cards/${cardId}`, 'GET')
+    myRequest(`${API_BASE_URL}/accounts/${accountId}/cards/${cardId}`, 'GET', token)
   )
     .then((response) => {
       if (response.ok) {
@@ -266,9 +267,11 @@ export const createUserCard = (
 
 // TODO: edit when backend is ready
 export const createDepositActivity = (
-  userId: number,
+  accountId: number,
   amount: number,
-  token: string
+  token: string,
+  origin: string,
+  destination = 'Cuenta de ahorros'
 ) => {
   const maxAmount = 30000;
   if (amount > maxAmount) return rejectPromise();
@@ -278,10 +281,12 @@ export const createDepositActivity = (
     type: 'Deposit',
     description: 'Depósito con tarjeta',
     dated: new Date(), // date must be genarated in backend
+    origin,
+    destination,
   };
 
   return fetch(
-    myRequest(`${baseUrl}/users/${userId}/activities`, 'POST', token),
+    myRequest(`${API_BASE_URL}/accounts/${accountId}/deposits`, 'POST', token),
     {
       body: JSON.stringify(activity),
     }
