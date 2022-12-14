@@ -1,5 +1,9 @@
-
-import { CardResponse, UserReponse, AccountResponse, TransactionResponse } from './types';
+import {
+  CardResponse,
+  UserReponse,
+  AccountResponse,
+  TransactionResponse,
+} from './types';
 
 const myInit = (method = 'GET', token?: string) => {
   return {
@@ -120,9 +124,12 @@ export const updateAccount = (
   data: any,
   token: string
 ): Promise<AccountResponse> => {
-  return fetch(myRequest(`${API_BASE_URL}/accounts/${accountId}`, 'PATCH', token), {
-    body: JSON.stringify(data),
-  })
+  return fetch(
+    myRequest(`${API_BASE_URL}/accounts/${accountId}`, 'PATCH', token),
+    {
+      body: JSON.stringify(data),
+    }
+  )
     .then((response) =>
       response.ok ? response.json() : rejectPromise(response)
     )
@@ -165,7 +172,7 @@ export const getUserActivity = (
 ): Promise<TransactionResponse> => {
   return fetch(
     myRequest(
-      `${API_BASE_URL}/accounts/${accountId}/activities/${activityId}`,
+      `${API_BASE_URL}/accounts/${accountId}/transactions/${activityId}`,
       'GET',
       token
     )
@@ -207,7 +214,11 @@ export const getUserCard = (
   token: string
 ): Promise<CardResponse> => {
   return fetch(
-    myRequest(`${API_BASE_URL}/accounts/${accountId}/cards/${cardId}`, 'GET', token)
+    myRequest(
+      `${API_BASE_URL}/accounts/${accountId}/cards/${cardId}`,
+      'GET',
+      token
+    )
   )
     .then((response) => {
       if (response.ok) {
