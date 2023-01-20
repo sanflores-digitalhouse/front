@@ -21,8 +21,30 @@ import {
 } from '../../../constants/';
 import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import { Icon, IconType } from './../../Icon';
-import { Transaction, Card, Account, ActivityType } from '../../../types';
+import { ActivityType, TransactionType, User } from '../../../types';
 import { useAuth, useLocalStorage, useUserInfo } from '../../../hooks';
+
+export interface TransactionRecord {
+  amount: number;
+  name?: string;
+  dated: string;
+  id: string;
+  type: TransactionType;
+  origin?: string;
+  destination?: string;
+}
+
+export interface CardRecord {
+  number: string;
+  name: string;
+  type: string;
+  id: string;
+}
+
+export interface AccountRecord {
+  name: string;
+  origin: string;
+}
 
 export enum RecordVariant {
   TRANSACTION = 'transaction',
@@ -31,7 +53,7 @@ export enum RecordVariant {
 }
 
 export interface IRecord {
-  content: Transaction | Card | Account;
+  content: TransactionRecord | CardRecord | AccountRecord;
   variant?: RecordVariant;
 }
 
@@ -62,23 +84,23 @@ export const Record = ({
       className={`tw-flex tw-w-full tw-justify-between tw-px-4 tw-border-t tw-border-neutral-blue-100 tw-py-5 hover:tw-bg-neutral-gray-500 tw-transition ${className}`}
     >
       {variant === RecordVariant.TRANSACTION && (
-        <TransactionItem {...(content as Transaction)} />
+        <TransactionItem {...(content as TransactionRecord)} />
       )}
       {variant === RecordVariant.CARD && (
         <CardItem
-          {...(content as Card)}
+          {...(content as CardRecord)}
           setRecords={setRecords}
           isSelecting={isSelecting}
         />
       )}
       {variant === RecordVariant.ACCOUNT && (
-        <AccountItem {...(content as Account)} />
+        <AccountItem {...(content as AccountRecord)} />
       )}
     </li>
   );
 };
 
-function TransactionItem({ amount, name, dated, id, type }: Transaction) {
+function TransactionItem({ amount, name, dated, id, type }: TransactionRecord) {
   const calculatedType = calculateTransacionType(amount, type);
   return (
     <Link
@@ -111,7 +133,7 @@ function CardItem({
   isSelecting,
   id: cardId,
   setRecords,
-}: Card & {
+}: CardRecord & {
   setRecords?: React.Dispatch<React.SetStateAction<IRecord[]>>;
   isSelecting: boolean;
 }) {
@@ -129,19 +151,22 @@ function CardItem({
   const [token] = useLocalStorage('token');
 
   const handleDelete = () => {
-    if (user && user.id) {
-      deleteUserCard(user.id, cardId, token)
-        .then((response) => {
-          if (response.status === UNAUTHORIZED) {
-            logout();
-          }
-          if (setRecords) {
+    if (user) {
+      const { account } = user as User;
+      deleteUserCard(account.id, cardId, token)
+        .then(() => {
+          setRecords &&
             setRecords((prev) =>
-              prev.filter((record) => (record.content as Card).id !== cardId)
+              prev.filter(
+                (record) => (record.content as CardRecord).id !== cardId
+              )
             );
-          }
-          navigate(
-            `${ROUTES.CARDS}?${SUCCESS}&${MESSAGE}${SUCCESS_MESSAGES_KEYS.CARD_DELETED}`
+          setTimeout(
+            () =>
+              navigate(
+                `${ROUTES.CARDS}?${SUCCESS}&${MESSAGE}${SUCCESS_MESSAGES_KEYS.CARD_DELETED}`
+              ),
+            1000
           );
         })
         .catch((error) => {
@@ -165,23 +190,23 @@ function CardItem({
         {isSelecting ? (
           <button
             onClick={() =>
-              navigate(
-                `${ROUTES.LOAD_MONEY}?type=${cardType}&card=${lastFourDigits}`
-              )
+              navigate(`${ROUTES.LOAD_MONEY}?type=${cardType}&card=${cardId}`)
             }
             className="tw-text-primary"
           >
             Seleccionar
           </button>
         ) : (
-          <button className="tw-text-error" onClick={handleDelete}>Eliminar</button>
+          <button className="tw-text-error" onClick={handleDelete}>
+            Eliminar
+          </button>
         )}
       </div>
     </>
   );
 }
 
-function AccountItem({ name, origin }: Account) {
+function AccountItem({ name, origin }: AccountRecord) {
   const navigate = useNavigate();
 
   return (

@@ -5,16 +5,17 @@ export interface RecordsProps {
   records: RecordProps[];
   maxRecords?: number;
   initialRecord?: number;
-  setRecords?:React.Dispatch<React.SetStateAction<IRecord[]>>;
+  setRecords?: React.Dispatch<React.SetStateAction<IRecord[]>>;
 }
 
 export const Records = ({
   records,
   maxRecords,
   initialRecord = 0,
-  setRecords
+  setRecords,
 }: RecordsProps) => {
   const recordsToShow = records.slice(initialRecord, maxRecords);
+
   return (
     <ul className="tw-w-full">
       {recordsToShow &&
@@ -24,7 +25,7 @@ export const Records = ({
             {...record}
             className={`
               ${index + 1 === recordsToShow.length && 'tw-border-b'}`}
-              setRecords={setRecords}
+            setRecords={setRecords}
           />
         ))}
     </ul>

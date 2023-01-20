@@ -1,11 +1,16 @@
-import { UserAccount, User, Transaction, Card } from '../../types';
+import {
+  CardResponse,
+  UserReponse,
+  AccountResponse,
+  TransactionResponse,
+} from './types';
 
 const myInit = (method = 'GET', token?: string) => {
   return {
     method,
     headers: {
       'Content-Type': 'application/json',
-      Authorization: token ? `Bearer ${token}` : '',
+      Authorization: token ? `${token?.replace(/['"]+/g, '')}` : '',
     },
     mode: 'cors' as RequestMode,
     cache: 'default' as RequestCache,
@@ -18,7 +23,7 @@ const myRequest = (endpoint: string, method: string, token?: string) =>
 // create and .env file and add the following line:
 // REACT_APP_API_URL='your api url'
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-const API_BASE_URL = process.env.REACT_APP_API_URL;
+const API_BASE_URL = process.env.REACT_APP_API_BASE_URL;
 // remove this one when backend is ready
 const baseUrl = 'http://localhost:3500';
 
@@ -30,7 +35,7 @@ const rejectPromise = (response?: Response): Promise<Response> =>
   });
 
 export const login = (email: string, password: string) => {
-  return fetch(myRequest(`${baseUrl}/login`, 'POST'), {
+  return fetch(myRequest(`${API_BASE_URL}/login`, 'POST'), {
     body: JSON.stringify({ email, password }),
   })
     .then((response) => {
@@ -45,8 +50,8 @@ export const login = (email: string, password: string) => {
     });
 };
 
-export const createAnUser = (user: User) => {
-  return fetch(myRequest(`${baseUrl}/register`, 'POST'), {
+export const createUser = (user: any) => {
+  return fetch(myRequest(`${API_BASE_URL}/users`, 'POST'), {
     body: JSON.stringify(user),
   })
     .then((response) => {
@@ -55,18 +60,14 @@ export const createAnUser = (user: User) => {
       }
       return rejectPromise(response);
     })
-    .then((data) => {
-      createAnAccount(data);
-      return data;
-    })
     .catch((err) => {
       console.log(err);
       return rejectPromise(err);
     });
 };
 
-export const getUser = (id: string): Promise<User> => {
-  return fetch(myRequest(`${baseUrl}/users/${id}`, 'GET'))
+export const getUser = (id: number, token?: string): Promise<UserReponse> => {
+  return fetch(myRequest(`${API_BASE_URL}/users/${id}`, 'GET', token))
     .then((response) =>
       response.ok ? response.json() : rejectPromise(response)
     )
@@ -81,7 +82,7 @@ export const updateUser = (
   data: any,
   token: string
 ): Promise<Response> => {
-  return fetch(myRequest(`${baseUrl}/users/${id}`, 'PATCH', token), {
+  return fetch(myRequest(`${API_BASE_URL}/users/${id}`, 'PATCH', token), {
     body: JSON.stringify(data),
   })
     .then((response) =>
@@ -93,73 +94,11 @@ export const updateUser = (
     });
 };
 
-// TODO: remove this functionality once backend is ready
-const generateCvu = (): string => {
-  let cvu = '';
-  for (let i = 0; i < 22; i++) {
-    cvu += Math.floor(Math.random() * 10);
-  }
-  return cvu;
-};
-
-// TODO: remove this functionality once backend is ready
-const generateAlias = (): string => {
-  const words = [
-    'Cuenta',
-    'Personal',
-    'Banco',
-    'Argentina',
-    'Digital',
-    'Money',
-    'House',
-    'Bank',
-    'Account',
-    'Cartera',
-    'Wallet',
-    'Pago',
-    'Pay',
-    'Rapido',
-    'Seguro',
-  ];
-  const length = 3;
-  let alias = '';
-  for (let i = 0; i < length; i++) {
-    alias += words[Math.floor(Math.random() * words.length)];
-    if (i < length - 1) {
-      alias += '.';
-    }
-  }
-  return alias;
-};
-
-// TODO: remove this functionality once backend is ready
-export const createAnAccount = (data: any): Promise<Response> => {
-  const { user, accessToken } = data;
-
-  const alias = generateAlias();
-  const cvu = generateCvu();
-  const account = {
-    alias,
-    cvu,
-    balance: 0,
-    name: `${user.firstName} ${user.lastName}`,
-  };
-
-  return fetch(
-    myRequest(`${baseUrl}/users/${user.id}/accounts`, 'POST', accessToken),
-    {
-      body: JSON.stringify(account),
-    }
-  ).then((response) =>
-    response.ok ? response.json() : rejectPromise(response)
-  );
-};
-
-export const getAccount = (id: string, token: string): Promise<UserAccount> => {
-  return fetch(myRequest(`${baseUrl}/users/${id}/accounts`, 'GET', token), {})
+export const getAccount = (token: string): Promise<AccountResponse> => {
+  return fetch(myRequest(`${API_BASE_URL}/account`, 'GET', token))
     .then((response) => {
       if (response.ok) {
-        return response.json().then((account) => account[0]);
+        return response.json().then((account) => account);
       }
       return rejectPromise(response);
     })
@@ -169,7 +108,7 @@ export const getAccount = (id: string, token: string): Promise<UserAccount> => {
     });
 };
 
-export const getAccounts = (): Promise<UserAccount[]> => {
+export const getAccounts = (): Promise<AccountResponse[]> => {
   return fetch(myRequest(`${baseUrl}/accounts`, 'GET'))
     .then((response) =>
       response.ok ? response.json() : rejectPromise(response)
@@ -181,13 +120,16 @@ export const getAccounts = (): Promise<UserAccount[]> => {
 };
 
 export const updateAccount = (
-  id: string,
+  accountId: number,
   data: any,
   token: string
-): Promise<Response> => {
-  return fetch(myRequest(`${baseUrl}/users/${id}/accounts/1`, 'PATCH', token), {
-    body: JSON.stringify(data),
-  })
+): Promise<AccountResponse> => {
+  return fetch(
+    myRequest(`${API_BASE_URL}/accounts/${accountId}`, 'PATCH', token),
+    {
+      body: JSON.stringify(data),
+    }
+  )
     .then((response) =>
       response.ok ? response.json() : rejectPromise(response)
     )
@@ -198,13 +140,15 @@ export const updateAccount = (
 };
 
 export const getUserActivities = (
-  userId: string,
+  accountId: number,
   token: string,
   limit?: number
-): Promise<Transaction[]> => {
+): Promise<TransactionResponse[]> => {
   return fetch(
     myRequest(
-      `${baseUrl}/users/${userId}/activities${limit ? `?_limit=${limit}` : ''}`,
+      `${API_BASE_URL}/accounts/${accountId}/activity${
+        limit ? `?_limit=${limit}` : ''
+      }`,
       'GET',
       token
     )
@@ -222,13 +166,13 @@ export const getUserActivities = (
 };
 
 export const getUserActivity = (
-  userId: string,
+  accountId: number,
   activityId: string,
   token: string
-): Promise<Transaction> => {
+): Promise<TransactionResponse> => {
   return fetch(
     myRequest(
-      `${baseUrl}/users/${userId}/activities/${activityId}`,
+      `${API_BASE_URL}/accounts/${accountId}/transactions/${activityId}`,
       'GET',
       token
     )
@@ -246,10 +190,12 @@ export const getUserActivity = (
 };
 
 export const getUserCards = (
-  userId: string,
+  accountId: number,
   token: string
-): Promise<Card[]> => {
-  return fetch(myRequest(`${baseUrl}/users/${userId}/cards`, 'GET', token))
+): Promise<CardResponse[]> => {
+  return fetch(
+    myRequest(`${API_BASE_URL}/accounts/${accountId}/cards`, 'GET', token)
+  )
     .then((response) => {
       if (response.ok) {
         return response.json();
@@ -262,8 +208,18 @@ export const getUserCards = (
     });
 };
 
-export const getUserCard = (userId: string, cardId: string): Promise<Card> => {
-  return fetch(myRequest(`${baseUrl}/users/${userId}/cards/${cardId}`, 'GET'))
+export const getUserCard = (
+  accountId: number,
+  cardId: string,
+  token: string
+): Promise<CardResponse> => {
+  return fetch(
+    myRequest(
+      `${API_BASE_URL}/accounts/${accountId}/cards/${cardId}`,
+      'GET',
+      token
+    )
+  )
     .then((response) => {
       if (response.ok) {
         return response.json();
@@ -277,12 +233,16 @@ export const getUserCard = (userId: string, cardId: string): Promise<Card> => {
 };
 
 export const deleteUserCard = (
-  userId: string,
+  accountId: number,
   cardId: string,
   token: string
 ): Promise<Response> => {
   return fetch(
-    myRequest(`${baseUrl}/users/${userId}/cards/${cardId}`, 'DELETE', token)
+    myRequest(
+      `${API_BASE_URL}/accounts/${accountId}/cards/${cardId}`,
+      'DELETE',
+      token
+    )
   )
     .then((response) => {
       if (response.ok) {
@@ -297,13 +257,16 @@ export const deleteUserCard = (
 };
 
 export const createUserCard = (
-  userId: string,
-  card: any,
+  accountId: number,
+  card: CardResponse,
   token: string
 ): Promise<Response> => {
-  return fetch(myRequest(`${baseUrl}/users/${userId}/cards`, 'POST', token), {
-    body: JSON.stringify(card),
-  })
+  return fetch(
+    myRequest(`${API_BASE_URL}/accounts/${accountId}/cards`, 'POST', token),
+    {
+      body: JSON.stringify(card),
+    }
+  )
     .then((response) =>
       response.ok ? response.json() : rejectPromise(response)
     )
@@ -315,9 +278,11 @@ export const createUserCard = (
 
 // TODO: edit when backend is ready
 export const createDepositActivity = (
-  userId: string,
+  accountId: number,
   amount: number,
-  token: string
+  token: string,
+  origin: string,
+  destination = 'Cuenta de ahorros'
 ) => {
   const maxAmount = 30000;
   if (amount > maxAmount) return rejectPromise();
@@ -327,10 +292,12 @@ export const createDepositActivity = (
     type: 'Deposit',
     description: 'Depósito con tarjeta',
     dated: new Date(), // date must be genarated in backend
+    origin,
+    destination,
   };
 
   return fetch(
-    myRequest(`${baseUrl}/users/${userId}/activities`, 'POST', token),
+    myRequest(`${API_BASE_URL}/accounts/${accountId}/deposits`, 'POST', token),
     {
       body: JSON.stringify(activity),
     }
@@ -338,50 +305,15 @@ export const createDepositActivity = (
     .then((response) =>
       response.ok ? response.json() : rejectPromise(response)
     )
-    .then((data) => {
-      depositMoney(data.amount, userId, token);
-    })
     .catch((err) => {
       console.log(err);
       return rejectPromise(err);
     });
 };
 
-// TODO: remove when backend is ready
-const depositMoney = (amount: number, userId: string, token: string) => {
-  return getAccount(userId, token)
-    .then((account) => {
-      const newBalance = account.balance + amount;
-      const accountId = account.id;
-      return {
-        newBalance,
-        accountId,
-      };
-    })
-    .then(({ newBalance, accountId }) => {
-      fetch(
-        myRequest(
-          `${baseUrl}/users/${userId}/accounts/${accountId}`,
-          'PATCH',
-          token
-        ),
-        {
-          body: JSON.stringify({ balance: newBalance }),
-        }
-      )
-        .then((response) =>
-          response.ok ? response.json() : rejectPromise(response)
-        )
-        .catch((err) => {
-          console.log(err);
-          return rejectPromise(err);
-        });
-    });
-};
-
 // TODO: edit when backend is ready
 export const createTransferActivity = (
-  userId: string,
+  userId: number,
   token: string,
   origin: string,
   destination: string,
@@ -404,45 +336,8 @@ export const createTransferActivity = (
     .then((response) =>
       response.ok ? response.json() : rejectPromise(response)
     )
-    .then((response) => {
-      discountMoney(response.amount, userId, token);
-      return response;
-    })
     .catch((err) => {
       console.log(err);
       return rejectPromise(err);
-    });
-};
-
-// TODO: remove when backend is ready
-const discountMoney = (amount: number, userId: string, token: string) => {
-  return getAccount(userId, token)
-    .then((account) => {
-      // amount is negavite
-      const newBalance = account.balance + amount;
-      const accountId = account.id;
-      return {
-        newBalance,
-        accountId,
-      };
-    })
-    .then(({ newBalance, accountId }) => {
-      fetch(
-        myRequest(
-          `${baseUrl}/users/${userId}/accounts/${accountId}`,
-          'PATCH',
-          token
-        ),
-        {
-          body: JSON.stringify({ balance: newBalance }),
-        }
-      )
-        .then((response) =>
-          response.ok ? response.json() : rejectPromise(response)
-        )
-        .catch((err) => {
-          console.log(err);
-          return rejectPromise(err);
-        });
     });
 };

@@ -14,8 +14,9 @@ import {
   getUserActivity,
   printPage,
   calculateTransacionType,
+  parseTransactionResponseInfo,
 } from '../../utils';
-import { Transaction, ActivityType } from '../../types';
+import { Transaction, ActivityType, User } from '../../types';
 import { useAuth, useLocalStorage, useUserInfo } from '../../hooks';
 
 const ActivityDetails = () => {
@@ -34,11 +35,13 @@ const ActivityDetails = () => {
   const { user } = useUserInfo();
 
   useEffect(() => {
-    if (user && user.id) {
-      getUserActivity(user.id, activityId, token)
+    if (user) {
+      const { account } = user as User;
+      getUserActivity(account.id, activityId, token)
         .then((activity) => {
-          if (activity && activity.amount && activity.type) {
-            setUserActivity(activity);
+          const parsedActivity = parseTransactionResponseInfo(activity);
+          if (parsedActivity && parsedActivity.amount && parsedActivity.type) {
+            setUserActivity(parsedActivity);
             setActivityType(
               calculateTransacionType(activity.amount, activity.type)
             );
@@ -78,14 +81,6 @@ const ActivityDetails = () => {
                 <p>
                   {RECORD_MESSAGES[activityType] &&
                     RECORD_MESSAGES[activityType]}{' '}
-                </p>
-                <p className="tw-text-xl tw-font-bold">
-                  {userActivity && userActivity.name && userActivity.name}
-                </p>
-                <p className="tw-text-xl tw-font-bold">
-                  {userActivity &&
-                    userActivity.destination &&
-                    userActivity.destination}
                 </p>
                 <i>
                   {userActivity && formatDateFromString(userActivity.dated)}

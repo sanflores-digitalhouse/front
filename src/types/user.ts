@@ -1,4 +1,12 @@
-export interface User {
+export interface UserAccount {
+  balance: number;
+  cvu: string;
+  alias: string;
+  userId: number;
+  id: number;
+}
+
+export interface UserInfo {
   firstName: string;
   lastName: string;
   email: string;
@@ -7,12 +15,7 @@ export interface User {
   dni?: number;
   id?: string;
 }
-
-export interface UserAccount {
-  balance: number;
-  cvu: string;
-  alias: string;
-  userId: string;
-  id: string;
-  name: string;
+export interface User {
+  info: UserInfo;
+  account: UserAccount;
 }

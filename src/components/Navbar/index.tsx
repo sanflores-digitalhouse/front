@@ -12,6 +12,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Fade from '@mui/material/Fade';
 import { useAuth } from '../../hooks/useAuth';
 import { Skeleton, SkeletonVariant } from '../Skeleton';
+import { User } from '../../types';
 
 const stringAvatar = (name: string) => {
   if (name.length === 0) return { children: name };
@@ -40,9 +41,11 @@ export const Navbar = ({ isAuthenticated = false }) => {
 
   useEffect(() => {
     if (user) {
-      setFullName(`${user.firstName} ${user.lastName}`);
+      const { info } = user as User;
+
+      setFullName(`${info.firstName} ${info.lastName}`);
     }
-  }, [user]);
+  }, [fullName, loading, user]);
 
   return (
     <div className="tw-w-full tw-fixed tw-z-50 print:tw-hidden">

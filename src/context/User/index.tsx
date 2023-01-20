@@ -2,7 +2,7 @@ import React, { createContext, useEffect, useReducer } from 'react';
 import userReducer from './userReducer';
 import { User } from '../../types';
 import { useAuth, useLocalStorage } from '../../hooks';
-import { getUser, parseJwt } from '../../utils';
+import { getAccount, getUser, parseAccountResponseInfo, parseUserResponseInfo } from '../../utils';
 import { userActionTypes } from './types';
 import { UNAUTHORIZED } from '../../constants/status';
 export interface UserInfoState {
@@ -10,7 +10,7 @@ export interface UserInfoState {
   loading: boolean;
 }
 
-const initialState : UserInfoState = {
+const initialState: UserInfoState = {
   user: null,
   loading: true,
 };
@@ -34,25 +34,34 @@ const UserInfoProvider = ({ children }: { children: React.ReactNode }) => {
     if (isAuthenticated) {
       const token = window.localStorage.getItem('token');
       if (token) {
-        const info = parseJwt(token);
-        const userId = info && info.sub;
-        userId &&
-          getUser(userId)
-            .then((res) => {
-              dispatch({ type: userActionTypes.SET_USER, payload: res });
+        getAccount(token)
+          .then((account) => {
+            const parseAccount  = parseAccountResponseInfo(account);
+            const userId = parseAccount.userId;
+            getUser(userId, token).then((user) => {
+              const parsedUserInfo = parseUserResponseInfo(user);
+
+              dispatch({
+                type: userActionTypes.SET_USER,
+                payload: {
+                  info: { ...parsedUserInfo },
+                  account: { ...parseAccount },
+                },
+              });
               dispatch({
                 type: userActionTypes.SET_USER_LOADING,
                 payload: false,
               });
-            })
-            .catch((error) => {
-              if (error.status === UNAUTHORIZED) {
-                setToken(null);
-                setIsAuthenticated(false);
-              }
-              // eslint-disable-next-line no-console
-              console.log(error);
             });
+          })
+          .catch((error) => {
+            if (error.status === UNAUTHORIZED) {
+              setToken(null);
+              setIsAuthenticated(false);
+            }
+            // eslint-disable-next-line no-console
+            console.log(error);
+          });
       } else {
         setIsAuthenticated(false);
       }
